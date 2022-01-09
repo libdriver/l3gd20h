@@ -1,10 +1,12 @@
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+
 <div align=center>
 <img src="/doc/image/logo.png"/>
 </div>
 
 ## LibDriver L3GD20H
 
-[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+[![API](https://img.shields.io/badge/api-reference-blue)](https://www.libdriver.com/docs/l3gd20h/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
 L3GD20H是一款低功耗的三軸陀螺儀。它通過數字接口IIC和SPI進行通信。傳感元件是ST專用微加工工藝生產的慣性傳感器和執行器矽片。 IC接口採用CMOS工藝製造。高級別集成的過程設計了一個專用電路，該電路被裁剪成更好地匹配傳感元件特性。 L3GD20H的滿量程為±245/±500/±2000 dps並且能夠配置可選擇的測量速率帶寬。該設備被用於遊戲和虛擬現實輸入設備、運動控制、GPS導航定位和機器人等。
 
