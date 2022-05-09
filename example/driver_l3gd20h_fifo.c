@@ -37,10 +37,10 @@
 
 #include "driver_l3gd20h_fifo.h"
 
-static l3gd20h_handle_t gs_handle;                                        /**< l3gd20h handle */
-static uint8_t (*_callback)(float (*dps)[3], uint16_t len) = NULL;        /**< irq callback */
-static int16_t gs_raw[32][3];                                             /**< raw data buffer */
-static float gs_data[32][3];                                              /**< data buffer */
+static l3gd20h_handle_t gs_handle;                                     /**< l3gd20h handle */
+static void (*a_callback)(float (*dps)[3], uint16_t len) = NULL;       /**< irq callback */
+static int16_t gs_raw[32][3];                                          /**< raw data buffer */
+static float gs_data[32][3];                                           /**< data buffer */
 
 /**
  * @brief  fifo example irq callback
@@ -51,7 +51,7 @@ static float gs_data[32][3];                                              /**< d
  */
 uint8_t l3gd20h_fifo_irq_handler(void)
 {
-    if (l3gd20h_irq_handler(&gs_handle, 2))
+    if (l3gd20h_irq_handler(&gs_handle, 2) != 0)
     {
         return 1;
     }
@@ -64,61 +64,56 @@ uint8_t l3gd20h_fifo_irq_handler(void)
 /**
  * @brief     interface receive callback
  * @param[in] type is the irq type
- * @return    status code
- *            - 0 success
- *            - 1 run failed
  * @note      none
  */
-static uint8_t _l3gd20h_interface_receive_callback(uint8_t type)
+static void a_l3gd20h_interface_receive_callback(uint8_t type)
 {
     switch (type)
     {
         case L3GD20H_INTERRUPT2_FIFO_THRESHOLD :
         {
-            volatile uint8_t res;
-            volatile uint16_t len;
+            uint8_t res;
+            uint16_t len;
             
             len = 32;
             res = l3gd20h_read(&gs_handle, (int16_t (*)[3])(gs_raw), (float (*)[3])(gs_data), (uint16_t *)&len);
             if (res == 0)
             {
-                if (_callback)
+                if (a_callback != NULL)
                 {
-                    _callback(gs_data, len);
+                    a_callback(gs_data, len);
                 }
             }
             else
             {
                 l3gd20h_interface_debug_print("l3gd20h: read failed.\n");
                 
-                return 1;
+                return;
             }
             
             break;
         }
         case L3GD20H_INTERRUPT2_FIFO_OVERRRUN :
         {
-            volatile uint8_t res;
-            volatile uint16_t len;
+            uint8_t res;
+            uint16_t len;
             
             len = 32;
             res = l3gd20h_read(&gs_handle, (int16_t (*)[3])(gs_raw), (float (*)[3])(gs_data), (uint16_t *)&len);
-            if (res)
+            if (res != 0)
             {
                 l3gd20h_interface_debug_print("l3gd20h: read failed.\n");
-                l3gd20h_deinit(&gs_handle);
                 
-                return 1;
+                return;
             }
             
             /* disable fifo */
             res = l3gd20h_set_fifo(&gs_handle, L3GD20H_BOOL_FALSE);
-            if (res)
+            if (res != 0)
             {
                 l3gd20h_interface_debug_print("l3gd20h: set fifo failed.\n");
-                l3gd20h_deinit(&gs_handle);
                 
-                return 1;
+                return;
             }
             
             l3gd20h_interface_debug_print("l3gd20h: irq fifo overrun.\n");
@@ -136,8 +131,6 @@ static uint8_t _l3gd20h_interface_receive_callback(uint8_t type)
             break;
         }
     }
-    
-    return 0;
 }
 
 /**
@@ -151,10 +144,10 @@ static uint8_t _l3gd20h_interface_receive_callback(uint8_t type)
  * @note      none
  */
 uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_pin,
-                          uint8_t (*callback)(float (*dps)[3], uint16_t len))
+                          void (*callback)(float (*dps)[3], uint16_t len))
 {
-    volatile uint8_t res;
-    volatile uint16_t threshold;
+    uint8_t res;
+    uint16_t threshold;
 
     /* link interface function */
     DRIVER_L3GD20H_LINK_INIT(&gs_handle, l3gd20h_handle_t);
@@ -168,11 +161,11 @@ uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_
     DRIVER_L3GD20H_LINK_SPI_WRITE(&gs_handle, l3gd20h_interface_spi_write);
     DRIVER_L3GD20H_LINK_DELAY_MS(&gs_handle, l3gd20h_interface_delay_ms);
     DRIVER_L3GD20H_LINK_DEBUG_PRINT(&gs_handle, l3gd20h_interface_debug_print);
-    DRIVER_L3GD20H_LINK_RECEIVE_CALLBACK(&gs_handle, _l3gd20h_interface_receive_callback);
+    DRIVER_L3GD20H_LINK_RECEIVE_CALLBACK(&gs_handle, a_l3gd20h_interface_receive_callback);
     
     /* set the interface */
     res = l3gd20h_set_interface(&gs_handle, interface);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set interface failed.\n");
        
@@ -181,7 +174,7 @@ uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_
     
     /* set the address pin */
     res = l3gd20h_set_addr_pin(&gs_handle, addr_pin);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set addr pin failed.\n");
        
@@ -190,7 +183,7 @@ uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_
     
     /* init the l3gd20h */
     res = l3gd20h_init(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: init failed.\n");
        
@@ -199,250 +192,250 @@ uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_
    
     /* set boot */
     res = l3gd20h_set_boot(&gs_handle, L3GD20H_FIFO_DEFAULT_BOOT);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set boot failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set x axis*/
     res = l3gd20h_set_axis(&gs_handle, L3GD20H_AXIS_X, L3GD20H_FIFO_DEFAULT_AXIS_X);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set axis failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set y axis*/
     res = l3gd20h_set_axis(&gs_handle, L3GD20H_AXIS_Y, L3GD20H_FIFO_DEFAULT_AXIS_Y);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set axis failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set z axis*/
     res = l3gd20h_set_axis(&gs_handle, L3GD20H_AXIS_Z, L3GD20H_FIFO_DEFAULT_AXIS_Z);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set axis failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set rate bandwidth */
     res = l3gd20h_set_rate_bandwidth(&gs_handle, L3GD20H_FIFO_DEFAULT_RATE_BANDWIDTH);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set rate bandwidth failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set edge trigger */
     res = l3gd20h_set_edge_trigger(&gs_handle, L3GD20H_FIFO_DEFAULT_EDGE_TRIGGER);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set edge trigger failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set level trigger */
     res = l3gd20h_set_level_trigger(&gs_handle, L3GD20H_FIFO_DEFAULT_LEVEL_TRIGGER);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set level trigger failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set latched */
     res = l3gd20h_set_level_sensitive_latched(&gs_handle, L3GD20H_FIFO_DEFAULT_LEVEL_SENSITIVE_LATCHED);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set level sensitive latched failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set self test */
     res = l3gd20h_set_self_test(&gs_handle, L3GD20H_FIFO_DEFAULT_SELF_TEST);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set self test failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set high pass filter mode */
     res = l3gd20h_set_high_pass_filter_mode(&gs_handle, L3GD20H_FIFO_DEFAULT_HIGH_PASS_FILTER_MODE);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set high pass filter normal mode failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set high pass filter cut off */
     res = l3gd20h_set_high_pass_filter_cut_off_frequency(&gs_handle, L3GD20H_FIFO_DEFAULT_HIGH_PASS_FILTER_CUT_OFF);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set high pass filter cut off frequency failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set high pass filter */
     res = l3gd20h_set_high_pass_filter(&gs_handle, L3GD20H_FIFO_DEFAULT_HIGH_PASS_FILTER);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set high pass filter failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set block data update */
     res = l3gd20h_set_block_data_update(&gs_handle, L3GD20H_FIFO_DEFAULT_BLOCK_DATA_UPDATE);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set block data update failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set out selection */
     res = l3gd20h_set_out_selection(&gs_handle, L3GD20H_FIFO_DEFAULT_OUT_SELECTION);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set out selection failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set interrupt selection */
     res = l3gd20h_set_interrupt_selection(&gs_handle, L3GD20H_FIFO_DEFAULT_INTERRUPT_SELECTION);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set interrupt selection failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set high pass filter reference */
     res = l3gd20h_set_high_pass_filter_reference(&gs_handle, L3GD20H_FIFO_DEFAULT_HIGH_PASS_FILTER_REFERENCE);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set high pass filter reference failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set fifo mode */
     res = l3gd20h_set_fifo_mode(&gs_handle, L3GD20H_FIFO_MODE_FIFO);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set fifo mode failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set interrupt 1*/
     res = l3gd20h_set_interrupt1(&gs_handle, L3GD20H_FIFO_DEFAULT_INTERRUPT1);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set interrupt1 failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set boot on interrupt 1*/
     res = l3gd20h_set_boot_on_interrupt1(&gs_handle, L3GD20H_FIFO_DEFAULT_BOOT_ON_INTERRUPT1);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set boot on interrupt1 failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set active level */
     res = l3gd20h_set_interrupt_active_level(&gs_handle, L3GD20H_FIFO_DEFAULT_INTERRUPT_ACTIVE_LEVEL);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set interrupt active level failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set interrupt pin type */
     res = l3gd20h_set_interrupt_pin_type(&gs_handle, L3GD20H_FIFO_DEFAULT_INTERRUPT_PIN_TYPE);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set interrupt pin type failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set data ready on interrupt2 */
     res = l3gd20h_set_data_ready_on_interrupt2(&gs_handle, L3GD20H_FIFO_DEFAULT_DATA_READY_ON_INTERRUPT2);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set data ready on interrupt2 failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set fifo threshold on interrupt2 */
     res = l3gd20h_set_fifo_threshold_on_interrupt2(&gs_handle, L3GD20H_BOOL_TRUE);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set fifo threshold on interrupt2 failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set fifo overrun on interrupt2 */
     res = l3gd20h_set_fifo_overrun_on_interrupt2(&gs_handle, L3GD20H_BOOL_TRUE);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set fifo overrun on interrupt2 failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set fifo empty on interrupt2 */
     res = l3gd20h_set_fifo_empty_on_interrupt2(&gs_handle, L3GD20H_FIFO_DEFAULT_FIFO_EMPTY_ON_INTERRUPT2);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set fifo empty on interrupt2 failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
@@ -450,10 +443,10 @@ uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_
     /* set L3GD20H_INTERRUPT_EVENT_AND_OR_COMBINATION */
     res = l3gd20h_set_interrupt_event(&gs_handle, L3GD20H_INTERRUPT_EVENT_AND_OR_COMBINATION, 
                                       L3GD20H_FIFO_DEFAULT_INTERRUPT_EVENT_AND_OR_COMBINATION);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set interrupt event failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
@@ -461,10 +454,10 @@ uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_
     /* set L3GD20H_INTERRUPT_EVENT_LATCH */
     res = l3gd20h_set_interrupt_event(&gs_handle, L3GD20H_INTERRUPT_EVENT_LATCH, 
                                       L3GD20H_FIFO_DEFAULT_INTERRUPT_EVENT_LATCH);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set interrupt event failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
@@ -472,10 +465,10 @@ uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_
     /* set L3GD20H_INTERRUPT_EVENT_Z_HIGH_EVENT */
     res = l3gd20h_set_interrupt_event(&gs_handle, L3GD20H_INTERRUPT_EVENT_Z_HIGH_EVENT, 
                                       L3GD20H_FIFO_DEFAULT_INTERRUPT_EVENT_Z_HIGH_EVENT);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set interrupt event failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
@@ -483,10 +476,10 @@ uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_
     /* set L3GD20H_INTERRUPT_EVENT_Z_LOW_EVENT */
     res = l3gd20h_set_interrupt_event(&gs_handle, L3GD20H_INTERRUPT_EVENT_Z_LOW_EVENT, 
                                       L3GD20H_FIFO_DEFAULT_INTERRUPT_EVENT_Z_LOW_EVENT);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set interrupt event failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
@@ -494,10 +487,10 @@ uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_
     /* set L3GD20H_INTERRUPT_EVENT_Y_HIGH_EVENT */
     res = l3gd20h_set_interrupt_event(&gs_handle, L3GD20H_INTERRUPT_EVENT_Y_HIGH_EVENT, 
                                       L3GD20H_FIFO_DEFAULT_INTERRUPT_EVENT_Y_HIGH_EVENT);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set interrupt event failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
@@ -505,10 +498,10 @@ uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_
     /* set L3GD20H_INTERRUPT_EVENT_Y_LOW_EVENT */
     res = l3gd20h_set_interrupt_event(&gs_handle, L3GD20H_INTERRUPT_EVENT_Y_LOW_EVENT, 
                                       L3GD20H_FIFO_DEFAULT_INTERRUPT_EVENT_Y_LOW_EVENT);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set interrupt event failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
@@ -516,10 +509,10 @@ uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_
     /* set L3GD20H_INTERRUPT_EVENT_X_HIGH_EVENT */
     res = l3gd20h_set_interrupt_event(&gs_handle, L3GD20H_INTERRUPT_EVENT_X_HIGH_EVENT, 
                                       L3GD20H_FIFO_DEFAULT_INTERRUPT_EVENT_X_HIGH_EVENT);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set interrupt event failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
@@ -527,10 +520,10 @@ uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_
     /* set L3GD20H_INTERRUPT_EVENT_X_LOW_EVENT */
     res = l3gd20h_set_interrupt_event(&gs_handle, L3GD20H_INTERRUPT_EVENT_X_LOW_EVENT, 
                                       L3GD20H_FIFO_DEFAULT_INTERRUPT_EVENT_X_LOW_EVENT);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set interrupt event failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
@@ -538,145 +531,146 @@ uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_
     /* convert the threshold */
     res = l3gd20h_interrupt_threshold_convert_to_register(&gs_handle, L3GD20H_FIFO_DEFAULT_INTERRUPT_THRESHOLD, 
                                                          (uint16_t *)&threshold);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: convert to register failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set x interrupt threshold */
     res = l3gd20h_set_x_interrupt_threshold(&gs_handle, threshold);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set x interrupt threshold failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set y interrupt threshold */
     res = l3gd20h_set_y_interrupt_threshold(&gs_handle, threshold);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set y interrupt threshold failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set z interrupt threshold */
     res = l3gd20h_set_z_interrupt_threshold(&gs_handle, threshold);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set z interrupt threshold failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set counter mode */
     res = l3gd20h_set_counter_mode(&gs_handle, L3GD20H_FIFO_DEFAULT_COUNTER_MODE);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set counter mode failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set wait */
     res = l3gd20h_set_wait(&gs_handle, L3GD20H_FIFO_DEFAULT_WAIT);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set wait failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set duration */
     res = l3gd20h_set_duration(&gs_handle, L3GD20H_FIFO_DEFAULT_DURATION);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set duration failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set data ready active level */
     res = l3gd20h_set_data_ready_active_level(&gs_handle, L3GD20H_FIFO_DEFAULT_DATA_READY_ACTIVE_LEVEL);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set data ready active level failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* enable fifo */
     res = l3gd20h_set_fifo(&gs_handle, L3GD20H_BOOL_TRUE);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set fifo failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set stop on fifo threshold */
     res = l3gd20h_set_stop_on_fifo_threshold(&gs_handle, L3GD20H_FIFO_DEFAULT_STOP_ON_FIFO_THRESHOLD);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set stop on fifo threshold failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set fifo threshold */
     res = l3gd20h_set_fifo_threshold(&gs_handle, L3GD20H_FIFO_DEFAULT_FIFO_THRESHOLD);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set fifo threshold failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set endian */
     res = l3gd20h_set_data_format(&gs_handle, L3GD20H_FIFO_DEFAULT_DATA_FORMAT);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set data format failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set full scale */
     res = l3gd20h_set_full_scale(&gs_handle, L3GD20H_FIFO_DEFAULT_FULL_SCALE);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set full scale failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
     /* normal mode */
     res = l3gd20h_set_mode(&gs_handle, L3GD20H_MODE_NORMAL);
-    if (res)
+    if (res != 0)
     {
         l3gd20h_interface_debug_print("l3gd20h: set mode failed.\n");
-        l3gd20h_deinit(&gs_handle);
+        (void)l3gd20h_deinit(&gs_handle);
         
         return 1;
     }
     
-    _callback = callback;
+    a_callback = callback;
+    
     /* success return 0 */
     return 0;
 }
@@ -690,5 +684,12 @@ uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_
  */
 uint8_t l3gd20h_fifo_deinit(void)
 {
-    return l3gd20h_deinit(&gs_handle);
+    if (l3gd20h_deinit(&gs_handle) != 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }

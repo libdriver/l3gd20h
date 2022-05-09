@@ -489,6 +489,8 @@ l3gd20h: temperature is 27.00C.
 l3gd20h: finish read test.
 ```
 
+STM32F407 INT must be connected to L3GD20H INT2 in FIFO mode.
+
 ```shell
 l3gd20h -t fifo -spi
 
@@ -548,6 +550,8 @@ l3gd20h: x 0.01 dps.
 l3gd20h: y -0.02 dps.
 l3gd20h: z -0.10 dps.
 ```
+
+STM32F407 INT must be connected to L3GD20H INT2 in FIFO mode.
 
 ```shell
 l3gd20h -c fifo 3 -spi

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['_5fl3gd20h_5finterface_5freceive_5fcallback_0',['_l3gd20h_interface_receive_callback',['../driver__l3gd20h__interrupt_8c.html#ae49f779110674234d02f00279ad5a063',1,'driver_l3gd20h_interrupt.c']]]
+  ['chip_5fname_0',['chip_name',['../structl3gd20h__info__s.html#af890958c72bd715cc6454a10dc846ae6',1,'l3gd20h_info_s']]],
+  ['chip_5fname_1',['CHIP_NAME',['../driver__l3gd20h_8c.html#adc9da0a24824ca1239b593f6459b3954',1,'driver_l3gd20h.c']]]
 ];

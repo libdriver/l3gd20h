@@ -35,8 +35,8 @@
  * </table>
  */
 
-#ifndef _DRIVER_L3GD20H_FIFO_H_
-#define _DRIVER_L3GD20H_FIFO_H_
+#ifndef DRIVER_L3GD20H_FIFO_H
+#define DRIVER_L3GD20H_FIFO_H
 
 #include "driver_l3gd20h_interface.h"
 
@@ -112,7 +112,7 @@ uint8_t l3gd20h_fifo_irq_handler(void);
  * @note      none
  */
 uint8_t l3gd20h_fifo_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_pin,
-                          uint8_t (*callback)(float (*dps)[3], uint16_t len));
+                          void (*callback)(float (*dps)[3], uint16_t len));
 
 /**
  * @brief  fifo example deinit

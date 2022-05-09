@@ -35,8 +35,8 @@
  * </table>
  */
 
-#ifndef _DRIVER_L3GD20H_INTERRUPT_H_
-#define _DRIVER_L3GD20H_INTERRUPT_H_
+#ifndef DRIVER_L3GD20H_INTERRUPT_H
+#define DRIVER_L3GD20H_INTERRUPT_H
 
 #include "driver_l3gd20h_interface.h"
 
@@ -113,7 +113,7 @@ uint8_t l3gd20h_interrupt_irq_handler(void);
  * @note      none
  */
 uint8_t l3gd20h_interrupt_init(l3gd20h_interface_t interface, l3gd20h_address_t addr_pin,
-                               float interrupt_threshold, uint8_t (*callback)(uint8_t type));
+                               float interrupt_threshold, void (*callback)(uint8_t type));
 
 /**
  * @brief  interrupt example deinit
