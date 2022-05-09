@@ -1,4 +1,4 @@
-[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md) | [日本語](/README_ja.md) | [Deutsch](/README_de.md) | [한국어](/README_ko.md)
 
 <div align=center>
 <img src="/doc/image/logo.png"/>
@@ -6,11 +6,11 @@
 
 ## LibDriver L3GD20H
 
-[![API](https://img.shields.io/badge/api-reference-blue)](https://www.libdriver.com/docs/l3gd20h/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
+[![MISRA](https://img.shields.io/badge/misra-compliant-brightgreen.svg)](/misra/README.md) [![API](https://img.shields.io/badge/api-reference-blue.svg)](https://www.libdriver.com/docs/l3gd20h/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
 L3GD20H是一款低功耗的三轴陀螺仪。它通过数字接口IIC和SPI进行通信。传感元件是ST专用微加工工艺生产的惯性传感器和执行器硅片。IC接口采用CMOS工艺制造。高级别集成的过程设计了一个专用电路，该电路被裁剪成更好地匹配传感元件特性。L3GD20H的满量程为±245/±500/±2000 dps并且能够配置可选择的测量速率带宽。该设备被用于游戏和虚拟现实输入设备、运动控制、GPS导航定位和机器人等。
 
-LibDriver L3GD20H是LibDriver推出的L3GD20H的全功能驱动，该驱动提供角速度读取、角速度FIFO模式采集、阈值中断等功能。
+LibDriver L3GD20H是LibDriver推出的L3GD20H的全功能驱动，该驱动提供角速度读取、角速度FIFO模式采集、阈值中断等功能并且它符合MISRA标准。
 
 ### 目录
 
@@ -52,11 +52,11 @@ LibDriver L3GD20H是LibDriver推出的L3GD20H的全功能驱动，该驱动提�
 #### example basic
 
 ```C
-volatile uint8_t res;
-volatile float dps[3];
+uint8_t res;
+float dps[3];
 
 res = l3gd20h_basic_init(L3GD20H_INTERFACE_IIC, L3GD20H_ADDRESS_SDO_0);
-if (res)
+if (res != 0)
 {
     return 1;
 }
@@ -66,9 +66,9 @@ if (res)
 for (i = 0; i < 3; i++)
 {
     res = l3gd20h_basic_read((float *)dps);
-    if (res)
+    if (res != 0)
     {
-        l3gd20h_basic_deinit();
+        (void)l3gd20h_basic_deinit();
 
         return 1;
     }
@@ -83,7 +83,7 @@ for (i = 0; i < 3; i++)
 
 ...
 
-l3gd20h_basic_deinit();
+(void)l3gd20h_basic_deinit();
 
 return 0;
 ```
@@ -91,9 +91,9 @@ return 0;
 #### example fifo
 
 ```C
-volatile uint8_t res;
+uint8_t res;
 
-static uint8_t _l3gd20h_fifo_receive_callback(float (*dps)[3], uint16_t len)
+static void a_l3gd20h_fifo_receive_callback(float (*dps)[3], uint16_t len)
 {
     ...
         
@@ -101,23 +101,23 @@ static uint8_t _l3gd20h_fifo_receive_callback(float (*dps)[3], uint16_t len)
 }
 
 res = gpio_interrupt_init();
-if (res)
+if (res != 0)
 {
     return 1;
 }
 
-res = l3gd20h_fifo_init(L3GD20H_INTERFACE_IIC, L3GD20H_ADDRESS_SDO_0, _l3gd20h_fifo_receive_callback);
-if (res)
+res = l3gd20h_fifo_init(L3GD20H_INTERFACE_IIC, L3GD20H_ADDRESS_SDO_0, a_l3gd20h_fifo_receive_callback);
+if (res != 0)
 {
-    l3gd20h_fifo_deinit();
-    gpio_interrupt_deinit();
+    (void)l3gd20h_fifo_deinit();
+    (void)gpio_interrupt_deinit();
 
     return 1;
 }
 
 ...
 
-while (times)
+while (times != 0)
 {
 
 ...
@@ -126,8 +126,8 @@ while (times)
 
 ...
 
-l3gd20h_fifo_deinit();
-gpio_interrupt_deinit();
+(void)l3gd20h_fifo_deinit();
+(void)gpio_interrupt_deinit();
 
 return 0;
 ```
@@ -135,12 +135,10 @@ return 0;
 #### example interrupt
 
 ```C
-volatile uint8_t res;
+uint8_t res;
 
-static uint8_t _l3gd20h_interrupt_receive_callback(uint8_t type)
+static void a_l3gd20h_interrupt_receive_callback(uint8_t type)
 {
-    volatile uint8_t res;
-
     switch (type)
     {
         case L3GD20H_INTERRUPT1_Z_HIGH :
@@ -166,21 +164,19 @@ static uint8_t _l3gd20h_interrupt_receive_callback(uint8_t type)
             break;
         }
     }
-    
-    return 0;
 }
 
 res = gpio_interrupt_init();
-if (res)
+if (res != 0)
 {
     return 1;
 }
 
-res = l3gd20h_interrupt_init(L3GD20H_INTERFACE_IIC, L3GD20H_ADDRESS_SDO_0, 20.f, _l3gd20h_interrupt_receive_callback);
-if (res)
+res = l3gd20h_interrupt_init(L3GD20H_INTERFACE_IIC, L3GD20H_ADDRESS_SDO_0, 20.f, a_l3gd20h_interrupt_receive_callback);
+if (res != 0)
 {
-    l3gd20h_interrupt_deinit();
-    gpio_interrupt_deinit();
+    (void)l3gd20h_interrupt_deinit();
+    (void)gpio_interrupt_deinit();
     
     return 1;
 }
@@ -196,8 +192,8 @@ while (1)
 
 ...
 
-l3gd20h_interrupt_deinit();
-gpio_interrupt_deinit();
+(void)l3gd20h_interrupt_deinit();
+(void)gpio_interrupt_deinit();
 
 return 0;
 ```

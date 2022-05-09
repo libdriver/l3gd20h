@@ -40,6 +40,6 @@ var driver__l3gd20h__interrupt_8h =
     [ "L3GD20H_INTERRUPT_DEFAULT_STOP_ON_FIFO_THRESHOLD", "group__l3gd20h__example__driver.html#gaea47eca4aea911245d0bc2d1a62f44d8", null ],
     [ "L3GD20H_INTERRUPT_DEFAULT_WAIT", "group__l3gd20h__example__driver.html#ga8e1b81318ff8f55f96f6b578269d972f", null ],
     [ "l3gd20h_interrupt_deinit", "group__l3gd20h__example__driver.html#ga8afde894aa102783cd133b14ce647068", null ],
-    [ "l3gd20h_interrupt_init", "group__l3gd20h__example__driver.html#gaea5e4851eacb3396da5122651b386e5a", null ],
+    [ "l3gd20h_interrupt_init", "group__l3gd20h__example__driver.html#ga47f0652993bb60f49b2196c0a8890fe0", null ],
     [ "l3gd20h_interrupt_irq_handler", "group__l3gd20h__example__driver.html#ga29f2644b9bfab8aa06f36875b7f1e4d4", null ]
 ];

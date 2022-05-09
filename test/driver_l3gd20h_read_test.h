@@ -35,8 +35,8 @@
  * </table>
  */
 
-#ifndef _DRIVER_L3GD20H_READ_TEST_H_
-#define _DRIVER_L3GD20H_READ_TEST_H_
+#ifndef DRIVER_L3GD20H_READ_TEST_H
+#define DRIVER_L3GD20H_READ_TEST_H
 
 #include "driver_l3gd20h_interface.h"
 

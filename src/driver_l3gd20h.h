@@ -35,8 +35,8 @@
  * </table>
  */
 
-#ifndef _DRIVER_L3GD20H_H_
-#define _DRIVER_L3GD20H_H_
+#ifndef DRIVER_L3GD20H_H
+#define DRIVER_L3GD20H_H
 
 #include <stdint.h>
 #include <stdio.h>
@@ -373,9 +373,9 @@ typedef struct l3gd20h_handle_s
     uint8_t (*spi_deinit)(void);                                                        /**< point to a spi_deinit function address */
     uint8_t (*spi_read)(uint8_t reg, uint8_t *buf, uint16_t len);                       /**< point to a spi_read function address */
     uint8_t (*spi_write)(uint8_t reg, uint8_t *buf, uint16_t len);                      /**< point to a spi_write function address */
-    uint8_t (*receive_callback)(uint8_t type);                                          /**< point to a receive_callback function address */
+    void (*receive_callback)(uint8_t type);                                             /**< point to a receive_callback function address */
     void (*delay_ms)(uint32_t ms);                                                      /**< point to a delay_ms function address */
-    uint16_t (*debug_print)(char *fmt, ...);                                            /**< point to a debug_print function address */
+    void (*debug_print)(const char *const fmt, ...);                                    /**< point to a debug_print function address */
     uint8_t inited;                                                                     /**< inited flag */
     uint8_t iic_spi;                                                                    /**< iic spi interface type */
 } l3gd20h_handle_t;

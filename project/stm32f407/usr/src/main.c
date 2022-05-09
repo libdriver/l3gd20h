@@ -84,31 +84,21 @@ void HAL_GPIO_EXTI_Callback(uint16_t pin)
 /**
  * @brief     interface fifo receive callback
  * @param[in] type is the irq type
- * @return    status code
- *            - 0 success
- *            - 1 run failed
  * @note      none
  */
-static uint8_t _l3gd20h_fifo_receive_callback(float (*dps)[3], uint16_t len)
+static void a_l3gd20h_fifo_receive_callback(float (*dps)[3], uint16_t len)
 {
     l3gd20h_interface_debug_print("l3gd20h: fifo irq with %d.\n", len);
     g_flag = 1;
-    
-    return 0;
 }
 
 /**
  * @brief     interface interrupt receive callback
  * @param[in] type is the irq type
- * @return    status code
- *            - 0 success
- *            - 1 run failed
  * @note      none
  */
-static uint8_t _l3gd20h_interrupt_receive_callback(uint8_t type)
+static void a_l3gd20h_interrupt_receive_callback(uint8_t type)
 {
-    volatile uint8_t res;
-
     switch (type)
     {
         case L3GD20H_INTERRUPT1_Z_HIGH :
@@ -137,8 +127,6 @@ static uint8_t _l3gd20h_interrupt_receive_callback(uint8_t type)
             break;
         }
     }
-    
-    return 0;
 }
 
 /**
@@ -224,11 +212,11 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
             {
                 if (strcmp("-spi", argv[3]) == 0)
                 {
-                    volatile uint8_t res;
+                    uint8_t res;
                     
                     /* run register test */
                     res = l3gd20h_register_test(L3GD20H_INTERFACE_SPI, L3GD20H_ADDRESS_SDO_0);
-                    if (res)
+                    if (res != 0)
                     {
                         return 1;
                     }
@@ -244,10 +232,10 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
             {
                 if (strcmp("-spi", argv[3]) == 0)
                 {
-                    volatile uint8_t res;
+                    uint8_t res;
                     
                     res = gpio_interrupt_init();
-                    if (res)
+                    if (res != 0)
                     {
                         return 1;
                     }
@@ -255,14 +243,14 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                     
                     /* run fifo test */
                     res = l3gd20h_fifo_test(L3GD20H_INTERFACE_SPI, L3GD20H_ADDRESS_SDO_0);
-                    if (res)
+                    if (res != 0)
                     {
-                        gpio_interrupt_deinit();
+                        (void)gpio_interrupt_deinit();
                         g_gpio_irq = NULL;
                         
                         return 1;
                     }
-                    gpio_interrupt_deinit();
+                    (void)gpio_interrupt_deinit();
                     g_gpio_irq = NULL;
                     
                     return 0;
@@ -276,10 +264,10 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
             {
                 if (strcmp("-spi", argv[3]) == 0)
                 {
-                    volatile uint8_t res;
+                    uint8_t res;
                     
                     res = gpio_interrupt_init();
-                    if (res)
+                    if (res != 0)
                     {
                         return 1;
                     }
@@ -287,14 +275,14 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                     
                     /* run interrupt test */
                     res = l3gd20h_interrupt_test(L3GD20H_INTERFACE_SPI, L3GD20H_ADDRESS_SDO_0, 50.f, 100);
-                    if (res)
+                    if (res != 0)
                     {
-                        gpio_interrupt_deinit();
+                        (void)gpio_interrupt_deinit();
                         g_gpio_irq = NULL;
                         
                         return 1;
                     }
-                    gpio_interrupt_deinit();
+                    (void)gpio_interrupt_deinit();
                     g_gpio_irq = NULL;
                     
                     return 0;
@@ -322,7 +310,7 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
             {
                 if (strcmp("-iic", argv[3]) == 0)
                 {
-                    volatile uint8_t res;
+                    uint8_t res;
                     l3gd20h_address_t addr;
                     
                     if (strcmp("0", argv[4]) == 0)
@@ -340,7 +328,7 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                     
                     /* run register test */
                     res = l3gd20h_register_test(L3GD20H_INTERFACE_IIC, addr);
-                    if (res)
+                    if (res != 0)
                     {
                         return 1;
                     }
@@ -356,11 +344,11 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
             {
                 if (strcmp("-spi", argv[4]) == 0)
                 {
-                    volatile uint8_t res;
+                    uint8_t res;
                     
                     /* run register test */
                     res = l3gd20h_read_test(L3GD20H_INTERFACE_SPI, L3GD20H_ADDRESS_SDO_0, atoi(argv[3]));
-                    if (res)
+                    if (res != 0)
                     {
                         return 1;
                     }
@@ -376,7 +364,7 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
             {
                 if (strcmp("-iic", argv[3]) == 0)
                 {
-                    volatile uint8_t res;
+                    uint8_t res;
                     l3gd20h_address_t addr;
                     
                     if (strcmp("0", argv[4]) == 0)
@@ -393,7 +381,7 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                     }
 
                     res = gpio_interrupt_init();
-                    if (res)
+                    if (res != 0)
                     {
                         return 1;
                     }
@@ -401,14 +389,14 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                     
                     /* run fifo test */
                     res = l3gd20h_fifo_test(L3GD20H_INTERFACE_IIC, addr);
-                    if (res)
+                    if (res != 0)
                     {
-                        gpio_interrupt_deinit();
+                        (void)gpio_interrupt_deinit();
                         g_gpio_irq = NULL;
                         
                         return 1;
                     }
-                    gpio_interrupt_deinit();
+                    (void)gpio_interrupt_deinit();
                     g_gpio_irq = NULL;
                     
                     return 0;
@@ -422,7 +410,7 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
             {
                 if (strcmp("-iic", argv[3]) == 0)
                 {
-                    volatile uint8_t res;
+                    uint8_t res;
                     l3gd20h_address_t addr;
                     
                     if (strcmp("0", argv[4]) == 0)
@@ -439,7 +427,7 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                     }
 
                     res = gpio_interrupt_init();
-                    if (res)
+                    if (res != 0)
                     {
                         return 1;
                     }
@@ -447,14 +435,14 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                     
                     /* run interrupt test */
                     res = l3gd20h_interrupt_test(L3GD20H_INTERFACE_IIC, addr, 50.0f, 100);
-                    if (res)
+                    if (res != 0)
                     {
-                        gpio_interrupt_deinit();
+                        (void)gpio_interrupt_deinit();
                         g_gpio_irq = NULL;
                         
                         return 1;
                     }
-                    gpio_interrupt_deinit();
+                    (void)gpio_interrupt_deinit();
                     g_gpio_irq = NULL;
                     
                     return 0;
@@ -473,24 +461,24 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
         {
             if (strcmp("basic", argv[2]) == 0)
             {
-                volatile uint8_t res;
-                volatile uint32_t i, times;
-                volatile float dps[3];
+                uint8_t res;
+                uint32_t i, times;
+                float dps[3];
                 
                 times = atoi(argv[3]);
                 if (strcmp("-spi", argv[4]) == 0)
                 {
                     res = l3gd20h_basic_init(L3GD20H_INTERFACE_SPI, L3GD20H_ADDRESS_SDO_0);
-                    if (res)
+                    if (res != 0)
                     {
                         return 1;
                     }
                     for (i = 0; i < times; i++)
                     {
                         res = l3gd20h_basic_read((float *)dps);
-                        if (res)
+                        if (res != 0)
                         {
-                            l3gd20h_basic_deinit();
+                            (void)l3gd20h_basic_deinit();
                             
                             return 1;
                         }
@@ -500,7 +488,7 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                         l3gd20h_interface_debug_print("l3gd20h: z %0.2f dps.\n", dps[2]);
                         l3gd20h_interface_delay_ms(1000);
                     }
-                    l3gd20h_basic_deinit();
+                    (void)l3gd20h_basic_deinit();
                     
                     return 0;
                 }
@@ -511,36 +499,36 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
             }
             else if (strcmp("fifo", argv[2]) == 0)
             {
-                volatile uint8_t res;
-                volatile uint32_t times, timeout;
+                uint8_t res;
+                uint32_t times, timeout;
                 
                 times = atoi(argv[3]);
                 if (strcmp("-spi", argv[4]) == 0)
                 {
                     res = gpio_interrupt_init();
-                    if (res)
+                    if (res != 0)
                     {
                         return 1;
                     }
                     g_gpio_irq = l3gd20h_fifo_irq_handler;
                     
-                    res = l3gd20h_fifo_init(L3GD20H_INTERFACE_SPI, L3GD20H_ADDRESS_SDO_0, _l3gd20h_fifo_receive_callback);
-                    if (res)
+                    res = l3gd20h_fifo_init(L3GD20H_INTERFACE_SPI, L3GD20H_ADDRESS_SDO_0, a_l3gd20h_fifo_receive_callback);
+                    if (res != 0)
                     {
-                        l3gd20h_fifo_deinit();
-                        gpio_interrupt_deinit();
+                        (void)l3gd20h_fifo_deinit();
+                        (void)gpio_interrupt_deinit();
                         g_gpio_irq = NULL;
                         
                         return 1;
                     }
-                    while (times)
+                    while (times != 0)
                     {
                         timeout = 5000;
                         g_flag = 0;
-                        while (timeout)
+                        while (timeout != 0)
                         {
                             timeout--;
-                            if (g_flag)
+                            if (g_flag != 0)
                             {
                                 break;
                             }
@@ -553,8 +541,8 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                         times--;
                     }
                     
-                    l3gd20h_fifo_deinit();
-                    gpio_interrupt_deinit();
+                    (void)l3gd20h_fifo_deinit();
+                    (void)gpio_interrupt_deinit();
                     g_gpio_irq = NULL;
                     
                     return 0;
@@ -566,25 +554,25 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
             }
             else if (strcmp("int", argv[2]) == 0)
             {
-                volatile uint8_t res;
-                volatile uint32_t timeout;
-                volatile float threshold;
+                uint8_t res;
+                uint32_t timeout;
+                float threshold;
                 
-                threshold = atof(argv[4]);
+                threshold = (float)atof(argv[4]);
                 if (strcmp("-spi", argv[3]) == 0)
                 {
                     res = gpio_interrupt_init();
-                    if (res)
+                    if (res != 0)
                     {
                         return 1;
                     }
                     g_gpio_irq = l3gd20h_interrupt_irq_handler;
                     
-                    res = l3gd20h_interrupt_init(L3GD20H_INTERFACE_SPI, L3GD20H_ADDRESS_SDO_0, threshold, _l3gd20h_interrupt_receive_callback);
-                    if (res)
+                    res = l3gd20h_interrupt_init(L3GD20H_INTERFACE_SPI, L3GD20H_ADDRESS_SDO_0, threshold, a_l3gd20h_interrupt_receive_callback);
+                    if (res != 0)
                     {
-                        l3gd20h_interrupt_deinit();
-                        gpio_interrupt_deinit();
+                        (void)l3gd20h_interrupt_deinit();
+                        (void)gpio_interrupt_deinit();
                         g_gpio_irq = NULL;
                         
                         return 1;
@@ -592,10 +580,10 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                     l3gd20h_interface_debug_print("l3gd20h: set threshold %0.2f.\n", threshold);
                     timeout = 5000;
                     g_flag = 0;
-                    while (timeout)
+                    while (timeout != 0)
                     {
                         timeout--;
-                        if (g_flag)
+                        if (g_flag != 0)
                         {
                             break;
                         }
@@ -610,8 +598,8 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                         l3gd20h_interface_debug_print("l3gd20h: find interrupt.\n");
                     }
                     
-                    l3gd20h_interrupt_deinit();
-                    gpio_interrupt_deinit();
+                    (void)l3gd20h_interrupt_deinit();
+                    (void)gpio_interrupt_deinit();
                     g_gpio_irq = NULL;
                     
                     return 0;
@@ -639,7 +627,7 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
             {
                 if (strcmp("-iic", argv[4]) == 0)
                 {
-                    volatile uint8_t res;
+                    uint8_t res;
                     l3gd20h_address_t addr;
                     
                     if (strcmp("0", argv[5]) == 0)
@@ -657,7 +645,7 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                     
                     /* run register test */
                     res = l3gd20h_read_test(L3GD20H_INTERFACE_IIC, addr, atoi(argv[3]));
-                    if (res)
+                    if (res != 0)
                     {
                         return 1;
                     }
@@ -678,9 +666,9 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
         {
             if (strcmp("basic", argv[2]) == 0)
             {
-                volatile uint8_t res;
-                volatile uint32_t i, times;
-                volatile float dps[3];
+                uint8_t res;
+                uint32_t i, times;
+                float dps[3];
                 l3gd20h_address_t addr;
                 
                 times = atoi(argv[3]);
@@ -699,16 +687,16 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                 if (strcmp("-iic", argv[4]) == 0)
                 {
                     res = l3gd20h_basic_init(L3GD20H_INTERFACE_IIC, addr);
-                    if (res)
+                    if (res != 0)
                     {
                         return 1;
                     }
                     for (i = 0; i < times; i++)
                     {
                         res = l3gd20h_basic_read((float *)dps);
-                        if (res)
+                        if (res != 0)
                         {
-                            l3gd20h_basic_deinit();
+                            (void)l3gd20h_basic_deinit();
                             
                             return 1;
                         }
@@ -718,7 +706,7 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                         l3gd20h_interface_debug_print("l3gd20h: z %0.2f dps.\n", dps[2]);
                         l3gd20h_interface_delay_ms(1000);
                     }
-                    l3gd20h_basic_deinit();
+                    (void)l3gd20h_basic_deinit();
                     
                     return 0;
                 }
@@ -729,8 +717,8 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
             }
             else if (strcmp("fifo", argv[2]) == 0)
             {
-                volatile uint8_t res;
-                volatile uint32_t times, timeout;
+                uint8_t res;
+                uint32_t times, timeout;
                 l3gd20h_address_t addr;
                 
                 times = atoi(argv[3]);
@@ -749,29 +737,29 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                 if (strcmp("-iic", argv[4]) == 0)
                 {
                     res = gpio_interrupt_init();
-                    if (res)
+                    if (res != 0)
                     {
                         return 1;
                     }
                     g_gpio_irq = l3gd20h_fifo_irq_handler;
                     
-                    res = l3gd20h_fifo_init(L3GD20H_INTERFACE_IIC, addr, _l3gd20h_fifo_receive_callback);
-                    if (res)
+                    res = l3gd20h_fifo_init(L3GD20H_INTERFACE_IIC, addr, a_l3gd20h_fifo_receive_callback);
+                    if (res != 0)
                     {
-                        l3gd20h_fifo_deinit();
-                        gpio_interrupt_deinit();
+                        (void)l3gd20h_fifo_deinit();
+                        (void)gpio_interrupt_deinit();
                         g_gpio_irq = NULL;
                         
                         return 1;
                     }
-                    while (times)
+                    while (times != 0)
                     {
                         timeout = 5000;
                         g_flag = 0;
-                        while (timeout)
+                        while (timeout != 0)
                         {
                             timeout--;
-                            if (g_flag)
+                            if (g_flag != 0)
                             {
                                 break;
                             }
@@ -784,8 +772,8 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                         times--;
                     }
                     
-                    l3gd20h_fifo_deinit();
-                    gpio_interrupt_deinit();
+                    (void)l3gd20h_fifo_deinit();
+                    (void)gpio_interrupt_deinit();
                     g_gpio_irq = NULL;
                     
                     return 0;
@@ -797,12 +785,12 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
             }
             else if (strcmp("int", argv[2]) == 0)
             {
-                volatile uint8_t res;
-                volatile uint32_t timeout;
-                volatile float threshold;
+                uint8_t res;
+                uint32_t timeout;
+                float threshold;
                 l3gd20h_address_t addr;
                 
-                threshold = atof(argv[5]);
+                threshold = (float)atof(argv[5]);
                 if (strcmp("0", argv[4]) == 0)
                 {
                     addr = L3GD20H_ADDRESS_SDO_0;
@@ -818,17 +806,17 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                 if (strcmp("-iic", argv[3]) == 0)
                 {
                     res = gpio_interrupt_init();
-                    if (res)
+                    if (res != 0)
                     {
                         return 1;
                     }
                     g_gpio_irq = l3gd20h_interrupt_irq_handler;
                     
-                    res = l3gd20h_interrupt_init(L3GD20H_INTERFACE_IIC, addr, threshold, _l3gd20h_interrupt_receive_callback);
-                    if (res)
+                    res = l3gd20h_interrupt_init(L3GD20H_INTERFACE_IIC, addr, threshold, a_l3gd20h_interrupt_receive_callback);
+                    if (res != 0)
                     {
-                        l3gd20h_interrupt_deinit();
-                        gpio_interrupt_deinit();
+                        (void)l3gd20h_interrupt_deinit();
+                        (void)gpio_interrupt_deinit();
                         g_gpio_irq = NULL;
                         
                         return 1;
@@ -836,10 +824,10 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                     l3gd20h_interface_debug_print("l3gd20h: set threshold %0.2f.\n", threshold);
                     timeout = 5000;
                     g_flag = 0;
-                    while (timeout)
+                    while (timeout != 0)
                     {
                         timeout--;
-                        if (g_flag)
+                        if (g_flag != 0)
                         {
                             break;
                         }
@@ -854,8 +842,8 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
                         l3gd20h_interface_debug_print("l3gd20h: find interrupt.\n");
                     }
                     
-                    l3gd20h_interrupt_deinit();
-                    gpio_interrupt_deinit();
+                    (void)l3gd20h_interrupt_deinit();
+                    (void)gpio_interrupt_deinit();
                     g_gpio_irq = NULL;
                     
                     return 0;
@@ -889,7 +877,7 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
  */
 int main(void)
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     /* stm32f407 clock init and hal init */
     clock_init();

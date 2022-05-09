@@ -123,26 +123,26 @@ Functions</h2></td></tr>
 <tr class="memitem:gaf893e3313a9c62d8949f96b571e261b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__l3gd20h__interface__driver.html#gaf893e3313a9c62d8949f96b571e261b9">l3gd20h_interface_delay_ms</a> (uint32_t ms)</td></tr>
 <tr class="memdesc:gaf893e3313a9c62d8949f96b571e261b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">interface delay ms  <a href="group__l3gd20h__interface__driver.html#gaf893e3313a9c62d8949f96b571e261b9">More...</a><br /></td></tr>
 <tr class="separator:gaf893e3313a9c62d8949f96b571e261b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5af18d8ee55bab64d36b847b81e250b6"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__l3gd20h__interface__driver.html#ga5af18d8ee55bab64d36b847b81e250b6">l3gd20h_interface_debug_print</a> (char *fmt,...)</td></tr>
-<tr class="memdesc:ga5af18d8ee55bab64d36b847b81e250b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">interface print format data  <a href="group__l3gd20h__interface__driver.html#ga5af18d8ee55bab64d36b847b81e250b6">More...</a><br /></td></tr>
-<tr class="separator:ga5af18d8ee55bab64d36b847b81e250b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaed9a22acb3b7aacff17edcb34d456bc7"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__l3gd20h__interface__driver.html#gaed9a22acb3b7aacff17edcb34d456bc7">l3gd20h_interface_receive_callback</a> (uint8_t type)</td></tr>
-<tr class="memdesc:gaed9a22acb3b7aacff17edcb34d456bc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">interface receive callback  <a href="group__l3gd20h__interface__driver.html#gaed9a22acb3b7aacff17edcb34d456bc7">More...</a><br /></td></tr>
-<tr class="separator:gaed9a22acb3b7aacff17edcb34d456bc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2be5a6c7759d509786c94b7fce0d71fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a> (const char *const fmt,...)</td></tr>
+<tr class="memdesc:ga2be5a6c7759d509786c94b7fce0d71fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">interface print format data  <a href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">More...</a><br /></td></tr>
+<tr class="separator:ga2be5a6c7759d509786c94b7fce0d71fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf750f9b31e8a5a8a64fdb17f2c66682c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__l3gd20h__interface__driver.html#gaf750f9b31e8a5a8a64fdb17f2c66682c">l3gd20h_interface_receive_callback</a> (uint8_t type)</td></tr>
+<tr class="memdesc:gaf750f9b31e8a5a8a64fdb17f2c66682c"><td class="mdescLeft">&#160;</td><td class="mdescRight">interface receive callback  <a href="group__l3gd20h__interface__driver.html#gaf750f9b31e8a5a8a64fdb17f2c66682c">More...</a><br /></td></tr>
+<tr class="separator:gaf750f9b31e8a5a8a64fdb17f2c66682c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>l3gd20h interface driver modules </p>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga5af18d8ee55bab64d36b847b81e250b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga5af18d8ee55bab64d36b847b81e250b6">&#9670;&nbsp;</a></span>l3gd20h_interface_debug_print()</h2>
+<a id="ga2be5a6c7759d509786c94b7fce0d71fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2be5a6c7759d509786c94b7fce0d71fc">&#9670;&nbsp;</a></span>l3gd20h_interface_debug_print()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t l3gd20h_interface_debug_print </td>
+          <td class="memname">void l3gd20h_interface_debug_print </td>
           <td>(</td>
-          <td class="paramtype">char *&#160;</td>
+          <td class="paramtype">const char *const&#160;</td>
           <td class="paramname"><em>fmt</em>, </td>
         </tr>
         <tr>
@@ -166,10 +166,9 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>length of the send data </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>none </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="driver__l3gd20h__interface__template_8c_source.html#l00166">166</a> of file <a class="el" href="driver__l3gd20h__interface__template_8c_source.html">driver_l3gd20h_interface_template.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="driver__l3gd20h__interface__template_8c_source.html#l00165">165</a> of file <a class="el" href="driver__l3gd20h__interface__template_8c_source.html">driver_l3gd20h_interface_template.c</a>.</p>
 
 </div>
 </div>
@@ -376,14 +375,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gaed9a22acb3b7aacff17edcb34d456bc7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaed9a22acb3b7aacff17edcb34d456bc7">&#9670;&nbsp;</a></span>l3gd20h_interface_receive_callback()</h2>
+<a id="gaf750f9b31e8a5a8a64fdb17f2c66682c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf750f9b31e8a5a8a64fdb17f2c66682c">&#9670;&nbsp;</a></span>l3gd20h_interface_receive_callback()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t l3gd20h_interface_receive_callback </td>
+          <td class="memname">void l3gd20h_interface_receive_callback </td>
           <td>(</td>
           <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>type</em></td><td>)</td>
@@ -399,14 +398,9 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>status code<ul>
-<li>0 success</li>
-<li>1 run failed </li>
-</ul>
-</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>none </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="driver__l3gd20h__interface__template_8c_source.html#l00179">179</a> of file <a class="el" href="driver__l3gd20h__interface__template_8c_source.html">driver_l3gd20h_interface_template.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="driver__l3gd20h__interface__template_8c_source.html#l00175">175</a> of file <a class="el" href="driver__l3gd20h__interface__template_8c_source.html">driver_l3gd20h_interface_template.c</a>.</p>
 
 </div>
 </div>

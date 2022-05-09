@@ -91,7 +91,7 @@
  *             - 1 read failed
  * @note       none
  */
-static uint8_t _l3gd20h_iic_spi_read(l3gd20h_handle_t *handle, uint8_t reg, uint8_t *buf, uint16_t len)
+static uint8_t a_l3gd20h_iic_spi_read(l3gd20h_handle_t *handle, uint8_t reg, uint8_t *buf, uint16_t len)
 {
     if (handle->iic_spi == L3GD20H_INTERFACE_IIC)                        /* iic interface */
     {
@@ -100,7 +100,14 @@ static uint8_t _l3gd20h_iic_spi_read(l3gd20h_handle_t *handle, uint8_t reg, uint
             reg |= 1 << 7;                                               /* flag bit 7 */
         }
         
-        return handle->iic_read(handle->iic_addr, reg, buf, len);        /* read data */
+        if (handle->iic_read(handle->iic_addr, reg, buf, len) != 0)      /* read data */
+        {
+            return 1;                                                    /* return error */
+        }
+        else
+        {
+            return 0;                                                    /* success return 0 */
+        }
     }
     else                                                                 /* spi interface */
     {
@@ -110,8 +117,15 @@ static uint8_t _l3gd20h_iic_spi_read(l3gd20h_handle_t *handle, uint8_t reg, uint
         }
         reg |= 1 << 7;                                                   /* set read bit */
         
-        return handle->spi_read(reg, buf, len);                          /* read data */
-  }
+        if (handle->spi_read(reg, buf, len) != 0)                        /* read data */
+        {
+            return 1;                                                    /* return error */
+        }
+        else
+        {
+            return 0;                                                    /* success return 0 */
+        }
+    }
 }
 
 /**
@@ -125,11 +139,18 @@ static uint8_t _l3gd20h_iic_spi_read(l3gd20h_handle_t *handle, uint8_t reg, uint
  *            - 1 write failed
  * @note      none
  */
-static uint8_t _l3gd20h_iic_spi_write(l3gd20h_handle_t *handle, uint8_t reg, uint8_t *buf, uint16_t len)
+static uint8_t a_l3gd20h_iic_spi_write(l3gd20h_handle_t *handle, uint8_t reg, uint8_t *buf, uint16_t len)
 {
     if (handle->iic_spi == L3GD20H_INTERFACE_IIC)                         /* iic interface */
     {
-        return handle->iic_write(handle->iic_addr, reg, buf, len);        /* write data */
+        if (handle->iic_write(handle->iic_addr, reg, buf, len) != 0)      /* write data */
+        {
+            return 1;                                                     /* return error */
+        }
+        else
+        {
+            return 0;                                                     /* success return 0 */
+        }
     }
     else                                                                  /* spi interface */
     {
@@ -139,8 +160,15 @@ static uint8_t _l3gd20h_iic_spi_write(l3gd20h_handle_t *handle, uint8_t reg, uin
         }
         reg &= ~(1 << 7);                                                 /* set write bit */
         
-        return handle->spi_write(reg, buf, len);                          /* write data */
-  }
+        if (handle->spi_write(reg, buf, len) != 0)                        /* write data */
+        {
+            return 1;                                                     /* return error */
+        }
+        else
+        {
+            return 0;                                                     /* success return 0 */
+        }
+    }
 }
 
 /**
@@ -154,14 +182,14 @@ static uint8_t _l3gd20h_iic_spi_write(l3gd20h_handle_t *handle, uint8_t reg, uin
  */
 uint8_t l3gd20h_set_interface(l3gd20h_handle_t *handle, l3gd20h_interface_t interface)
 {
-    if (handle == NULL)                 /* check handle */
+    if (handle == NULL)                          /* check handle */
     {
-        return 2;                       /* return error */
+        return 2;                                /* return error */
     }
     
-    handle->iic_spi = interface;        /* set the interface */
+    handle->iic_spi = (uint8_t)interface;        /* set the interface */
     
-    return 0;                           /* success return 0 */
+    return 0;                                    /* success return 0 */
 }
 
 /**
@@ -196,14 +224,14 @@ uint8_t l3gd20h_get_interface(l3gd20h_handle_t *handle, l3gd20h_interface_t *int
  */
 uint8_t l3gd20h_set_addr_pin(l3gd20h_handle_t *handle, l3gd20h_address_t addr_pin)
 {
-    if (handle == NULL)                 /* check handle */
+    if (handle == NULL)                          /* check handle */
     {
-        return 2;                       /* return error */
+        return 2;                                /* return error */
     }
     
-    handle->iic_addr = addr_pin;        /* set the iic address */
+    handle->iic_addr = (uint8_t)addr_pin;        /* set the iic address */
     
-    return 0;                           /* success return 0 */
+    return 0;                                    /* success return 0 */
 }
 
 /**
@@ -240,7 +268,7 @@ uint8_t l3gd20h_get_addr_pin(l3gd20h_handle_t *handle, l3gd20h_address_t *addr_p
  */
 uint8_t l3gd20h_set_mode(l3gd20h_handle_t *handle, l3gd20h_mode_t mode)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                       /* check handle */
     {
@@ -251,8 +279,8 @@ uint8_t l3gd20h_set_mode(l3gd20h_handle_t *handle, l3gd20h_mode_t mode)
         return 3;                                                                             /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);              /* read config */
-    if (res)                                                                                  /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);             /* read config */
+    if (res != 0)                                                                             /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl1 failed.\n");                                 /* read ctrl1 failed */
         
@@ -263,7 +291,7 @@ uint8_t l3gd20h_set_mode(l3gd20h_handle_t *handle, l3gd20h_mode_t mode)
         prev |= (1 << 3);                                                                     /* set pd */
         prev &= ~(0x07);                                                                      /* clear config */
         
-        return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);        /* write config */
+        return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);       /* write config */
     }
     else
     {
@@ -271,7 +299,7 @@ uint8_t l3gd20h_set_mode(l3gd20h_handle_t *handle, l3gd20h_mode_t mode)
         prev |= (mode << 3);                                                                  /* set mode */
         prev |= 0x07;                                                                         /* set x,y,z enale */
         
-        return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);        /* write config */
+        return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);       /* write config */
     }
 }
 
@@ -288,7 +316,7 @@ uint8_t l3gd20h_set_mode(l3gd20h_handle_t *handle, l3gd20h_mode_t mode)
  */
 uint8_t l3gd20h_get_mode(l3gd20h_handle_t *handle, l3gd20h_mode_t *mode)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -299,21 +327,21 @@ uint8_t l3gd20h_get_mode(l3gd20h_handle_t *handle, l3gd20h_mode_t *mode)
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl1 failed.\n");                           /* read ctrl1 failed */
         
         return 1;                                                                       /* return error */
     }
-    if (prev & 0x07)                                                                    /* if x,y,z valid */
+    if ((prev & 0x07) != 0)                                                             /* if x,y,z valid */
     {
         prev &= 1 << 3;                                                                 /* set pd */
         *mode  = (l3gd20h_mode_t)((prev >> 3) & 0x01);                                  /* normal or power down mode */
     }
     else
     {
-        if (prev & (1 << 3))                                                            /* if pd == 1 */
+        if ((prev & (1 << 3)) != 0)                                                     /* if pd == 1 */
         {
             *mode = L3GD20H_MODE_SLEEP;                                                 /* sleep mode*/
         }
@@ -341,7 +369,7 @@ uint8_t l3gd20h_get_mode(l3gd20h_handle_t *handle, l3gd20h_mode_t *mode)
  */
 uint8_t l3gd20h_set_axis(l3gd20h_handle_t *handle, l3gd20h_axis_t axis, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -352,8 +380,8 @@ uint8_t l3gd20h_set_axis(l3gd20h_handle_t *handle, l3gd20h_axis_t axis, l3gd20h_
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl1 failed.\n");                             /* read ctrl1 failed */
         
@@ -362,7 +390,7 @@ uint8_t l3gd20h_set_axis(l3gd20h_handle_t *handle, l3gd20h_axis_t axis, l3gd20h_
     prev &= ~(1 << axis);                                                                 /* clear enable bit */
     prev |= enable << axis;                                                               /* set enable */
     
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -379,7 +407,7 @@ uint8_t l3gd20h_set_axis(l3gd20h_handle_t *handle, l3gd20h_axis_t axis, l3gd20h_
  */
 uint8_t l3gd20h_get_axis(l3gd20h_handle_t *handle, l3gd20h_axis_t axis, l3gd20h_bool_t *enable) 
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -390,8 +418,8 @@ uint8_t l3gd20h_get_axis(l3gd20h_handle_t *handle, l3gd20h_axis_t axis, l3gd20h_
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl1 failed.\n");                           /* read ctrl1 failed */
         
@@ -416,7 +444,7 @@ uint8_t l3gd20h_get_axis(l3gd20h_handle_t *handle, l3gd20h_axis_t axis, l3gd20h_
  */
 uint8_t l3gd20h_set_rate_bandwidth(l3gd20h_handle_t *handle, l3gd20h_lodr_odr_bw_t rate_bandwidth) 
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -427,8 +455,8 @@ uint8_t l3gd20h_set_rate_bandwidth(l3gd20h_handle_t *handle, l3gd20h_lodr_odr_bw
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl1 failed.\n");                             /* read ctrl1 failed */
         
@@ -436,15 +464,15 @@ uint8_t l3gd20h_set_rate_bandwidth(l3gd20h_handle_t *handle, l3gd20h_lodr_odr_bw
     }
     prev &= ~(0xF << 4);                                                                  /* clear rate and bandwidth bits */
     prev |= (rate_bandwidth & 0xF) << 4;                                                  /* set rate and bandwidth */
-    if (_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1))           /* write config */
+    if (a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1) != 0)     /* write config */
     {
         handle->debug_print("l3gd20h: write ctrl1 failed.\n");                            /* write ctrl1 failed */
         
         return 1;                                                                         /* return error */
     }
 
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);        /* read low odr */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);       /* read low odr */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read low odr failed.\n");                           /* read low odr failed */
         
@@ -452,7 +480,7 @@ uint8_t l3gd20h_set_rate_bandwidth(l3gd20h_handle_t *handle, l3gd20h_lodr_odr_bw
     }
     prev &= ~(1 << 0);                                                                    /* clear odr bit */
     prev |= ((rate_bandwidth & 0x10) >> 4) & 0x01;                                        /* set odr */
-    if (_l3gd20h_iic_spi_write(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1))         /* write config */
+    if (a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1) != 0)   /* write config */
     {
         handle->debug_print("l3gd20h: write low odr failed.\n");                          /* write low odr failed */
         
@@ -475,7 +503,7 @@ uint8_t l3gd20h_set_rate_bandwidth(l3gd20h_handle_t *handle, l3gd20h_lodr_odr_bw
  */
 uint8_t l3gd20h_get_rate_bandwidth(l3gd20h_handle_t *handle, l3gd20h_lodr_odr_bw_t *rate_bandwidth)
 {
-    volatile uint8_t res, prev1, prev2;
+    uint8_t res, prev1, prev2;
     
     if (handle == NULL)                                                                     /* check handle */
     {
@@ -486,15 +514,15 @@ uint8_t l3gd20h_get_rate_bandwidth(l3gd20h_handle_t *handle, l3gd20h_lodr_odr_bw
         return 3;                                                                           /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev1, 1);           /* read config */
-    if (res)                                                                                /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev1, 1);          /* read config */
+    if (res != 0)                                                                           /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl1 failed.\n");                               /* read ctrl1 failed */
         
         return 1;                                                                           /* return error */
     }
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev2, 1);         /* read low odr */
-    if (res)                                                                                /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev2, 1);        /* read low odr */
+    if (res != 0)                                                                           /* check result */
     {
         handle->debug_print("l3gd20h: read low odr failed.\n");                             /* read low odr failed */
         
@@ -518,7 +546,7 @@ uint8_t l3gd20h_get_rate_bandwidth(l3gd20h_handle_t *handle, l3gd20h_lodr_odr_bw
  */
 uint8_t l3gd20h_set_edge_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -529,8 +557,8 @@ uint8_t l3gd20h_set_edge_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t enable
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl2 failed.\n");                             /* read ctrl2 failed */
         
@@ -539,7 +567,7 @@ uint8_t l3gd20h_set_edge_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t enable
     prev &= ~(1 << 7);                                                                    /* clear enable bit */
     prev |= enable << 7;                                                                  /* set enable */
     
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -555,7 +583,7 @@ uint8_t l3gd20h_set_edge_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t enable
  */
 uint8_t l3gd20h_get_edge_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -566,8 +594,8 @@ uint8_t l3gd20h_get_edge_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t *enabl
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl2 failed.\n");                           /* read ctrl2 failed */
         
@@ -593,7 +621,7 @@ uint8_t l3gd20h_get_edge_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t *enabl
  */
 uint8_t l3gd20h_set_level_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -604,8 +632,8 @@ uint8_t l3gd20h_set_level_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t enabl
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl2 failed.\n");                             /* read ctrl2 failed */
         
@@ -614,7 +642,7 @@ uint8_t l3gd20h_set_level_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t enabl
     prev &= ~(1 << 6);                                                                    /* get bool */
     prev |= enable << 6;                                                                  /* set the enable */
     
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -630,7 +658,7 @@ uint8_t l3gd20h_set_level_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t enabl
  */
 uint8_t l3gd20h_get_level_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -641,8 +669,8 @@ uint8_t l3gd20h_get_level_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t *enab
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl2 failed.\n");                             /* read ctrl2 failed */
         
@@ -667,7 +695,7 @@ uint8_t l3gd20h_get_level_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t *enab
  */
 uint8_t l3gd20h_set_high_pass_filter_mode(l3gd20h_handle_t *handle, l3gd20h_high_pass_filter_mode_t mode)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -678,8 +706,8 @@ uint8_t l3gd20h_set_high_pass_filter_mode(l3gd20h_handle_t *handle, l3gd20h_high
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl2 failed.\n");                             /* read ctrl2 failed */
         
@@ -688,7 +716,7 @@ uint8_t l3gd20h_set_high_pass_filter_mode(l3gd20h_handle_t *handle, l3gd20h_high
     prev &= ~(3 << 4);                                                                    /* clear the mode */
     prev |= mode << 4;                                                                    /* set the mode */
     
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -704,7 +732,7 @@ uint8_t l3gd20h_set_high_pass_filter_mode(l3gd20h_handle_t *handle, l3gd20h_high
  */
 uint8_t l3gd20h_get_high_pass_filter_mode(l3gd20h_handle_t *handle, l3gd20h_high_pass_filter_mode_t *mode)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -715,8 +743,8 @@ uint8_t l3gd20h_get_high_pass_filter_mode(l3gd20h_handle_t *handle, l3gd20h_high
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl2 failed.\n");                             /* read ctrl2 failed */
         
@@ -741,7 +769,7 @@ uint8_t l3gd20h_get_high_pass_filter_mode(l3gd20h_handle_t *handle, l3gd20h_high
  */
 uint8_t l3gd20h_set_high_pass_filter_cut_off_frequency(l3gd20h_handle_t *handle, l3gd20h_high_pass_filter_cut_off_frequency_t frequency)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -752,8 +780,8 @@ uint8_t l3gd20h_set_high_pass_filter_cut_off_frequency(l3gd20h_handle_t *handle,
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl2 failed.\n");                             /* read ctrl2 failed */
         
@@ -762,7 +790,7 @@ uint8_t l3gd20h_set_high_pass_filter_cut_off_frequency(l3gd20h_handle_t *handle,
     prev &= ~(0x0F);                                                                      /* clear the cut off frequency */
     prev |= frequency;                                                                    /* set the frequency */
     
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -778,7 +806,7 @@ uint8_t l3gd20h_set_high_pass_filter_cut_off_frequency(l3gd20h_handle_t *handle,
  */
 uint8_t l3gd20h_get_high_pass_filter_cut_off_frequency(l3gd20h_handle_t *handle, l3gd20h_high_pass_filter_cut_off_frequency_t *frequency)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -789,8 +817,8 @@ uint8_t l3gd20h_get_high_pass_filter_cut_off_frequency(l3gd20h_handle_t *handle,
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl2 failed.\n");                             /* read ctrl2 failed */
         
@@ -815,7 +843,7 @@ uint8_t l3gd20h_get_high_pass_filter_cut_off_frequency(l3gd20h_handle_t *handle,
  */
 uint8_t l3gd20h_set_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -826,8 +854,8 @@ uint8_t l3gd20h_set_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                             /* read ctrl3 failed */
         
@@ -836,7 +864,7 @@ uint8_t l3gd20h_set_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
     prev &= ~(1 << 7);                                                                    /* clear the enable */
     prev |= enable << 7;                                                                  /* set enable */
     
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -852,7 +880,7 @@ uint8_t l3gd20h_set_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
  */
 uint8_t l3gd20h_get_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -863,8 +891,8 @@ uint8_t l3gd20h_get_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                           /* read ctrl3 failed */
         
@@ -889,7 +917,7 @@ uint8_t l3gd20h_get_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
  */
 uint8_t l3gd20h_set_boot_on_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -900,8 +928,8 @@ uint8_t l3gd20h_set_boot_on_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t 
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                             /* read ctrl3 failed */
         
@@ -910,7 +938,7 @@ uint8_t l3gd20h_set_boot_on_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t 
     prev &= ~(1 << 6);                                                                    /* clear enable bit */
     prev |= enable << 6;                                                                  /* set enable */
     
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -926,7 +954,7 @@ uint8_t l3gd20h_set_boot_on_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t 
  */
 uint8_t l3gd20h_get_boot_on_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -937,8 +965,8 @@ uint8_t l3gd20h_get_boot_on_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t 
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                           /* read ctrl3 failed */
         
@@ -963,7 +991,7 @@ uint8_t l3gd20h_get_boot_on_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t 
  */
 uint8_t l3gd20h_set_interrupt_active_level(l3gd20h_handle_t *handle, l3gd20h_interrupt_active_level_t level)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -974,8 +1002,8 @@ uint8_t l3gd20h_set_interrupt_active_level(l3gd20h_handle_t *handle, l3gd20h_int
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                             /* read ctrl3 failed */
         
@@ -984,7 +1012,7 @@ uint8_t l3gd20h_set_interrupt_active_level(l3gd20h_handle_t *handle, l3gd20h_int
     prev &= ~(1 << 5);                                                                    /* clear level bit */
     prev |= level << 5;                                                                   /* set level bit */
     
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -1000,7 +1028,7 @@ uint8_t l3gd20h_set_interrupt_active_level(l3gd20h_handle_t *handle, l3gd20h_int
  */
 uint8_t l3gd20h_get_interrupt_active_level(l3gd20h_handle_t *handle, l3gd20h_interrupt_active_level_t *level)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -1011,8 +1039,8 @@ uint8_t l3gd20h_get_interrupt_active_level(l3gd20h_handle_t *handle, l3gd20h_int
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                           /* read ctrl3 failed */
         
@@ -1037,7 +1065,7 @@ uint8_t l3gd20h_get_interrupt_active_level(l3gd20h_handle_t *handle, l3gd20h_int
  */
 uint8_t l3gd20h_set_interrupt_pin_type(l3gd20h_handle_t *handle, l3gd20h_pin_type_t pin_type)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -1048,8 +1076,8 @@ uint8_t l3gd20h_set_interrupt_pin_type(l3gd20h_handle_t *handle, l3gd20h_pin_typ
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                             /* read ctrl3 failed */
         
@@ -1058,7 +1086,7 @@ uint8_t l3gd20h_set_interrupt_pin_type(l3gd20h_handle_t *handle, l3gd20h_pin_typ
     prev &= ~(1 << 4);                                                                    /* clear pin type bit */
     prev |= pin_type << 4;                                                                /* set pin type */
     
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -1074,7 +1102,7 @@ uint8_t l3gd20h_set_interrupt_pin_type(l3gd20h_handle_t *handle, l3gd20h_pin_typ
  */
 uint8_t l3gd20h_get_interrupt_pin_type(l3gd20h_handle_t *handle, l3gd20h_pin_type_t *pin_type)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -1085,8 +1113,8 @@ uint8_t l3gd20h_get_interrupt_pin_type(l3gd20h_handle_t *handle, l3gd20h_pin_typ
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                           /* read ctrl3 failed */
         
@@ -1111,7 +1139,7 @@ uint8_t l3gd20h_get_interrupt_pin_type(l3gd20h_handle_t *handle, l3gd20h_pin_typ
  */
 uint8_t l3gd20h_set_data_ready_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -1122,8 +1150,8 @@ uint8_t l3gd20h_set_data_ready_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                             /* read ctrl3 failed */
         
@@ -1132,7 +1160,7 @@ uint8_t l3gd20h_set_data_ready_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
     prev &= ~(1 << 3);                                                                    /* set data ready bit */
     prev |= enable << 3;                                                                  /* set data ready */
     
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -1148,7 +1176,7 @@ uint8_t l3gd20h_set_data_ready_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
  */
 uint8_t l3gd20h_get_data_ready_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -1159,8 +1187,8 @@ uint8_t l3gd20h_get_data_ready_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                           /* read ctrl3 failed */
         
@@ -1185,7 +1213,7 @@ uint8_t l3gd20h_get_data_ready_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
  */
 uint8_t l3gd20h_set_fifo_threshold_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -1196,8 +1224,8 @@ uint8_t l3gd20h_set_fifo_threshold_on_interrupt2(l3gd20h_handle_t *handle, l3gd2
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                             /* read ctrl3 failed */
         
@@ -1206,7 +1234,7 @@ uint8_t l3gd20h_set_fifo_threshold_on_interrupt2(l3gd20h_handle_t *handle, l3gd2
     prev &= ~(1 << 2);                                                                    /* clear enable bit */
     prev |= enable << 2;                                                                  /* set enable */
    
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -1222,7 +1250,7 @@ uint8_t l3gd20h_set_fifo_threshold_on_interrupt2(l3gd20h_handle_t *handle, l3gd2
  */
 uint8_t l3gd20h_get_fifo_threshold_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -1233,8 +1261,8 @@ uint8_t l3gd20h_get_fifo_threshold_on_interrupt2(l3gd20h_handle_t *handle, l3gd2
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                           /* read ctrl3 failed */
         
@@ -1259,7 +1287,7 @@ uint8_t l3gd20h_get_fifo_threshold_on_interrupt2(l3gd20h_handle_t *handle, l3gd2
  */
 uint8_t l3gd20h_set_fifo_overrun_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -1270,8 +1298,8 @@ uint8_t l3gd20h_set_fifo_overrun_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                             /* read ctrl3 failed */
         
@@ -1280,7 +1308,7 @@ uint8_t l3gd20h_set_fifo_overrun_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h
     prev &= ~(1 << 1);                                                                    /* clear enable bit */
     prev |= enable << 1;                                                                  /* set enable */
     
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -1296,7 +1324,7 @@ uint8_t l3gd20h_set_fifo_overrun_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h
  */
 uint8_t l3gd20h_get_fifo_overrun_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -1307,8 +1335,8 @@ uint8_t l3gd20h_get_fifo_overrun_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                           /* read ctrl3 failed */
         
@@ -1333,7 +1361,7 @@ uint8_t l3gd20h_get_fifo_overrun_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h
  */
 uint8_t l3gd20h_set_fifo_empty_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -1344,8 +1372,8 @@ uint8_t l3gd20h_set_fifo_empty_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                             /* read ctrl3 failed */
         
@@ -1354,7 +1382,7 @@ uint8_t l3gd20h_set_fifo_empty_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
     prev &= ~(1 << 0);                                                                    /* clear enable bit */
     prev |= enable << 0;                                                                  /* set enable */
     
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -1370,7 +1398,7 @@ uint8_t l3gd20h_set_fifo_empty_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
  */
 uint8_t l3gd20h_get_fifo_empty_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -1381,8 +1409,8 @@ uint8_t l3gd20h_get_fifo_empty_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl3 failed.\n");                           /* read ctrl3 failed */
         
@@ -1407,7 +1435,7 @@ uint8_t l3gd20h_get_fifo_empty_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
  */
 uint8_t l3gd20h_set_block_data_update(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -1418,8 +1446,8 @@ uint8_t l3gd20h_set_block_data_update(l3gd20h_handle_t *handle, l3gd20h_bool_t e
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl4 failed.\n");                             /* read ctrl4 failed */
         
@@ -1428,7 +1456,7 @@ uint8_t l3gd20h_set_block_data_update(l3gd20h_handle_t *handle, l3gd20h_bool_t e
     prev &= ~(1 << 7);                                                                    /* clear the enable bit */
     prev |= enable << 7;                                                                  /* set enable */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -1444,7 +1472,7 @@ uint8_t l3gd20h_set_block_data_update(l3gd20h_handle_t *handle, l3gd20h_bool_t e
  */
 uint8_t l3gd20h_get_block_data_update(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -1455,8 +1483,8 @@ uint8_t l3gd20h_get_block_data_update(l3gd20h_handle_t *handle, l3gd20h_bool_t *
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl4 failed.\n");                           /* read ctrl4 failed */
         
@@ -1481,7 +1509,7 @@ uint8_t l3gd20h_get_block_data_update(l3gd20h_handle_t *handle, l3gd20h_bool_t *
  */
 uint8_t l3gd20h_set_data_format(l3gd20h_handle_t *handle, l3gd20h_data_format_t data_format)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -1492,8 +1520,8 @@ uint8_t l3gd20h_set_data_format(l3gd20h_handle_t *handle, l3gd20h_data_format_t 
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl4 failed.\n");                             /* read ctrl4 failed */
         
@@ -1502,7 +1530,7 @@ uint8_t l3gd20h_set_data_format(l3gd20h_handle_t *handle, l3gd20h_data_format_t 
     prev &= ~(1 << 6);                                                                    /* clear enable bit */
     prev |= data_format << 6;                                                             /* set enable */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -1518,7 +1546,7 @@ uint8_t l3gd20h_set_data_format(l3gd20h_handle_t *handle, l3gd20h_data_format_t 
  */
 uint8_t l3gd20h_get_data_format(l3gd20h_handle_t *handle, l3gd20h_data_format_t *data_format)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -1529,8 +1557,8 @@ uint8_t l3gd20h_get_data_format(l3gd20h_handle_t *handle, l3gd20h_data_format_t 
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl4 failed.\n");                           /* read ctrl4 failed */
         
@@ -1555,7 +1583,7 @@ uint8_t l3gd20h_get_data_format(l3gd20h_handle_t *handle, l3gd20h_data_format_t 
  */
 uint8_t l3gd20h_set_full_scale(l3gd20h_handle_t *handle, l3gd20h_full_scale_t full_scale)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -1566,8 +1594,8 @@ uint8_t l3gd20h_set_full_scale(l3gd20h_handle_t *handle, l3gd20h_full_scale_t fu
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl4 failed.\n");                             /* read ctrl4 failed */
         
@@ -1576,7 +1604,7 @@ uint8_t l3gd20h_set_full_scale(l3gd20h_handle_t *handle, l3gd20h_full_scale_t fu
     prev &= ~(3 << 4);                                                                    /* clear the scale bits */
     prev |= full_scale << 4;                                                              /* set scale */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -1592,7 +1620,7 @@ uint8_t l3gd20h_set_full_scale(l3gd20h_handle_t *handle, l3gd20h_full_scale_t fu
  */
 uint8_t l3gd20h_get_full_scale(l3gd20h_handle_t *handle, l3gd20h_full_scale_t *full_scale)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -1603,8 +1631,8 @@ uint8_t l3gd20h_get_full_scale(l3gd20h_handle_t *handle, l3gd20h_full_scale_t *f
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl4 failed.\n");                           /* read ctrl4 failed */
         
@@ -1629,7 +1657,7 @@ uint8_t l3gd20h_get_full_scale(l3gd20h_handle_t *handle, l3gd20h_full_scale_t *f
  */
 uint8_t l3gd20h_set_level_sensitive_latched(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -1640,8 +1668,8 @@ uint8_t l3gd20h_set_level_sensitive_latched(l3gd20h_handle_t *handle, l3gd20h_bo
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl4 failed.\n");                             /* read ctrl4 failed */
         
@@ -1650,7 +1678,7 @@ uint8_t l3gd20h_set_level_sensitive_latched(l3gd20h_handle_t *handle, l3gd20h_bo
     prev &= ~(1 << 3);                                                                    /* clear enable bit */
     prev |= enable << 3;                                                                  /* set enable */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -1666,7 +1694,7 @@ uint8_t l3gd20h_set_level_sensitive_latched(l3gd20h_handle_t *handle, l3gd20h_bo
  */
 uint8_t l3gd20h_get_level_sensitive_latched(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -1677,8 +1705,8 @@ uint8_t l3gd20h_get_level_sensitive_latched(l3gd20h_handle_t *handle, l3gd20h_bo
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl4 failed.\n");                           /* read ctrl4 failed */
         
@@ -1703,7 +1731,7 @@ uint8_t l3gd20h_get_level_sensitive_latched(l3gd20h_handle_t *handle, l3gd20h_bo
  */
 uint8_t l3gd20h_set_self_test(l3gd20h_handle_t *handle, l3gd20h_self_test_t self_test)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -1714,8 +1742,8 @@ uint8_t l3gd20h_set_self_test(l3gd20h_handle_t *handle, l3gd20h_self_test_t self
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl4 failed.\n");                             /* read ctrl4 failed */
         
@@ -1724,7 +1752,7 @@ uint8_t l3gd20h_set_self_test(l3gd20h_handle_t *handle, l3gd20h_self_test_t self
     prev &= ~(3 << 1);                                                                    /* clear self test bits */
     prev |= self_test << 1;                                                               /* set self test */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -1740,7 +1768,7 @@ uint8_t l3gd20h_set_self_test(l3gd20h_handle_t *handle, l3gd20h_self_test_t self
  */
 uint8_t l3gd20h_get_self_test(l3gd20h_handle_t *handle, l3gd20h_self_test_t *self_test)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -1751,8 +1779,8 @@ uint8_t l3gd20h_get_self_test(l3gd20h_handle_t *handle, l3gd20h_self_test_t *sel
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl4 failed.\n");                           /* read ctrl4 failed */
         
@@ -1777,7 +1805,7 @@ uint8_t l3gd20h_get_self_test(l3gd20h_handle_t *handle, l3gd20h_self_test_t *sel
  */
 uint8_t l3gd20h_set_spi_wire(l3gd20h_handle_t *handle, l3gd20h_spi_wire_t spi_wire)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -1788,8 +1816,8 @@ uint8_t l3gd20h_set_spi_wire(l3gd20h_handle_t *handle, l3gd20h_spi_wire_t spi_wi
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl4 failed.\n");                             /* read ctrl4 failed */
         
@@ -1798,7 +1826,7 @@ uint8_t l3gd20h_set_spi_wire(l3gd20h_handle_t *handle, l3gd20h_spi_wire_t spi_wi
     prev &= ~(1 << 0);                                                                    /* clear spi wire bit */
     prev |= spi_wire << 0;                                                                /* set spi wire */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -1814,7 +1842,7 @@ uint8_t l3gd20h_set_spi_wire(l3gd20h_handle_t *handle, l3gd20h_spi_wire_t spi_wi
  */
 uint8_t l3gd20h_get_spi_wire(l3gd20h_handle_t *handle, l3gd20h_spi_wire_t *spi_wire)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -1825,8 +1853,8 @@ uint8_t l3gd20h_get_spi_wire(l3gd20h_handle_t *handle, l3gd20h_spi_wire_t *spi_w
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl4 failed.\n");                           /* read ctrl4 failed */
         
@@ -1851,7 +1879,7 @@ uint8_t l3gd20h_get_spi_wire(l3gd20h_handle_t *handle, l3gd20h_spi_wire_t *spi_w
  */
 uint8_t l3gd20h_set_boot(l3gd20h_handle_t *handle, l3gd20h_boot_t boot)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -1862,8 +1890,8 @@ uint8_t l3gd20h_set_boot(l3gd20h_handle_t *handle, l3gd20h_boot_t boot)
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl5 failed.\n");                             /* read ctrl5 failed */
         
@@ -1872,7 +1900,7 @@ uint8_t l3gd20h_set_boot(l3gd20h_handle_t *handle, l3gd20h_boot_t boot)
     prev &= ~(1 << 7);                                                                    /* clear boot */
     prev |= boot << 7;                                                                    /* set boot */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -1888,7 +1916,7 @@ uint8_t l3gd20h_set_boot(l3gd20h_handle_t *handle, l3gd20h_boot_t boot)
  */
 uint8_t l3gd20h_get_boot(l3gd20h_handle_t *handle, l3gd20h_boot_t *boot)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -1899,8 +1927,8 @@ uint8_t l3gd20h_get_boot(l3gd20h_handle_t *handle, l3gd20h_boot_t *boot)
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl5 failed.\n");                           /* read ctrl5 failed */
         
@@ -1925,7 +1953,7 @@ uint8_t l3gd20h_get_boot(l3gd20h_handle_t *handle, l3gd20h_boot_t *boot)
  */
 uint8_t l3gd20h_set_fifo(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -1936,8 +1964,8 @@ uint8_t l3gd20h_set_fifo(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl5 failed.\n");                             /* read ctrl5 failed */
         
@@ -1946,7 +1974,7 @@ uint8_t l3gd20h_set_fifo(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
     prev &= ~(1 << 6);                                                                    /* clear enable bit */
     prev |= enable << 6;                                                                  /* set enable */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -1962,7 +1990,7 @@ uint8_t l3gd20h_set_fifo(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
  */
 uint8_t l3gd20h_get_fifo(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -1973,8 +2001,8 @@ uint8_t l3gd20h_get_fifo(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl5 failed.\n");                           /* read ctrl5 failed */
         
@@ -1999,7 +2027,7 @@ uint8_t l3gd20h_get_fifo(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
  */
 uint8_t l3gd20h_set_stop_on_fifo_threshold(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -2010,8 +2038,8 @@ uint8_t l3gd20h_set_stop_on_fifo_threshold(l3gd20h_handle_t *handle, l3gd20h_boo
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl5 failed.\n");                             /* read ctrl5 failed */
         
@@ -2020,7 +2048,7 @@ uint8_t l3gd20h_set_stop_on_fifo_threshold(l3gd20h_handle_t *handle, l3gd20h_boo
     prev &= ~(1 << 5);                                                                    /* clear fifo enable bit */
     prev |= enable << 5;                                                                  /* set enable */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -2036,7 +2064,7 @@ uint8_t l3gd20h_set_stop_on_fifo_threshold(l3gd20h_handle_t *handle, l3gd20h_boo
  */
 uint8_t l3gd20h_get_stop_on_fifo_threshold(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -2047,8 +2075,8 @@ uint8_t l3gd20h_get_stop_on_fifo_threshold(l3gd20h_handle_t *handle, l3gd20h_boo
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl5 failed.\n");                           /* read ctrl5 failed */
         
@@ -2073,7 +2101,7 @@ uint8_t l3gd20h_get_stop_on_fifo_threshold(l3gd20h_handle_t *handle, l3gd20h_boo
  */
 uint8_t l3gd20h_set_high_pass_filter(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -2084,8 +2112,8 @@ uint8_t l3gd20h_set_high_pass_filter(l3gd20h_handle_t *handle, l3gd20h_bool_t en
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl5 failed.\n");                             /* read ctrl5 failed */
         
@@ -2094,7 +2122,7 @@ uint8_t l3gd20h_set_high_pass_filter(l3gd20h_handle_t *handle, l3gd20h_bool_t en
     prev &= ~(1 << 4);                                                                    /* clear enable bit */
     prev |= enable << 4;                                                                  /* set enable */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -2110,7 +2138,7 @@ uint8_t l3gd20h_set_high_pass_filter(l3gd20h_handle_t *handle, l3gd20h_bool_t en
  */
 uint8_t l3gd20h_get_high_pass_filter(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -2121,8 +2149,8 @@ uint8_t l3gd20h_get_high_pass_filter(l3gd20h_handle_t *handle, l3gd20h_bool_t *e
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl5 failed.\n");                           /* read ctrl5 failed */
         
@@ -2147,7 +2175,7 @@ uint8_t l3gd20h_get_high_pass_filter(l3gd20h_handle_t *handle, l3gd20h_bool_t *e
  */
 uint8_t l3gd20h_set_interrupt_selection(l3gd20h_handle_t *handle, l3gd20h_selection_t selection)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -2158,8 +2186,8 @@ uint8_t l3gd20h_set_interrupt_selection(l3gd20h_handle_t *handle, l3gd20h_select
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl5 failed.\n");                             /* read ctrl5 failed */
         
@@ -2168,7 +2196,7 @@ uint8_t l3gd20h_set_interrupt_selection(l3gd20h_handle_t *handle, l3gd20h_select
     prev &= ~(3 << 2);                                                                    /* clear selection */
     prev |= selection << 2;                                                               /* set selection */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -2184,7 +2212,7 @@ uint8_t l3gd20h_set_interrupt_selection(l3gd20h_handle_t *handle, l3gd20h_select
  */
 uint8_t l3gd20h_get_interrupt_selection(l3gd20h_handle_t *handle, l3gd20h_selection_t *selection)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -2195,8 +2223,8 @@ uint8_t l3gd20h_get_interrupt_selection(l3gd20h_handle_t *handle, l3gd20h_select
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl5 failed.\n");                           /* read ctrl5 failed */
         
@@ -2221,7 +2249,7 @@ uint8_t l3gd20h_get_interrupt_selection(l3gd20h_handle_t *handle, l3gd20h_select
  */
 uint8_t l3gd20h_set_out_selection(l3gd20h_handle_t *handle, l3gd20h_selection_t selection)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -2232,8 +2260,8 @@ uint8_t l3gd20h_set_out_selection(l3gd20h_handle_t *handle, l3gd20h_selection_t 
         return 3;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl5 failed.\n");                             /* read ctrl5 failed */
         
@@ -2242,7 +2270,7 @@ uint8_t l3gd20h_set_out_selection(l3gd20h_handle_t *handle, l3gd20h_selection_t 
     prev &= ~(3 << 0);                                                                    /* clear the selection bits */
     prev |= selection << 0;                                                               /* get the selection */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -2258,7 +2286,7 @@ uint8_t l3gd20h_set_out_selection(l3gd20h_handle_t *handle, l3gd20h_selection_t 
  */
 uint8_t l3gd20h_get_out_selection(l3gd20h_handle_t *handle, l3gd20h_selection_t *selection)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -2269,8 +2297,8 @@ uint8_t l3gd20h_get_out_selection(l3gd20h_handle_t *handle, l3gd20h_selection_t 
         return 3;                                                                       /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                            /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                       /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl5 failed.\n");                           /* read ctrl5 failed */
         
@@ -2304,7 +2332,7 @@ uint8_t l3gd20h_set_high_pass_filter_reference(l3gd20h_handle_t *handle, uint8_t
         return 3;                                                                              /* return error */
     }
     
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_REFERENCE, (uint8_t *)&value, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_REFERENCE, (uint8_t *)&value, 1);       /* write config */
 }
 
 /**
@@ -2329,7 +2357,7 @@ uint8_t l3gd20h_get_high_pass_filter_reference(l3gd20h_handle_t *handle, uint8_t
         return 3;                                                                              /* return error */
     }
     
-    return _l3gd20h_iic_spi_read(handle, L3GD20H_REG_REFERENCE, (uint8_t *)value, 1);          /* read config */
+    return a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_REFERENCE, (uint8_t *)value, 1);         /* read config */
 }
 
 /**
@@ -2346,7 +2374,7 @@ uint8_t l3gd20h_get_high_pass_filter_reference(l3gd20h_handle_t *handle, uint8_t
  */
 uint8_t l3gd20h_read_temperature(l3gd20h_handle_t *handle, int8_t *raw, float *temp)
 {
-    volatile uint8_t res;
+    uint8_t res;
   
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -2357,8 +2385,8 @@ uint8_t l3gd20h_read_temperature(l3gd20h_handle_t *handle, int8_t *raw, float *t
         return 3;                                                                        /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_OUT_TEMP, (uint8_t *)raw, 1);        /* read data */
-    if (res)                                                                             /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_OUT_TEMP, (uint8_t *)raw, 1);       /* read data */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("l3gd20h: read temperature failed.\n");                      /* read temperature failed */
     
@@ -2391,7 +2419,7 @@ uint8_t l3gd20h_get_status(l3gd20h_handle_t *handle, uint8_t *status)
         return 3;                                                                        /* return error */
     }
     
-    return _l3gd20h_iic_spi_read(handle, L3GD20H_REG_STATUS, (uint8_t *)status, 1);      /* read config */
+    return a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_STATUS, (uint8_t *)status, 1);     /* read config */
 }
 
 /**
@@ -2407,7 +2435,7 @@ uint8_t l3gd20h_get_status(l3gd20h_handle_t *handle, uint8_t *status)
  */
 uint8_t l3gd20h_set_fifo_mode(l3gd20h_handle_t *handle, l3gd20h_fifo_mode_t fifo_mode)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                       /* check handle */
     {
@@ -2418,8 +2446,8 @@ uint8_t l3gd20h_set_fifo_mode(l3gd20h_handle_t *handle, l3gd20h_fifo_mode_t fifo
         return 3;                                                                             /* return error */
     }
   
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                                  /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                             /* check result */
     {
         handle->debug_print("l3gd20h: read fifo ctrl failed.\n");                             /* read fifo ctrl failed */
    
@@ -2428,7 +2456,7 @@ uint8_t l3gd20h_set_fifo_mode(l3gd20h_handle_t *handle, l3gd20h_fifo_mode_t fifo
     prev &= ~(7 << 5);
     prev |= fifo_mode << 5;                                                                   /* clear fifo mode bits */
                                                                                               /* set fifo mode */
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);        /* wrtie config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);       /* wrtie config */
 }
 
 /**
@@ -2444,7 +2472,7 @@ uint8_t l3gd20h_set_fifo_mode(l3gd20h_handle_t *handle, l3gd20h_fifo_mode_t fifo
  */
 uint8_t l3gd20h_get_fifo_mode(l3gd20h_handle_t *handle, l3gd20h_fifo_mode_t *fifo_mode)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                     /* check handle */
     {
@@ -2455,8 +2483,8 @@ uint8_t l3gd20h_get_fifo_mode(l3gd20h_handle_t *handle, l3gd20h_fifo_mode_t *fif
         return 3;                                                                           /* return error */
     }
   
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                                /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                           /* check result */
     {
         handle->debug_print("l3gd20h: read fifo ctrl failed.\n");                           /* read fifo ctrl failed */
    
@@ -2482,7 +2510,7 @@ uint8_t l3gd20h_get_fifo_mode(l3gd20h_handle_t *handle, l3gd20h_fifo_mode_t *fif
  */
 uint8_t l3gd20h_set_fifo_threshold(l3gd20h_handle_t *handle, uint8_t threshold)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                       /* check handle */
     {
@@ -2499,8 +2527,8 @@ uint8_t l3gd20h_set_fifo_threshold(l3gd20h_handle_t *handle, uint8_t threshold)
     
         return 4;                                                                             /* return error */
     }
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                                  /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                             /* check result */
     {
         handle->debug_print("l3gd20h: read fifo ctrl failed.\n");                             /* read fifo ctrl failed */
     
@@ -2509,7 +2537,7 @@ uint8_t l3gd20h_set_fifo_threshold(l3gd20h_handle_t *handle, uint8_t threshold)
     prev &= ~(0x1F);                                                                          /* clear the threshold bits */
     prev |= threshold;                                                                        /* set the threshold */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);        /* wrtie config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);       /* wrtie config */
 }
 
 /**
@@ -2525,7 +2553,7 @@ uint8_t l3gd20h_set_fifo_threshold(l3gd20h_handle_t *handle, uint8_t threshold)
  */
 uint8_t l3gd20h_get_fifo_threshold(l3gd20h_handle_t *handle, uint8_t *threshold)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                     /* check handle */
     {
@@ -2536,8 +2564,8 @@ uint8_t l3gd20h_get_fifo_threshold(l3gd20h_handle_t *handle, uint8_t *threshold)
         return 3;                                                                           /* return error */
     }
   
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                                /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                           /* check result */
     {
         handle->debug_print("l3gd20h: read fifo ctrl failed.\n");                           /* read fifo ctrl failed */
     
@@ -2562,7 +2590,7 @@ uint8_t l3gd20h_get_fifo_threshold(l3gd20h_handle_t *handle, uint8_t *threshold)
  */
 uint8_t l3gd20h_get_fifo_level(l3gd20h_handle_t *handle, uint8_t *level)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                    /* check handle */
     {
@@ -2573,8 +2601,8 @@ uint8_t l3gd20h_get_fifo_level(l3gd20h_handle_t *handle, uint8_t *level)
         return 3;                                                                          /* return error */
     }
   
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_SRC, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                               /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_SRC, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                          /* check result */
     {
         handle->debug_print("l3gd20h: read fifo src failed.\n");                           /* read fifo src failed */
     
@@ -2600,7 +2628,7 @@ uint8_t l3gd20h_get_fifo_level(l3gd20h_handle_t *handle, uint8_t *level)
  */
 uint8_t l3gd20h_set_interrupt_event(l3gd20h_handle_t *handle, l3gd20h_interrupt_event_t interrupt_event, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                    /* check handle */
     {
@@ -2611,8 +2639,8 @@ uint8_t l3gd20h_set_interrupt_event(l3gd20h_handle_t *handle, l3gd20h_interrupt_
         return 3;                                                                          /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_CFG, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                               /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_CFG, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                          /* check result */
     {
         handle->debug_print("l3gd20h: read interrupt cfg failed.\n");                      /* read interrupt cfg failed */
     
@@ -2621,7 +2649,7 @@ uint8_t l3gd20h_set_interrupt_event(l3gd20h_handle_t *handle, l3gd20h_interrupt_
     prev &= ~(1 << interrupt_event);                                                       /* clear event bit */
     prev |= enable << interrupt_event;                                                     /* set event bit */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_CFG, (uint8_t *)&prev, 1);        /* wrtie config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_CFG, (uint8_t *)&prev, 1);       /* wrtie config */
 }
 
 /**
@@ -2638,7 +2666,7 @@ uint8_t l3gd20h_set_interrupt_event(l3gd20h_handle_t *handle, l3gd20h_interrupt_
  */
 uint8_t l3gd20h_get_interrupt_event(l3gd20h_handle_t *handle, l3gd20h_interrupt_event_t interrupt_event, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -2649,8 +2677,8 @@ uint8_t l3gd20h_get_interrupt_event(l3gd20h_handle_t *handle, l3gd20h_interrupt_
         return 3;                                                                        /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_CFG, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                             /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_CFG, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("l3gd20h: read interrupt cfg failed.\n");                    /* read interrupt cfg failed */
     
@@ -2675,7 +2703,7 @@ uint8_t l3gd20h_get_interrupt_event(l3gd20h_handle_t *handle, l3gd20h_interrupt_
  */
 uint8_t l3gd20h_get_interrupt_source(l3gd20h_handle_t *handle, uint8_t *src)
 {
-    volatile uint8_t res, prev;
+    uint8_t res;
   
     if (handle == NULL)                                                                /* check handle */
     {
@@ -2686,8 +2714,8 @@ uint8_t l3gd20h_get_interrupt_source(l3gd20h_handle_t *handle, uint8_t *src)
         return 3;                                                                      /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_SRC, (uint8_t *)src, 1);        /* read config */
-    if (res)                                                                           /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_SRC, (uint8_t *)src, 1);       /* read config */
+    if (res != 0)                                                                      /* check result */
     {
         handle->debug_print("l3gd20h: read interrupt source failed.\n");               /* read interrupt source failed */
     
@@ -2711,8 +2739,8 @@ uint8_t l3gd20h_get_interrupt_source(l3gd20h_handle_t *handle, uint8_t *src)
  */
 uint8_t l3gd20h_set_x_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t threshold)
 {
-    volatile uint8_t res;
-    volatile uint8_t buf[2];
+    uint8_t res;
+    uint8_t buf[2];
   
     if (handle == NULL)                                                                        /* check handle */
     {
@@ -2722,15 +2750,15 @@ uint8_t l3gd20h_set_x_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
     {
         return 3;                                                                              /* return error */
     }
-    if (threshold > 0x8000)                                                                    /* check the threshold */
+    if (threshold > 0x8000U)                                                                   /* check the threshold */
     {
         handle->debug_print("l3gd20h: threshold is invalid.\n");                               /* threshold is invalid */
     
         return 4;                                                                              /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_XH, (uint8_t *)buf, 1);             /* read x interrupt threshold */
-    if (res)                                                                                   /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_XH, (uint8_t *)buf, 1);            /* read x interrupt threshold */
+    if (res != 0)                                                                              /* check result */
     {
         handle->debug_print("l3gd20h: read x interrupt threshold failed.\n");                  /* read x interrupt threshold failed */
     
@@ -2739,16 +2767,16 @@ uint8_t l3gd20h_set_x_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
     buf[0] = buf[0] | ((threshold >> 8) & 0x7F);                                               /* set threshold high */
     buf[1] = (threshold) & 0xFF;                                                               /* set threshold low*/
   
-    res = _l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_XH, (uint8_t *)&buf[0], 1);        /* write config */
-    if (res)                                                                                   /* check result */
+    res = a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_XH, (uint8_t *)&buf[0], 1);       /* write config */
+    if (res != 0)                                                                              /* check result */
     {
         handle->debug_print("l3gd20h: write x interrupt high threshold failed.\n");            /* write x interrupt high threshold failed */
     
         return 1;                                                                              /* return error */
     }
     
-    res = _l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_XL, (uint8_t *)&buf[1], 1);        /* write config */
-    if (res)                                                                                   /* check result */
+    res = a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_XL, (uint8_t *)&buf[1], 1);       /* write config */
+    if (res != 0)                                                                              /* check result */
     {
         handle->debug_print("l3gd20h: write x interrupt low threshold failed.\n");             /* write x interrupt low threshold failed */
     
@@ -2771,7 +2799,7 @@ uint8_t l3gd20h_set_x_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
  */
 uint8_t l3gd20h_get_x_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t *threshold)
 {
-    volatile uint8_t buf[2];
+    uint8_t buf[2];
   
     if (handle == NULL)                                                                     /* check handle */
     {
@@ -2782,19 +2810,19 @@ uint8_t l3gd20h_get_x_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t *th
         return 3;                                                                           /* return error */
     }
     
-    if (_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_XH, (uint8_t *)&buf[0], 1))        /* read x interrupt high threshold */
+    if (a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_XH, (uint8_t *)&buf[0], 1) != 0)  /* read x interrupt high threshold */
     {
         handle->debug_print("l3gd20h: read x interrupt high threshold failed.\n");          /* read x interrupt high threshold failed */
     
         return 1;                                                                           /* return error */
     }
-    if (_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_XL, (uint8_t *)&buf[1], 1))        /* read x interrupt low threshold */
+    if (a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_XL, (uint8_t *)&buf[1], 1) != 0)  /* read x interrupt low threshold */
     {
         handle->debug_print("l3gd20h: read x interrupt low threshold failed.\n");           /* read x interrupt low threshold failed */
     
         return 1;                                                                           /* return error */
     }
-    *threshold = (uint16_t)(buf[0] << 8) | buf[1];                                          /* get the threshold */
+    *threshold = (uint16_t)((uint16_t)buf[0] << 8) | buf[1];                                /* get the threshold */
     *threshold &= ~(1 << 15);                                                               /* clear the 15th bit */
   
     return 0;                                                                               /* success return 0 */
@@ -2814,8 +2842,8 @@ uint8_t l3gd20h_get_x_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t *th
  */
 uint8_t l3gd20h_set_y_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t threshold)
 {
-    volatile uint8_t res;
-    volatile uint8_t buf[2];
+    uint8_t res;
+    uint8_t buf[2];
   
     if (handle == NULL)                                                                        /* check handle */
     {
@@ -2825,7 +2853,7 @@ uint8_t l3gd20h_set_y_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
     {
         return 3;                                                                              /* return error */
     }
-    if (threshold > 0x8000)                                                                    /* check the threshold */
+    if (threshold > 0x8000U)                                                                   /* check the threshold */
     {
         handle->debug_print("l3gd20h: threshold is invalid.\n");                               /* threshold is invalid */
     
@@ -2835,15 +2863,15 @@ uint8_t l3gd20h_set_y_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
     buf[0] = (threshold >> 8) & 0xFF;                                                          /* set the high threshold */
     buf[1] = (threshold) & 0xFF;                                                               /* set the low threshold */
   
-    res = _l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_YH, (uint8_t *)&buf[0], 1);        /* write the config */
-    if (res)                                                                                   /* check result */
+    res = a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_YH, (uint8_t *)&buf[0], 1);       /* write the config */
+    if (res != 0)                                                                              /* check result */
     {
         handle->debug_print("l3gd20h: write y interrupt high threshold failed.\n");            /* write y interrupt high threshold failed */
     
         return 1;                                                                              /* return error */
     }
-    res = _l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_YL, (uint8_t *)&buf[1], 1);        /* write the config */
-    if (res)                                                                                   /* check result */
+    res = a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_YL, (uint8_t *)&buf[1], 1);       /* write the config */
+    if (res != 0)                                                                              /* check result */
     {
         handle->debug_print("l3gd20h: write y interrupt low threshold failed.\n");             /* write y interrupt low threshold failed */
     
@@ -2866,7 +2894,7 @@ uint8_t l3gd20h_set_y_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
  */
 uint8_t l3gd20h_get_y_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t *threshold)
 {
-    volatile uint8_t buf[2];
+    uint8_t buf[2];
   
     if (handle == NULL)                                                                     /* check handle */
     {
@@ -2877,13 +2905,13 @@ uint8_t l3gd20h_get_y_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t *th
         return 3;                                                                           /* return error */
     }
     
-    if (_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_YH, (uint8_t *)&buf[0], 1))        /* read y interrupt high threshold */
+    if (a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_YH, (uint8_t *)&buf[0], 1) != 0)  /* read y interrupt high threshold */
     {
         handle->debug_print("l3gd20h: read y interrupt high threshold failed.\n");          /* read y interrupt high threshold failed */
     
         return 1;                                                                           /* return error */
     }
-    if (_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_YL, (uint8_t *)&buf[1], 1))        /* read y interrupt low threshold */
+    if (a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_YL, (uint8_t *)&buf[1], 1) != 0)  /* read y interrupt low threshold */
     {
         handle->debug_print("l3gd20h: read y interrupt low threshold failed.\n");           /* read y interrupt low threshold failed */
     
@@ -2909,8 +2937,8 @@ uint8_t l3gd20h_get_y_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t *th
  */
 uint8_t l3gd20h_set_z_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t threshold)
 {
-    volatile uint8_t res;
-    volatile uint8_t buf[2];
+    uint8_t res;
+    uint8_t buf[2];
   
     if (handle == NULL)                                                                        /* check handle */
     {
@@ -2920,7 +2948,7 @@ uint8_t l3gd20h_set_z_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
     {
         return 3;                                                                              /* return error */
     }
-    if (threshold > 0x8000)                                                                    /* check the threshold */
+    if (threshold > 0x8000U)                                                                   /* check the threshold */
     {
         handle->debug_print("l3gd20h: threshold is invalid.\n");                               /* threshold is invalid */
     
@@ -2930,15 +2958,15 @@ uint8_t l3gd20h_set_z_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
     buf[0] = (threshold >> 8) & 0xFF;                                                          /* set the high threshold */
     buf[1] = (threshold) & 0xFF;                                                               /* set the low threshold */
   
-    res = _l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_ZH, (uint8_t *)&buf[0], 1);        /* write config */
-    if (res)                                                                                   /* check result */
+    res = a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_ZH, (uint8_t *)&buf[0], 1);       /* write config */
+    if (res != 0)                                                                              /* check result */
     {
         handle->debug_print("l3gd20h: write z interrupt high threshold failed.\n");            /* write z interrupt high threshold failed */
     
         return 1;                                                                              /* return error */
     }
-    res = _l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_ZL, (uint8_t *)&buf[1], 1);        /* write config */
-    if (res)                                                                                   /* check result */
+    res = a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_ZL, (uint8_t *)&buf[1], 1);       /* write config */
+    if (res != 0)                                                                              /* check result */
     {
         handle->debug_print("l3gd20h: write z interrupt low threshold failed.\n");             /* write z interrupt low threshold failed */
     
@@ -2961,8 +2989,7 @@ uint8_t l3gd20h_set_z_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
  */
 uint8_t l3gd20h_get_z_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t *threshold)
 {
-    volatile uint8_t res;
-    volatile uint8_t buf[2];
+    uint8_t buf[2];
   
     if (handle == NULL)                                                                     /* check handle */
     {
@@ -2973,19 +3000,19 @@ uint8_t l3gd20h_get_z_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t *th
         return 3;                                                                           /* return error */
     }
     
-    if (_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_ZH, (uint8_t *)&buf[0], 1))        /* read the config */
+    if (a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_ZH, (uint8_t *)&buf[0], 1) != 0)  /* read the config */
     {
         handle->debug_print("l3gd20h: read z interrupt high threshold failed.\n");          /* read z interrupt high threshold failed */
     
         return 1;                                                                           /* return error */
     }
-    if (_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_ZL, (uint8_t *)&buf[1], 1))        /* read the config */
+    if (a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_ZL, (uint8_t *)&buf[1], 1) != 0)  /* read the config */
     {
         handle->debug_print("l3gd20h: read z interrupt low threshold failed.\n");           /* read z interrupt low threshold failed */
     
         return 1;                                                                           /* return error */
     }
-    *threshold = (uint16_t)(buf[0] << 8) | buf[1];                                          /* get the threshold */
+    *threshold = (uint16_t)((uint16_t)buf[0] << 8) | buf[1];                                /* get the threshold */
     *threshold &= ~(1 << 15);                                                               /* clear the 15th bit */
   
     return 0;                                                                               /* success return 0 */
@@ -3004,7 +3031,7 @@ uint8_t l3gd20h_get_z_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t *th
  */
 uint8_t l3gd20h_set_counter_mode(l3gd20h_handle_t *handle, l3gd20h_counter_mode_t counter_mode)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                       /* check handle */
     {
@@ -3015,8 +3042,8 @@ uint8_t l3gd20h_set_counter_mode(l3gd20h_handle_t *handle, l3gd20h_counter_mode_
         return 3;                                                                             /* return error */
     }
   
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_XH, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                                  /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_XH, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                             /* check result */
     {
         handle->debug_print("l3gd20h: read x interrupt threshold failed.\n");                 /* read x interrupt threshold failed */
     
@@ -3025,7 +3052,7 @@ uint8_t l3gd20h_set_counter_mode(l3gd20h_handle_t *handle, l3gd20h_counter_mode_
     prev &= ~(1 << 7);                                                                        /* clear the counter mode bit */
     prev |= counter_mode << 7;                                                                /* set the counter mode */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_XH, (uint8_t *)&prev, 1);        /* wrtie config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_XH, (uint8_t *)&prev, 1);       /* wrtie config */
 }
 
 /**
@@ -3041,7 +3068,7 @@ uint8_t l3gd20h_set_counter_mode(l3gd20h_handle_t *handle, l3gd20h_counter_mode_
  */
 uint8_t l3gd20h_get_counter_mode(l3gd20h_handle_t *handle, l3gd20h_counter_mode_t *counter_mode)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                     /* check handle */
     {
@@ -3052,8 +3079,8 @@ uint8_t l3gd20h_get_counter_mode(l3gd20h_handle_t *handle, l3gd20h_counter_mode_
         return 3;                                                                           /* return error */
     }
   
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_XH, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                                /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_THS_XH, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                           /* check result */
     {
         handle->debug_print("l3gd20h: read x interrupt threshold failed.\n");               /* read x interrupt threshold failed */
     
@@ -3078,7 +3105,7 @@ uint8_t l3gd20h_get_counter_mode(l3gd20h_handle_t *handle, l3gd20h_counter_mode_
  */
 uint8_t l3gd20h_set_wait(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                         /* check handle */
     {
@@ -3089,8 +3116,8 @@ uint8_t l3gd20h_set_wait(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
         return 3;                                                                               /* return error */
     }
   
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_DURATION, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                                    /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_DURATION, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                               /* check result */
     {
         handle->debug_print("l3gd20h: read duration failed.\n");                                /* read duration failed */
     
@@ -3099,7 +3126,7 @@ uint8_t l3gd20h_set_wait(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
     prev &= ~(1 << 7);                                                                          /* clear enable bit */
     prev |= enable << 7;                                                                        /* set enable */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_DURATION, (uint8_t *)&prev, 1);        /* wrtie config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_DURATION, (uint8_t *)&prev, 1);       /* wrtie config */
 }
 
 /**
@@ -3115,7 +3142,7 @@ uint8_t l3gd20h_set_wait(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
  */
 uint8_t l3gd20h_get_wait(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                       /* check handle */
     {
@@ -3126,8 +3153,8 @@ uint8_t l3gd20h_get_wait(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
         return 3;                                                                             /* return error */
     }
   
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_DURATION, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                                  /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_DURATION, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                             /* check result */
     {
         handle->debug_print("l3gd20h: read duration failed.\n");                              /* read duration failed */
     
@@ -3152,7 +3179,7 @@ uint8_t l3gd20h_get_wait(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
  */
 uint8_t l3gd20h_set_duration(l3gd20h_handle_t *handle, uint8_t duration)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                         /* check handle */
     {
@@ -3169,8 +3196,8 @@ uint8_t l3gd20h_set_duration(l3gd20h_handle_t *handle, uint8_t duration)
         return 1;                                                                               /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_DURATION, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                                    /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_DURATION, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                               /* check result */
     {
         handle->debug_print("l3gd20h: read duration failed.\n");                                /* read duration failed */
     
@@ -3178,7 +3205,7 @@ uint8_t l3gd20h_set_duration(l3gd20h_handle_t *handle, uint8_t duration)
     }
     prev |= duration & 0x7F;                                                                    /* set the duration */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_DURATION, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_DURATION, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -3194,7 +3221,7 @@ uint8_t l3gd20h_set_duration(l3gd20h_handle_t *handle, uint8_t duration)
  */
 uint8_t l3gd20h_get_duration(l3gd20h_handle_t *handle, uint8_t *duration)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                       /* check handle */
     {
@@ -3205,8 +3232,8 @@ uint8_t l3gd20h_get_duration(l3gd20h_handle_t *handle, uint8_t *duration)
         return 3;                                                                             /* return error */
     }
   
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_DURATION, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                                  /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_DURATION, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                             /* check result */
     {
         handle->debug_print("l3gd20h: read duration failed.\n");                              /* read duration failed */
     
@@ -3231,7 +3258,7 @@ uint8_t l3gd20h_get_duration(l3gd20h_handle_t *handle, uint8_t *duration)
  */
 uint8_t l3gd20h_set_data_ready_active_level(l3gd20h_handle_t *handle, l3gd20h_interrupt_active_level_t level)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                     /* check handle */
     {
@@ -3242,8 +3269,8 @@ uint8_t l3gd20h_set_data_ready_active_level(l3gd20h_handle_t *handle, l3gd20h_in
         return 3;                                                                           /* return error */
     }
   
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                                /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                           /* check result */
     {
         handle->debug_print("l3gd20h: read low odr failed.\n");                             /* read low odr failed */
     
@@ -3252,7 +3279,7 @@ uint8_t l3gd20h_set_data_ready_active_level(l3gd20h_handle_t *handle, l3gd20h_in
     prev &= ~(1 << 5);                                                                      /* clear level bit */
     prev |= level << 5;                                                                     /* set level */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -3268,7 +3295,7 @@ uint8_t l3gd20h_set_data_ready_active_level(l3gd20h_handle_t *handle, l3gd20h_in
  */
 uint8_t l3gd20h_get_data_ready_active_level(l3gd20h_handle_t *handle, l3gd20h_interrupt_active_level_t *level)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -3279,8 +3306,8 @@ uint8_t l3gd20h_get_data_ready_active_level(l3gd20h_handle_t *handle, l3gd20h_in
         return 3;                                                                         /* return error */
     }
   
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read low odr failed.\n");                           /* return error */
     
@@ -3305,7 +3332,7 @@ uint8_t l3gd20h_get_data_ready_active_level(l3gd20h_handle_t *handle, l3gd20h_in
  */
 uint8_t l3gd20h_set_iic(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                     /* check handle */
     {
@@ -3316,8 +3343,8 @@ uint8_t l3gd20h_set_iic(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
         return 3;                                                                           /* return error */
     }
   
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                                /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                           /* check result */
     {
         handle->debug_print("l3gd20h: read low odr failed.\n");                             /* read low odr failed */
     
@@ -3326,7 +3353,7 @@ uint8_t l3gd20h_set_iic(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
     prev &= ~(1 << 3);                                                                      /* clear enable bit */
     prev |= enable << 3;                                                                    /* set enable */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -3342,7 +3369,7 @@ uint8_t l3gd20h_set_iic(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
  */
 uint8_t l3gd20h_get_iic(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -3353,8 +3380,8 @@ uint8_t l3gd20h_get_iic(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
         return 3;                                                                         /* return error */
     }
   
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read low odr failed.\n");                           /* read low odr failed */
     
@@ -3378,7 +3405,7 @@ uint8_t l3gd20h_get_iic(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
  */
 uint8_t l3gd20h_soft_reset(l3gd20h_handle_t *handle)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                     /* check handle */
     {
@@ -3389,8 +3416,8 @@ uint8_t l3gd20h_soft_reset(l3gd20h_handle_t *handle)
         return 3;                                                                           /* return error */
     }
   
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);          /* read config */
-    if (res)                                                                                /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);         /* read config */
+    if (res != 0)                                                                           /* check result */
     {
         handle->debug_print("l3gd20h: read low odr failed.\n");                             /* read low odr failed */
     
@@ -3399,7 +3426,7 @@ uint8_t l3gd20h_soft_reset(l3gd20h_handle_t *handle)
     prev &= ~(1 << 2);                                                                      /* clear reset bit */
     prev |= 1 << 2;                                                                         /* set reset bit */
   
-    return _l3gd20h_iic_spi_write(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);        /* write config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -3416,7 +3443,7 @@ uint8_t l3gd20h_soft_reset(l3gd20h_handle_t *handle)
  */
 uint8_t l3gd20h_interrupt_threshold_convert_to_register(l3gd20h_handle_t *handle, float dps, uint16_t *reg)
 {
-    volatile uint8_t range, prev;
+    uint8_t range, prev;
   
     if (handle == NULL)                                                               /* check handle */
     {
@@ -3427,7 +3454,7 @@ uint8_t l3gd20h_interrupt_threshold_convert_to_register(l3gd20h_handle_t *handle
         return 3;                                                                     /* return error */
     }
   
-    if (_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1))        /* read config */
+    if (a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1) != 0)  /* read config */
     {
         handle->debug_print("l3gd20h: read ctrl4 failed.\n");                         /* read ctrl4 failed */
     
@@ -3436,7 +3463,7 @@ uint8_t l3gd20h_interrupt_threshold_convert_to_register(l3gd20h_handle_t *handle
     range = (prev & (3 << 4)) >> 4;                                                   /* get range */
     if (range == 0)
     {
-        *reg = (uint16_t)(dps * 1000.0f / 7.5f);                                     /* convert */
+        *reg = (uint16_t)(dps * 1000.0f / 7.5f);                                      /* convert */
     }
     else if (range == 1)
     {
@@ -3464,7 +3491,7 @@ uint8_t l3gd20h_interrupt_threshold_convert_to_register(l3gd20h_handle_t *handle
  */
 uint8_t l3gd20h_interrupt_threshold_convert_to_data(l3gd20h_handle_t *handle, uint16_t reg, float *dps)
 {
-    volatile uint8_t range, prev;
+    uint8_t range, prev;
   
     if (handle == NULL)                                                               /* check handle */
     {
@@ -3475,7 +3502,7 @@ uint8_t l3gd20h_interrupt_threshold_convert_to_data(l3gd20h_handle_t *handle, ui
         return 3;                                                                     /* return error */
     }
   
-    if (_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1))        /* read config */
+    if (a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1) != 0)  /* read config */
     {
         handle->debug_print("l3gd20h: read ctrl4 failed.\n");                         /* read ctrl4 failed */
     
@@ -3511,7 +3538,7 @@ uint8_t l3gd20h_interrupt_threshold_convert_to_data(l3gd20h_handle_t *handle, ui
  */
 uint8_t l3gd20h_irq_handler(l3gd20h_handle_t *handle, uint8_t num)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
   
     if (handle == NULL)                                                                      /* check handle */
     {
@@ -3524,58 +3551,58 @@ uint8_t l3gd20h_irq_handler(l3gd20h_handle_t *handle, uint8_t num)
     
     if (num == 1)                                                                            /* interrupt 1 */
     {
-        res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_SRC, (uint8_t *)&prev, 1);        /* read config */
-        if (res)                                                                             /* check result */
+        res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_IG_SRC, (uint8_t *)&prev, 1);       /* read config */
+        if (res != 0)                                                                        /* check result */
         {
             handle->debug_print("l3gd20h: read interrupt source failed.\n");                 /* read interrupt source failed */
       
             return 1;                                                                        /* return error */
         }
-        if (prev & (1 << 6))                                                                 /* check active */
+        if ((prev & (1 << 6)) != 0)                                                          /* check active */
         {
-            if (handle->receive_callback)                                                    /* receive callback is valid */
+            if (handle->receive_callback != NULL)                                            /* receive callback is valid */
             {
                 handle->receive_callback(L3GD20H_INTERRUPT1_INTERRUPT_ACTIVE);               /* run receive callback */
             }
         }
-        if (prev & (1 << 5))                                                                 /* check z high */
+        if ((prev & (1 << 5)) != 0)                                                          /* check z high */
         {
-            if (handle->receive_callback)                                                    /* receive callback is valid */
+            if (handle->receive_callback != NULL)                                            /* receive callback is valid */
             {
                 handle->receive_callback(L3GD20H_INTERRUPT1_Z_HIGH);                         /* run receive callback */
             }
         }
-        if (prev & (1 << 4))                                                                 /* check z low */
+        if ((prev & (1 << 4)) != 0)                                                          /* check z low */
         {
-            if (handle->receive_callback)                                                    /* receive callback is valid */
+            if (handle->receive_callback != NULL)                                            /* receive callback is valid */
             {
                 handle->receive_callback(L3GD20H_INTERRUPT1_Z_LOW);                          /* run receive callback */
             }
         }
-        if (prev & (1 << 3))                                                                 /* check y high */
+        if ((prev & (1 << 3)) != 0)                                                          /* check y high */
         {
-            if (handle->receive_callback)                                                    /* receive callback is valid */
+            if (handle->receive_callback != NULL)                                            /* receive callback is valid */
             {
                 handle->receive_callback(L3GD20H_INTERRUPT1_Y_HIGH);                         /* run receive callback */
             }
         }
-        if (prev & (1 << 2))
+        if ((prev & (1 << 2)) != 0)                                                          /* check y low */
         {                                                                                    /* check y low */
-            if (handle->receive_callback)                                                    /* receive callback is valid */
+            if (handle->receive_callback != NULL)                                            /* receive callback is valid */
             {
                 handle->receive_callback(L3GD20H_INTERRUPT1_Y_LOW);                          /* run receive callback */
             }
         }
-        if (prev & (1 << 1))                                                                 /* check x high */
+        if ((prev & (1 << 1)) != 0)                                                          /* check x high */
         {
-            if (handle->receive_callback)                                                    /* receive callback is valid */
+            if (handle->receive_callback != NULL)                                            /* receive callback is valid */
             {
                 handle->receive_callback(L3GD20H_INTERRUPT1_X_HIGH);                         /* run receive callback */
             }
         }
-        if (prev & (1 << 0))                                                                 /* check x high */
+        if ((prev & (1 << 0)) != 0)                                                          /* check x low */
         {
-            if (handle->receive_callback)                                                    /* receive callback is valid */
+            if (handle->receive_callback != NULL)                                            /* receive callback is valid */
            {
                handle->receive_callback(L3GD20H_INTERRUPT1_X_LOW);                           /* run receive callback */
            }
@@ -3585,94 +3612,94 @@ uint8_t l3gd20h_irq_handler(l3gd20h_handle_t *handle, uint8_t num)
   }
   else if (num == 2)                                                                         /* interrupt 2 */
   {
-      res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_STATUS, (uint8_t *)&prev, 1);          /* read config */
-      if (res)                                                                               /* check result */
+      res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_STATUS, (uint8_t *)&prev, 1);         /* read config */
+      if (res != 0)                                                                          /* check result */
       {
           handle->debug_print("l3gd20h: read status failed.\n");                             /* read status failed */
       
           return 1;                                                                          /* return error */
       }
-      if (prev & (1 << L3GD20H_STATUS_XYZ_OVERRUN))                                          /* check status xyz overrun */
+      if ((prev & (1 << L3GD20H_STATUS_XYZ_OVERRUN)) != 0)                                   /* check status xyz overrun */
       {
-          if (handle->receive_callback)                                                      /* receive callback is valid */
+          if (handle->receive_callback != NULL)                                              /* receive callback is valid */
           {
               handle->receive_callback(L3GD20H_INTERRUPT2_XYZ_OVERRUN);                      /* run receive callback */
           }
       }
-      if (prev & (1 << L3GD20H_STATUS_Z_OVERRUN))                                            /* check status z overrun */
+      if ((prev & (1 << L3GD20H_STATUS_Z_OVERRUN)) != 0)                                     /* check status z overrun */
       {
-          if (handle->receive_callback)                                                      /* receive callback is valid */
+          if (handle->receive_callback != NULL)                                              /* receive callback is valid */
           {
               handle->receive_callback(L3GD20H_INTERRUPT2_Z_OVERRUN);                        /* run receive callback */
           }
       }
-      if (prev & (1 << L3GD20H_STATUS_Y_OVERRUN))                                            /* check status y overrun */
+      if ((prev & (1 << L3GD20H_STATUS_Y_OVERRUN)) != 0)                                     /* check status y overrun */
       {
-          if (handle->receive_callback)                                                      /* receive callback is valid */
+          if (handle->receive_callback != NULL)                                              /* receive callback is valid */
           {
               handle->receive_callback(L3GD20H_INTERRUPT2_Y_OVERRUN);                        /* run receive callback */
           }
       }
-      if (prev & (1 << L3GD20H_STATUS_X_OVERRUN))                                            /* check status x overrun */
+      if ((prev & (1 << L3GD20H_STATUS_X_OVERRUN)) != 0)                                     /* check status x overrun */
       {
-          if (handle->receive_callback)                                                      /* receive callback is valid */
+          if (handle->receive_callback != NULL)                                              /* receive callback is valid */
           {
               handle->receive_callback(L3GD20H_INTERRUPT2_X_OVERRUN);                        /* run receive callback */
           }
       }
-      if (prev & (1 << L3GD20H_STATUS_XYZ_DATA_READY))                                       /* check status xyz data ready */
+      if ((prev & (1 << L3GD20H_STATUS_XYZ_DATA_READY)) != 0)                                /* check status xyz data ready */
       {
-          if (handle->receive_callback)                                                      /* receive callback is valid */
+          if (handle->receive_callback != NULL)                                              /* receive callback is valid */
           {
               handle->receive_callback(L3GD20H_INTERRUPT2_XYZ_DATA_READY);                   /* run receive callback */
           }
       }
-      if (prev & (1 << L3GD20H_STATUS_Z_DATA_READY))                                         /* check status z data ready */
+      if ((prev & (1 << L3GD20H_STATUS_Z_DATA_READY)) != 0)                                  /* check status z data ready */
       {
-          if (handle->receive_callback)                                                      /* receive callback is valid */
+          if (handle->receive_callback != NULL)                                              /* receive callback is valid */
           {
               handle->receive_callback(L3GD20H_INTERRUPT2_Z_DATA_READY);                     /* run receive callback */
           }
       }
-      if (prev & (1 << L3GD20H_STATUS_Y_DATA_READY))                                         /* check status y data ready */
+      if ((prev & (1 << L3GD20H_STATUS_Y_DATA_READY)) != 0)                                  /* check status y data ready */
       {
-          if (handle->receive_callback)                                                      /* receive callback is valid */
+          if (handle->receive_callback != NULL)                                              /* receive callback is valid */
           {
               handle->receive_callback(L3GD20H_INTERRUPT2_Y_DATA_READY);                     /* run receive callback */
           }
       }
-      if (prev & (1 << L3GD20H_STATUS_X_DATA_READY))                                         /* check status x data ready */
+      if ((prev & (1 << L3GD20H_STATUS_X_DATA_READY)) != 0)                                  /* check status x data ready */
       {
-          if (handle->receive_callback)                                                      /* receive callback is valid */
+          if (handle->receive_callback != NULL)                                              /* receive callback is valid */
           {
               handle->receive_callback(L3GD20H_INTERRUPT2_X_DATA_READY);                     /* run receive callback */
           }
       }
 
-      res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_SRC, (uint8_t *)&prev, 1);        /* read config */
-      if (res)                                                                               /* check result */
+      res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_SRC, (uint8_t *)&prev, 1);       /* read config */
+      if (res != 0)                                                                          /* check result */
       {
           handle->debug_print("l3gd20h: read fifo source failed.\n");                        /* read fifo source failed*/
       
           return 1;                                                                          /* return error */
       }
-      if (prev & (1 << 7))                                                                   /* check fifo threshold */
+      if ((prev & (1 << 7)) != 0)                                                            /* check fifo threshold */
       {
-          if (handle->receive_callback)                                                      /* receive callback is valid */
+          if (handle->receive_callback != NULL)                                              /* receive callback is valid */
           {
               handle->receive_callback(L3GD20H_INTERRUPT2_FIFO_THRESHOLD);                   /* run receive callback */
           }
       }
-      if (prev & (1 << 6))                                                                   /* check fifo overrun */
+      if ((prev & (1 << 6)) != 0)                                                            /* check fifo overrun */
       {
-          if (handle->receive_callback)                                                      /* receive callback is valid */
+          if (handle->receive_callback != NULL)                                              /* receive callback is valid */
           {
               handle->receive_callback(L3GD20H_INTERRUPT2_FIFO_OVERRRUN);                    /* run receive callback */
           }
       }
-      if (prev & (1 << 5))                                                                   /* check fifo empty */
+      if ((prev & (1 << 5)) != 0)                                                            /* check fifo empty */
       {
-          if (handle->receive_callback)                                                      /* receive callback is valid */
+          if (handle->receive_callback != NULL)                                              /* receive callback is valid */
           {
               handle->receive_callback(L3GD20H_INTERRUPT2_FIFO_EMPTY);                       /* run receive callback */
           }
@@ -3701,8 +3728,8 @@ uint8_t l3gd20h_irq_handler(l3gd20h_handle_t *handle, uint8_t num)
  */
 uint8_t l3gd20h_init(l3gd20h_handle_t *handle)
 {
-    volatile uint8_t res, prev;
-    volatile uint8_t id;
+    uint8_t res, prev;
+    uint8_t id;
   
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -3769,7 +3796,7 @@ uint8_t l3gd20h_init(l3gd20h_handle_t *handle)
     
     if (handle->iic_spi == L3GD20H_INTERFACE_IIC)                                         /* iic interface */
     {
-        if (handle->iic_init())                                                           /* initialize iic bus */
+        if (handle->iic_init() != 0)                                                      /* initialize iic bus */
         {
             handle->debug_print("l3gd20h: iic init failed.\n");                           /* iic init failed */
       
@@ -3778,23 +3805,23 @@ uint8_t l3gd20h_init(l3gd20h_handle_t *handle)
     }
     else
     {
-        if (handle->spi_init())                                                           /* initialize spi bus */
+        if (handle->spi_init() != 0)                                                      /* initialize spi bus */
         {
             handle->debug_print("l3gd20h: spi init failed.\n");                           /* spi init failed */
       
             return 1;                                                                     /* return error */
         }
     }
-    if (_l3gd20h_iic_spi_read(handle, L3GD20H_REG_WHO_AM_I, (uint8_t *)&id, 1))           /* read id */
+    if (a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_WHO_AM_I, (uint8_t *)&id, 1) != 0)     /* read id */
     {
         handle->debug_print("l3gd20h: read id failed.\n");                                /* read id failed */
         if (handle->iic_spi == L3GD20H_INTERFACE_IIC)                                     /* if iic interface */
         {
-            handle->iic_deinit();                                                         /* iic deinit */
+            (void)handle->iic_deinit();                                                   /* iic deinit */
         }
         else                                                                              /* spi interface */
         {
-            handle->spi_deinit();                                                         /* spi deinit */
+            (void)handle->spi_deinit();                                                   /* spi deinit */
         }
         
         return 1;                                                                         /* return error */
@@ -3804,60 +3831,60 @@ uint8_t l3gd20h_init(l3gd20h_handle_t *handle)
         handle->debug_print("l3gd20h: id is invalid.\n");                                 /* id is invlaid */
         if (handle->iic_spi == L3GD20H_INTERFACE_IIC)                                     /* if iic interface */
         {
-            handle->iic_deinit();                                                         /* iic deinit */
+            (void)handle->iic_deinit();                                                   /* iic deinit */
         }
         else
         {
-            handle->spi_deinit();                                                         /* spi deinit */
+            (void)handle->spi_deinit();                                                   /* spi deinit */
         }
         
         return 4;                                                                         /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read low odr failed.\n");                           /* read low odr failed */
         if (handle->iic_spi == L3GD20H_INTERFACE_IIC)                                     /* if iic interface */
         {                                                                               
-            handle->iic_deinit();                                                         /* iic deinit */
+            (void)handle->iic_deinit();                                                   /* iic deinit */
         }
         else
         {
-            handle->spi_deinit();                                                         /* spi deinit */
+            (void)handle->spi_deinit();                                                   /* spi deinit */
         }
     
         return 1;                                                                         /* return error */
     }
     prev &= ~(1 << 2);                                                                    /* clear reset bit */
     prev |= 1 << 2;                                                                       /* set reset bit */
-    if (_l3gd20h_iic_spi_write(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1))         /* write config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);      /* write config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: write low odr failed.\n");                          /* write low odr failed */
         if (handle->iic_spi == L3GD20H_INTERFACE_IIC)                                     /* if iic interface */
         {
-            handle->iic_deinit();                                                         /* iic deinit */
+            (void)handle->iic_deinit();                                                   /* iic deinit */
         }
         else
         {
-            handle->spi_deinit();                                                         /* spi deinit */
+            (void)handle->spi_deinit();                                                   /* spi deinit */
         }
         
         return 1;                                                                         /* return error */
     }
     handle->delay_ms(12);                                                                 /* delay 12 ms */
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);        /* read config */
-    if (res)                                                                              /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);       /* read config */
+    if (res != 0)                                                                         /* check result */
     {
         handle->debug_print("l3gd20h: read low odr failed.\n");                           /* read low odr failed */
         if (handle->iic_spi == L3GD20H_INTERFACE_IIC)                                     /* if iic interface */
         {
-            handle->iic_deinit();                                                         /* iic deinit */
+            (void)handle->iic_deinit();                                                   /* iic deinit */
         }
         else
         {
-            handle->spi_deinit();                                                         /* spi deinit */
+            (void)handle->spi_deinit();                                                   /* spi deinit */
         }
     
         return 1;                                                                         /* return error */
@@ -3867,11 +3894,11 @@ uint8_t l3gd20h_init(l3gd20h_handle_t *handle)
         handle->debug_print("l3gd20h: reset chip failed.\n");                             /* reset chip failed */
         if (handle->iic_spi == L3GD20H_INTERFACE_IIC)                                     /* if iic interface */
         {
-            handle->iic_deinit();                                                         /* iic deinit */
+            (void)handle->iic_deinit();                                                   /* iic deinit */
         }
         else
         {
-            handle->spi_deinit();                                                         /* spi deinit */
+            (void)handle->spi_deinit();                                                   /* spi deinit */
         }
     
         return 1;                                                                         /* return error */
@@ -3895,7 +3922,7 @@ uint8_t l3gd20h_init(l3gd20h_handle_t *handle)
  */
 uint8_t l3gd20h_deinit(l3gd20h_handle_t *handle)
 {
-    volatile uint8_t res, prev;
+    uint8_t res, prev;
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -3906,16 +3933,16 @@ uint8_t l3gd20h_deinit(l3gd20h_handle_t *handle)
         return 3;                                                                        /* return error */
     }
     
-    res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);         /* read config */
-    if (res)                                                                             /* check result */
+    res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);        /* read config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("l3gd20h: read ctrl1 failed.\n");                            /* read ctrl1 failed */
         
         return 4;                                                                        /* return error */
     }
     prev &= ~(1 << 3);                                                                   /* set power down bit */
-    res = _l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);        /* write config */
-    if (res)                                                                             /* check result */
+    res = a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);       /* write config */
+    if (res != 0)                                                                        /* check result */
     {
         handle->debug_print("l3gd20h: write ctrl1 failed.\n");                           /* write ctrl1 failed */
         
@@ -3942,10 +3969,10 @@ uint8_t l3gd20h_deinit(l3gd20h_handle_t *handle)
  */
 uint8_t l3gd20h_read(l3gd20h_handle_t *handle, int16_t (*raw)[3], float (*dps)[3], uint16_t *len) 
 {
-    volatile uint8_t res, prev;
-    volatile uint8_t mode, cnt, i;
-    volatile uint8_t ble, range, enable;
-    volatile uint8_t buf[32 * 6];
+    uint8_t res, prev;
+    uint8_t mode, cnt, i;
+    uint8_t ble, range, enable;
+    uint8_t buf[32 * 6];
   
     if (handle == NULL)                                                                              /* check handle */
     {
@@ -3962,21 +3989,21 @@ uint8_t l3gd20h_read(l3gd20h_handle_t *handle, int16_t (*raw)[3], float (*dps)[3
     
         return 4;                                                                                    /* return error */
     }
-    if (_l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1))                   /* read fifo ctrl */
+    if (a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1) != 0)             /* read fifo ctrl */
     {
         handle->debug_print("l3gd20h: read fifo ctrl failed.\n");                                    /* read fifo ctrl failed */
     
         return 1;                                                                                    /* return error */
     }
     mode = prev >> 5;                                                                                /* get the mode */
-    if (_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1))                       /* read ctrl5 */
+    if (a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1) != 0)                 /* read ctrl5 */
     {
         handle->debug_print("l3gd20h: read ctrl5 failed.\n");                                        /* read ctrl5 failed */
     
         return 1;                                                                                    /* return error */
     }
     enable = (prev & (1 << 6)) >> 6;                                                                 /* get enable */
-    if (_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1))                       /* get ctrl4 */
+    if (a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1) != 0)                 /* get ctrl4 */
     {
         handle->debug_print("l3gd20h: read ctrl4 failed.\n");                                        /* read ctrl4 failed */
     
@@ -3984,10 +4011,10 @@ uint8_t l3gd20h_read(l3gd20h_handle_t *handle, int16_t (*raw)[3], float (*dps)[3
     }
     range = (prev & (3 << 4)) >> 4;                                                                  /* get range */
     ble = (prev & (1 << 6)) >> 6;                                                                    /* get big little endian */
-    if (mode && enable)                                                                              /* fifo modes */
+    if ((mode && enable) != 0)                                                                       /* fifo modes */
     {
-        res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_SRC, (uint8_t *)&prev, 1);              /* read fifo source */
-        if (res)                                                                                     /* check result */
+        res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_SRC, (uint8_t *)&prev, 1);             /* read fifo source */
+        if (res != 0)                                                                                /* check result */
         {
             handle->debug_print("l3gd20h: read fifo source failed.\n");                              /* read fifo source failed */
       
@@ -3995,8 +4022,8 @@ uint8_t l3gd20h_read(l3gd20h_handle_t *handle, int16_t (*raw)[3], float (*dps)[3
         }
         cnt = prev & 0x1F;                                                                           /* get counter */
         *len = ((*len) < cnt) ? (*len) : cnt;                                                        /* get the lenght */
-        res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_OUT_X_L, (uint8_t *)buf, 6 * (*len));        /* read all data */
-        if (res)                                                                                     /* check result */
+        res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_OUT_X_L, (uint8_t *)buf, 6 * (*len));       /* read all data */
+        if (res != 0)                                                                                /* check result */
         {
             handle->debug_print("l3gd20h: read data failed.\n");                                     /* read data failed */
       
@@ -4039,8 +4066,8 @@ uint8_t l3gd20h_read(l3gd20h_handle_t *handle, int16_t (*raw)[3], float (*dps)[3
     else
     {
         *len = 1;                                                                                    /* set length */
-        res = _l3gd20h_iic_spi_read(handle, L3GD20H_REG_OUT_X_L, (uint8_t *)buf, 6);                 /* read data */
-        if (res)                                                                                     /* check result */
+        res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_OUT_X_L, (uint8_t *)buf, 6);                /* read data */
+        if (res != 0)                                                                                /* check result */
         {
             handle->debug_print("l3gd20h: read data failed.\n");                                     /* read data failed */
       
@@ -4105,7 +4132,7 @@ uint8_t l3gd20h_set_reg(l3gd20h_handle_t *handle, uint8_t reg, uint8_t *buf, uin
         return 3;                                                /* return error */
     }
   
-    return _l3gd20h_iic_spi_write(handle, reg, buf, len);        /* write data */
+    return a_l3gd20h_iic_spi_write(handle, reg, buf, len);       /* write data */
 }
 
 /**
@@ -4132,7 +4159,7 @@ uint8_t l3gd20h_get_reg(l3gd20h_handle_t *handle, uint8_t reg, uint8_t *buf, uin
         return 3;                                               /* return error */
     }
   
-    return _l3gd20h_iic_spi_read(handle, reg, buf, len);        /* read data */
+    return a_l3gd20h_iic_spi_read(handle, reg, buf, len);       /* read data */
 }
 
 /**

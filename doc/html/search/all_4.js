@@ -1,11 +1,8 @@
 var searchData=
 [
-  ['iic_5faddr_40',['iic_addr',['../structl3gd20h__handle__s.html#ae4fb63dc1b166464d5da3aa753b0805a',1,'l3gd20h_handle_s']]],
-  ['iic_5fdeinit_41',['iic_deinit',['../structl3gd20h__handle__s.html#af6963bbad902ca6e43942b48c07986c3',1,'l3gd20h_handle_s']]],
-  ['iic_5finit_42',['iic_init',['../structl3gd20h__handle__s.html#a8826dd07625f8d90859ce9bd09628d61',1,'l3gd20h_handle_s']]],
-  ['iic_5fread_43',['iic_read',['../structl3gd20h__handle__s.html#af4ef726288b88f51a846483803a1249b',1,'l3gd20h_handle_s']]],
-  ['iic_5fspi_44',['iic_spi',['../structl3gd20h__handle__s.html#a00209e629162307269baa592e51144ac',1,'l3gd20h_handle_s']]],
-  ['iic_5fwrite_45',['iic_write',['../structl3gd20h__handle__s.html#adca3ee7a793bbf510d5267daf0fcf1c5',1,'l3gd20h_handle_s']]],
-  ['inited_46',['inited',['../structl3gd20h__handle__s.html#a19bedf28d2b9748f6a62d9ae93f4e68f',1,'l3gd20h_handle_s']]],
-  ['interface_47',['interface',['../structl3gd20h__info__s.html#aebaa6c28dd4f2c3dc27566fcb910fd28',1,'l3gd20h_info_s']]]
+  ['mainpage_2eh_463',['mainpage.h',['../mainpage_8h.html',1,'']]],
+  ['manufacturer_5fname_464',['manufacturer_name',['../structl3gd20h__info__s.html#ad25285dbf810c90f8eaf3fcef6f2b2ea',1,'l3gd20h_info_s']]],
+  ['manufacturer_5fname_465',['MANUFACTURER_NAME',['../driver__l3gd20h_8c.html#aaa2b8f5b105c3019df0cb346f472e803',1,'driver_l3gd20h.c']]],
+  ['max_5fcurrent_466',['MAX_CURRENT',['../driver__l3gd20h_8c.html#a2989837a37d6d63b59c6dd541b785435',1,'driver_l3gd20h.c']]],
+  ['max_5fcurrent_5fma_467',['max_current_ma',['../structl3gd20h__info__s.html#a9db82802561bf22d799b03a345f1d1dc',1,'l3gd20h_info_s']]]
 ];

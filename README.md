@@ -1,4 +1,4 @@
-[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md) | [日本語](/README_ja.md) | [Deutsch](/README_de.md) | [한국어](/README_ko.md)
 
 <div align=center>
 <img src="/doc/image/logo.png"/>
@@ -6,11 +6,11 @@
 
 ## LibDriver L3GD20H
 
-[![API](https://img.shields.io/badge/api-reference-blue)](https://www.libdriver.com/docs/l3gd20h/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
+[![MISRA](https://img.shields.io/badge/misra-compliant-brightgreen.svg)](/misra/README.md) [![API](https://img.shields.io/badge/api-reference-blue.svg)](https://www.libdriver.com/docs/l3gd20h/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
 The L3GD20H is a low-power three-axis angular rate sensor. It includes a sensing element and an IC interface able to provide the measured angular rate to the external world through digital interface (I2C/SPI).The sensing element is manufactured using a dedicated micromachining process developed by ST to produce inertial sensors and actuators on silicon wafers.The IC interface is manufactured using a CMOS process that allows a high level of integration to design a dedicated circuit which is trimmed to better match the sensing element characteristics.The L3GD20H has a full scale of ±245/±500/±2000 dps and is capable of measuring rates with a user selectable bandwidth.It can be used in gaming and virtual reality input devices,motion control with MMI (man-machine interface),GPS navigation systems,GPS navigation systems and so on.
 
-LibDriver L3GD20H is the full function driver of L3GD20H  launched by LibDriver.It provides angular velocity reading, angular velocity FIFO mode acquisition, threshold interrupt and other functions.
+LibDriver L3GD20H is the full function driver of L3GD20H  launched by LibDriver.It provides angular velocity reading, angular velocity FIFO mode acquisition, threshold interrupt and other functions. LibDriver is MISRA compliant.
 
 ### Table of Contents
 
@@ -52,11 +52,11 @@ Add /src, /interface and /example to your project.
 #### example basic
 
 ```C
-volatile uint8_t res;
-volatile float dps[3];
+uint8_t res;
+float dps[3];
 
 res = l3gd20h_basic_init(L3GD20H_INTERFACE_IIC, L3GD20H_ADDRESS_SDO_0);
-if (res)
+if (res != 0)
 {
     return 1;
 }
@@ -66,9 +66,9 @@ if (res)
 for (i = 0; i < 3; i++)
 {
     res = l3gd20h_basic_read((float *)dps);
-    if (res)
+    if (res != 0)
     {
-        l3gd20h_basic_deinit();
+        (void)l3gd20h_basic_deinit();
 
         return 1;
     }
@@ -83,7 +83,7 @@ for (i = 0; i < 3; i++)
 
 ...
 
-l3gd20h_basic_deinit();
+(void)l3gd20h_basic_deinit();
 
 return 0;
 ```
@@ -91,9 +91,9 @@ return 0;
 #### example fifo
 
 ```C
-volatile uint8_t res;
+uint8_t res;
 
-static uint8_t _l3gd20h_fifo_receive_callback(float (*dps)[3], uint16_t len)
+static void a_l3gd20h_fifo_receive_callback(float (*dps)[3], uint16_t len)
 {
     ...
         
@@ -101,23 +101,23 @@ static uint8_t _l3gd20h_fifo_receive_callback(float (*dps)[3], uint16_t len)
 }
 
 res = gpio_interrupt_init();
-if (res)
+if (res != 0)
 {
     return 1;
 }
 
-res = l3gd20h_fifo_init(L3GD20H_INTERFACE_IIC, L3GD20H_ADDRESS_SDO_0, _l3gd20h_fifo_receive_callback);
-if (res)
+res = l3gd20h_fifo_init(L3GD20H_INTERFACE_IIC, L3GD20H_ADDRESS_SDO_0, a_l3gd20h_fifo_receive_callback);
+if (res != 0)
 {
-    l3gd20h_fifo_deinit();
-    gpio_interrupt_deinit();
+    (void)l3gd20h_fifo_deinit();
+    (void)gpio_interrupt_deinit();
 
     return 1;
 }
 
 ...
 
-while (times)
+while (times != 0)
 {
 
 ...
@@ -126,8 +126,8 @@ while (times)
 
 ...
 
-l3gd20h_fifo_deinit();
-gpio_interrupt_deinit();
+(void)l3gd20h_fifo_deinit();
+(void)gpio_interrupt_deinit();
 
 return 0;
 ```
@@ -135,12 +135,10 @@ return 0;
 #### example interrupt
 
 ```C
-volatile uint8_t res;
+uint8_t res;
 
-static uint8_t _l3gd20h_interrupt_receive_callback(uint8_t type)
+static void a_l3gd20h_interrupt_receive_callback(uint8_t type)
 {
-    volatile uint8_t res;
-
     switch (type)
     {
         case L3GD20H_INTERRUPT1_Z_HIGH :
@@ -166,21 +164,19 @@ static uint8_t _l3gd20h_interrupt_receive_callback(uint8_t type)
             break;
         }
     }
-    
-    return 0;
 }
 
 res = gpio_interrupt_init();
-if (res)
+if (res != 0)
 {
     return 1;
 }
 
-res = l3gd20h_interrupt_init(L3GD20H_INTERFACE_IIC, L3GD20H_ADDRESS_SDO_0, 20.f, _l3gd20h_interrupt_receive_callback);
-if (res)
+res = l3gd20h_interrupt_init(L3GD20H_INTERFACE_IIC, L3GD20H_ADDRESS_SDO_0, 20.f, a_l3gd20h_interrupt_receive_callback);
+if (res != 0)
 {
-    l3gd20h_interrupt_deinit();
-    gpio_interrupt_deinit();
+    (void)l3gd20h_interrupt_deinit();
+    (void)gpio_interrupt_deinit();
     
     return 1;
 }
@@ -196,8 +192,8 @@ while (1)
 
 ...
 
-l3gd20h_interrupt_deinit();
-gpio_interrupt_deinit();
+(void)l3gd20h_interrupt_deinit();
+(void)gpio_interrupt_deinit();
 
 return 0;
 ```
