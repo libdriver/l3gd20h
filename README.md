@@ -29,15 +29,15 @@ LibDriver L3GD20H is the full function driver of L3GD20H  launched by LibDriver.
 
 /src includes LibDriver L3GD20H source files.
 
-/interface includes LibDriver L3GD20H IIC and SPI platform independent template。
+/interface includes LibDriver L3GD20H IIC and SPI platform independent template.
 
-/test includes LibDriver L3GD20H driver test code and this code can test the chip necessary function simply。
+/test includes LibDriver L3GD20H driver test code and this code can test the chip necessary function simply.
 
 /example includes LibDriver L3GD20H sample code.
 
 /doc includes LibDriver L3GD20H offline document.
 
-/datasheet includes L3GD20H datasheet。
+/datasheet includes L3GD20H datasheet.
 
 /project includes the common Linux and MCU development board sample code. All projects use the shell script to debug the driver and the detail instruction can be found in each project's README.md.
 
@@ -52,6 +52,8 @@ Add /src, /interface and /example to your project.
 #### example basic
 
 ```C
+#include "driver_l3gd20h_basic.h"
+
 uint8_t res;
 float dps[3];
 
@@ -91,6 +93,8 @@ return 0;
 #### example fifo
 
 ```C
+#include "driver_l3gd20h_fifo.h"
+
 uint8_t res;
 
 static void a_l3gd20h_fifo_receive_callback(float (*dps)[3], uint16_t len)
@@ -135,6 +139,8 @@ return 0;
 #### example interrupt
 
 ```C
+#include "driver_l3gd20h_interrupt.h"
+
 uint8_t res;
 
 static void a_l3gd20h_interrupt_receive_callback(uint8_t type)

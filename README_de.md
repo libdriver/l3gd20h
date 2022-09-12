@@ -52,6 +52,8 @@ Fügen Sie /src, /interface und /example zu Ihrem Projekt hinzu.
 #### example basic
 
 ```C
+#include "driver_l3gd20h_basic.h"
+
 uint8_t res;
 float dps[3];
 
@@ -91,6 +93,8 @@ return 0;
 #### example fifo
 
 ```c
+#include "driver_l3gd20h_fifo.h"
+
 uint8_t res;
 
 static void a_l3gd20h_fifo_receive_callback(float (*dps)[3], uint16_t len)
@@ -135,6 +139,8 @@ return 0;
 #### example interrupt
 
 ```C
+#include "driver_l3gd20h_interrupt.h"
+
 uint8_t res;
 
 static void a_l3gd20h_interrupt_receive_callback(uint8_t type)
