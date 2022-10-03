@@ -1,6 +1,6 @@
-### 1. chip
+### 1. Chip
 
-#### 1.1 chip info
+#### 1.1 Chip Info
 
 chip name : STM32F407ZGT6.
 
@@ -14,23 +14,23 @@ spi pin: SCK/MISO/MOSI/CS  PA5/PA6/PA7/PA4.
 
 gpio pin: INT PB0.
 
-### 2. shell
+### 2. Shell
 
-#### 2.1 shell parameter
+#### 2.1 Shell Parameter
 
-baud rate: 115200
+baud rate: 115200.
 
-data bits : 8
+data bits : 8.
 
-stop bits: 1
+stop bits: 1.
 
-parity: none
+parity: none.
 
-flow control: none
+flow control: none.
 
-### 3. l3gd20h
+### 3. L3GD20H
 
-#### 3.1 command Instruction
+#### 3.1 Command Instruction
 
 ​           l3gd20h is a basic command which can test all l3gd20h driver function:
 
@@ -56,7 +56,7 @@ flow control: none
 ​           -c fifo <times> (-iic (0 | 1) | -spi)        run l3gd20h fifo function.times is the read times.
 ​           -c int (-iic (0 | 1) | -spi) <threshold>        run l3gd20h interrupt function.threshold is the interrupt threshold.
 
-#### 3.2 command example
+#### 3.2 Command Example
 
 ```shell
 l3gd20h -i
