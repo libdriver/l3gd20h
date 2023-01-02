@@ -105,7 +105,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
         l3gd20h_interface_debug_print("l3gd20h: chip is %s.\n", info.chip_name);
         l3gd20h_interface_debug_print("l3gd20h: manufacturer is %s.\n", info.manufacturer_name);
         l3gd20h_interface_debug_print("l3gd20h: interface is %s.\n", info.interface);
-        l3gd20h_interface_debug_print("l3gd20h: driver version is %d.%d.\n", info.driver_version/1000, (info.driver_version%1000)/100);
+        l3gd20h_interface_debug_print("l3gd20h: driver version is %d.%d.\n", info.driver_version / 1000, (info.driver_version % 1000) / 100);
         l3gd20h_interface_debug_print("l3gd20h: min supply voltage is %0.1fV.\n", info.supply_voltage_min_v);
         l3gd20h_interface_debug_print("l3gd20h: max supply voltage is %0.1fV.\n", info.supply_voltage_max_v);
         l3gd20h_interface_debug_print("l3gd20h: max current is %0.2fmA.\n", info.max_current_ma);

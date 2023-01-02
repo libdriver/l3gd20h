@@ -1,14 +1,14 @@
-### 1. Chip
+### 1. Board
 
-#### 1.1 Chip Info
+#### 1.1 Board Info
 
-chip name : Raspberry Pi 4B.
+Board Name: Raspberry Pi 4B.
 
-iic pin: SCL/SDA GPIO3/GPIO2.
+IIC Pin: SCL/SDA GPIO3/GPIO2.
 
-spi pin: SCLK/MOSI/MISO/CS GPIO11/GPIO10/GPIO9/GPIO8.
+SPI Pin: SCLK/MOSI/MISO/CS GPIO11/GPIO10/GPIO9/GPIO8.
 
-gpio pin: INT GPIO17.
+GPIO Pin: INT GPIO17.
 
 ### 2. Install
 
@@ -78,29 +78,65 @@ find_package(l3gd20h REQUIRED)
 
 #### 3.1 Command Instruction
 
-​           l3gd20h is a basic command which can test all l3gd20h driver function:
+1. Show l3gd20h chip and driver information.
 
-​           -i        show l3gd20h chip and driver information.
+   ```shell
+   l3gd20h (-i | --information)
+   ```
 
-​           -h       show l3gd20h help.
+2. Show l3gd20h help.
 
-​           -p       show l3gd20h pin connections of the current board.
+   ```shell
+   l3gd20h (-h | --help)
+   ```
 
-​           -t (reg (-iic (0 | 1) | -spi)  | read <times> (-iic (0 | 1) | -spi) | fifo (-iic (0 | 1) | -spi) | int (-iic (0 | 1) | -spi))
+3. Show l3gd20h pin connections of the current board.
 
-​           -t reg (-iic (0 | 1) | -spi)        run l3gd20h register test.
+   ```shell
+   l3gd20h (-p | --port)
+   ```
 
-​           -t read <times> (-iic (0 | 1) | -spi)        run l3gd20h read test.times means the test times.
+4. run l3gd20h register test.
 
-​           -t fifo (-iic (0 | 1) | -spi)       run l3gd20h fifo test.
+   ```shell
+   l3gd20h (-t reg | --test=reg) [--addr=<0 | 1>] [--interface=<iic | spi>]
+   ```
 
-​           -t int (-iic (0 | 1) | -spi)        run l3gd20h interrupt test. 
+5. Run l3gd20h read test, num means the test times.
 
-​           -c (basic <times> (-iic (0 | 1) | -spi) | fifo <times> (-iic (0 | 1) | -spi) | int (-iic (0 | 1) | -spi) <threshold>)
+   ```shell
+   l3gd20h (-t read | --test=read) [--addr=<0 | 1>] [--interface=<iic | spi>] [--times=<num>]
+   ```
 
-​           -c basic <times> (-iic (0 | 1) | -spi)        run l3gd20h basic function.times is the read times.
-​           -c fifo <times> (-iic (0 | 1) | -spi)        run l3gd20h fifo function.times is the read times.
-​           -c int (-iic (0 | 1) | -spi) <threshold>        run l3gd20h interrupt function.threshold is the interrupt threshold.
+6. Run l3gd20h fifo test.
+
+   ```shell
+   l3gd20h (-t fifo | --test=fifo) [--addr=<0 | 1>] [--interface=<iic | spi>]
+   ```
+
+7. Run l3gd20h interrupt test.
+
+   ```shell
+   l3gd20h (-t int | --test=int) [--addr=<0 | 1>] [--interface=<iic | spi>]
+   ```
+
+8. Run l3gd20h basic function, num is the read times.
+
+   ```shell
+   l3gd20h (-e read | --example=read) [--addr=<0 | 1>] [--interface=<iic | spi>] [--times=<num>]
+   ```
+
+9. Run l3gd20h fifo function, num is the read times, ms is the timeout in ms.
+
+   ```shell
+   l3gd20h (-e fifo | --example=fifo) [--addr=<0 | 1>] [--interface=<iic | spi>] [--times=<num>] [--timeout=<ms>]
+   ```
+
+10. Run l3gd20h interrupt function, th is the interrupt threshold, ms is the timeout in ms.
+
+    ```shell
+    l3gd20h (-e int | --example=int) [--addr=<0 | 1>] [--interface=<iic | spi>] [--threshold=<th>] [--timeout=<ms>]
+    ```
 
 #### 3.2 Command Example
 
@@ -131,7 +167,7 @@ l3gd20h: INT connected to GPIOB17(BCM).
 ```
 
 ```shell
-./l3gd20h -t reg -spi
+./l3gd20h -t reg --interface=spi
 
 l3gd20h: chip is STMicroelectronic L3GD20H.
 l3gd20h: manufacturer is STMicroelectronic.
@@ -310,7 +346,7 @@ l3gd20h: check out selection ok.
 l3gd20h: set out selection LPF1-HPF-LPF2.
 l3gd20h: check out selection ok.
 l3gd20h: l3gd20h_set_high_pass_filter_reference/l3gd20h_get_high_pass_filter_reference test.
-l3gd20h: set high pass filter reference 0xB0.
+l3gd20h: set high pass filter reference 0x67.
 l3gd20h: check high pass filter reference ok.
 l3gd20h: l3gd20h_set_iic/l3gd20h_get_iic test.
 l3gd20h: disable iic.
@@ -398,21 +434,21 @@ l3gd20h: check interrupt event ok.
 l3gd20h: disable interrupt event L3GD20H_INTERRUPT_EVENT_X_LOW_EVENT.
 l3gd20h: check interrupt event ok.
 l3gd20h: l3gd20h_set_x_interrupt_threshold/l3gd20h_get_x_interrupt_threshold test.
-l3gd20h: set x interrupt threshold 8651.
+l3gd20h: set x interrupt threshold 9158.
 l3gd20h: check x interrupt threshold ok.
 l3gd20h: l3gd20h_set_y_interrupt_threshold/l3gd20h_get_y_interrupt_threshold test.
-l3gd20h: set y interrupt threshold 31561.
+l3gd20h: set y interrupt threshold 6249.
 l3gd20h: check y interrupt threshold ok.
 l3gd20h: l3gd20h_set_z_interrupt_threshold/l3gd20h_get_z_interrupt_threshold test.
-l3gd20h: set z interrupt threshold 22632.
+l3gd20h: set z interrupt threshold 18547.
 l3gd20h: check z interrupt threshold ok.
 l3gd20h: l3gd20h_interrupt_threshold_convert_to_register/l3gd20h_interrupt_threshold_convert_to_data test.
 l3gd20h: ±245 dps full scale.
-l3gd20h: 58.3000 to 68.0137 with reg 0x7773.
+l3gd20h: 179.3000 to 209.1775 with reg 0x23906.
 l3gd20h: ±500 dps full scale.
-l3gd20h: 74.1000 to 84.7525 with reg 0x4843.
+l3gd20h: 33.5000 to 38.3075 with reg 0x2189.
 l3gd20h: ±2000 dps full scale.
-l3gd20h: 76.0000 to 87.1500 with reg 0x1245.
+l3gd20h: 138.6000 to 159.0400 with reg 0x2272.
 l3gd20h: l3gd20h_set_counter_mode/l3gd20h_get_counter_mode test.
 l3gd20h: set decrement counter mode.
 l3gd20h: check counter mode ok.
@@ -457,14 +493,14 @@ l3gd20h: check fifo mode ok.
 l3gd20h: set fifo mode bypass to fifo.
 l3gd20h: check fifo mode ok.
 l3gd20h: l3gd20h_set_fifo_threshold/l3gd20h_get_fifo_threshold test.
-l3gd20h: set fifo threshold 10.
+l3gd20h: set fifo threshold 17.
 l3gd20h: check fifo threshold ok.
 l3gd20h: l3gd20h_get_fifo_level test.
 l3gd20h: fifo level is 0.
 l3gd20h: l3gd20h_get_status test.
-l3gd20h: status is 255.
+l3gd20h: status is 15.
 l3gd20h: l3gd20h_get_interrupt_source test.
-l3gd20h: interrupt source is 0x00.
+l3gd20h: interrupt source is 0x42.
 l3gd20h: l3gd20h_set_boot/l3gd20h_get_boot test.
 l3gd20h: set normal boot.
 l3gd20h: check boot ok.
@@ -476,7 +512,7 @@ l3gd20h: finish register test.
 ```
 
 ```shell
-./l3gd20h -t read 3 -spi
+./l3gd20h -t read --interface=spi --times=3
 
 l3gd20h: chip is STMicroelectronic L3GD20H.
 l3gd20h: manufacturer is STMicroelectronic.
@@ -490,55 +526,55 @@ l3gd20h: min temperature is -40.0C.
 l3gd20h: start read test.
 l3gd20h: set full scale 245 dps.
 l3gd20h: x -0.02 dps.
-l3gd20h: y 0.01 dps.
-l3gd20h: z 0.04 dps.
-l3gd20h: x 0.01 dps.
-l3gd20h: y -0.04 dps.
-l3gd20h: z 0.00 dps.
-l3gd20h: x 0.01 dps.
-l3gd20h: y -0.01 dps.
-l3gd20h: z 0.03 dps.
+l3gd20h: y -0.06 dps.
+l3gd20h: z -0.08 dps.
+l3gd20h: x -0.04 dps.
+l3gd20h: y -0.06 dps.
+l3gd20h: z -0.04 dps.
+l3gd20h: x -0.03 dps.
+l3gd20h: y -0.09 dps.
+l3gd20h: z -0.11 dps.
 l3gd20h: set full scale 500 dps.
-l3gd20h: x 0.04 dps.
-l3gd20h: y -0.05 dps.
-l3gd20h: z -0.07 dps.
-l3gd20h: x 0.00 dps.
-l3gd20h: y -0.04 dps.
-l3gd20h: z 0.07 dps.
-l3gd20h: x 0.31 dps.
-l3gd20h: y -0.16 dps.
-l3gd20h: z -0.46 dps.
+l3gd20h: x -0.02 dps.
+l3gd20h: y -0.02 dps.
+l3gd20h: z -0.04 dps.
+l3gd20h: x 0.02 dps.
+l3gd20h: y 0.07 dps.
+l3gd20h: z 0.05 dps.
+l3gd20h: x -0.02 dps.
+l3gd20h: y -0.02 dps.
+l3gd20h: z -0.02 dps.
 l3gd20h: set full scale 2000 dps.
-l3gd20h: x -0.21 dps.
-l3gd20h: y 0.00 dps.
-l3gd20h: z 0.21 dps.
+l3gd20h: x -0.07 dps.
+l3gd20h: y -0.21 dps.
+l3gd20h: z -0.07 dps.
+l3gd20h: x -5.25 dps.
+l3gd20h: y -7.00 dps.
+l3gd20h: z 3.15 dps.
 l3gd20h: x 0.00 dps.
 l3gd20h: y 0.00 dps.
-l3gd20h: z -0.21 dps.
-l3gd20h: x -0.07 dps.
-l3gd20h: y -0.07 dps.
 l3gd20h: z 0.00 dps.
 l3gd20h: set big endian.
 l3gd20h: x -0.14 dps.
-l3gd20h: y 0.00 dps.
-l3gd20h: z 0.00 dps.
+l3gd20h: y -0.14 dps.
+l3gd20h: z -0.28 dps.
 l3gd20h: x 0.00 dps.
 l3gd20h: y -0.07 dps.
-l3gd20h: z 0.07 dps.
-l3gd20h: x -0.07 dps.
-l3gd20h: y -0.07 dps.
-l3gd20h: z -0.21 dps.
+l3gd20h: z -0.14 dps.
+l3gd20h: x 0.00 dps.
+l3gd20h: y 0.00 dps.
+l3gd20h: z -0.07 dps.
 l3gd20h: read the temperature.
-l3gd20h: temperature is 26.00C.
-l3gd20h: temperature is 26.00C.
-l3gd20h: temperature is 27.00C.
+l3gd20h: temperature is 23.00C.
+l3gd20h: temperature is 23.00C.
+l3gd20h: temperature is 24.00C.
 l3gd20h: finish read test.
 ```
 
 Raspberry INT must be connected to L3GD20H INT2 in FIFO mode.
 
 ```shell
-./l3gd20h -t fifo -spi
+./l3gd20h -t fifo --interface=spi
 
 l3gd20h: chip is STMicroelectronic L3GD20H.
 l3gd20h: manufacturer is STMicroelectronic.
@@ -555,8 +591,10 @@ l3gd20h: find interrupt.
 l3gd20h: finish fifo test.
 ```
 
+Raspberry INT must be connected to L3GD20H INT1 in interrupt mode.
+
 ```shell
-./l3gd20h -t int -spi
+./l3gd20h -t int --interface=spi
 
 l3gd20h: chip is STMicroelectronic L3GD20H.
 l3gd20h: manufacturer is STMicroelectronic.
@@ -572,71 +610,86 @@ l3gd20h: threshold is 50.00.
 l3gd20h: x -0.01 dps.
 l3gd20h: y 0.00 dps.
 l3gd20h: z 0.00 dps.
-l3gd20h: x -41.83 dps.
-l3gd20h: y -18.92 dps.
-l3gd20h: z -75.61 dps.
+l3gd20h: x -0.02 dps.
+l3gd20h: y -0.04 dps.
+l3gd20h: z -0.03 dps.
+l3gd20h: x -49.60 dps.
+l3gd20h: y -4.30 dps.
+l3gd20h: z -97.70 dps.
+l3gd20h: irq z high threshold.
+l3gd20h: x 50.70 dps.
+l3gd20h: y 16.06 dps.
+l3gd20h: z 76.32 dps.
 l3gd20h: irq z high threshold.
 l3gd20h: detect the high threshold event.
 l3gd20h: finish interrupt test.
 ```
 
 ```shell
-./l3gd20h -c basic 3 -spi
+./l3gd20h -e read --interface=spi --times=3
 
 l3gd20h: 1/3.
-l3gd20h: x -0.01 dps.
+l3gd20h: x 0.00 dps.
 l3gd20h: y 0.00 dps.
 l3gd20h: z 0.00 dps.
 l3gd20h: 2/3.
-l3gd20h: x 0.02 dps.
-l3gd20h: y 0.01 dps.
-l3gd20h: z 0.03 dps.
+l3gd20h: x 0.00 dps.
+l3gd20h: y 0.05 dps.
+l3gd20h: z -0.02 dps.
 l3gd20h: 3/3.
-l3gd20h: x 0.01 dps.
-l3gd20h: y -0.02 dps.
-l3gd20h: z -0.10 dps.
+l3gd20h: x 0.00 dps.
+l3gd20h: y -0.04 dps.
+l3gd20h: z -0.08 dps.
 ```
 
 Raspberry INT must be connected to L3GD20H INT2 in FIFO mode.
 
 ```shell
-./l3gd20h -c fifo 3 -spi
+./l3gd20h -e fifo --interface=spi --times=3 --timeout=5000
 
 l3gd20h: fifo irq with 17.
 l3gd20h: fifo irq with 17.
 l3gd20h: fifo irq with 17.
 ```
 
+Raspberry INT must be connected to L3GD20H INT1 in interrupt mode.
+
 ```shell
-./l3gd20h -c int -spi 50.0
+./l3gd20h -e int --interface=spi --threshold=50.0 --timeout=5000
 
 l3gd20h: set threshold 50.00.
-l3gd20h: irq y high threshold.
+l3gd20h: irq z high threshold.
+l3gd20h: irq x high threshold.
 l3gd20h: find interrupt.
 ```
 
 ```shell
 ./l3gd20h -h
 
-l3gd20h -i
-	show l3gd20h chip and driver information.
-l3gd20h -h
-	show l3gd20h help.
-l3gd20h -p
-	show l3gd20h pin connections of the current board.
-l3gd20h -t reg (-iic (0 | 1) | -spi)
-	run l3gd20h register test.
-l3gd20h -t read <times> (-iic (0 | 1) | -spi)
-	run l3gd20h read test.times means the test times.
-l3gd20h -t fifo (-iic (0 | 1) | -spi)
-	run l3gd20h fifo test.
-l3gd20h -t int (-iic (0 | 1) | -spi)
-	run l3gd20h interrupt test.
-l3gd20h -c basic <times> (-iic (0 | 1) | -spi)
-	run l3gd20h basic function.times is the read times.
-l3gd20h -c fifo <times> (-iic (0 | 1) | -spi)
-	run l3gd20h fifo function.times is the read times.
-l3gd20h -c int (-iic (0 | 1) | -spi) <threshold>
-	run l3gd20h interrupt function.threshold is the interrupt threshold.
+Usage:
+  l3gd20h (-i | --information)
+  l3gd20h (-h | --help)
+  l3gd20h (-p | --port)
+  l3gd20h (-t reg | --test=reg) [--addr=<0 | 1>] [--interface=<iic | spi>]
+  l3gd20h (-t read | --test=read) [--addr=<0 | 1>] [--interface=<iic | spi>] [--times=<num>]
+  l3gd20h (-t fifo | --test=fifo) [--addr=<0 | 1>] [--interface=<iic | spi>]
+  l3gd20h (-t int | --test=int) [--addr=<0 | 1>] [--interface=<iic | spi>]
+  l3gd20h (-e read | --example=read) [--addr=<0 | 1>] [--interface=<iic | spi>] [--times=<num>]
+  l3gd20h (-e fifo | --example=fifo) [--addr=<0 | 1>] [--interface=<iic | spi>] [--times=<num>] [--timeout=<ms>]
+  l3gd20h (-e int | --example=int) [--addr=<0 | 1>] [--interface=<iic | spi>] [--threshold=<th>] [--timeout=<ms>]
+
+Options:
+      --addr=<0 | 1>             Set the addr pin.([default: 0])
+  -e <read | fifo | int>, --example=<read | fifo | int>
+                                 Run the driver example.
+  -h, --help                     Show the help.
+  -i, --information              Show the chip information.
+      --interface=<iic | spi>    Set the chip interface.([default: iic])
+  -p, --port                     Display the pin connections of the current board.
+  -t <reg | read | fifo | init>, --test=<reg | read | fifo | int>
+                                 Run the driver test.
+      --threshold=<th>           Set the interrupt threshold.([default: 50.0f])
+      --times=<num>              Set the running times.([default: 3])
+      --timeout=<ms>             Set the interrupt timeout in ms.([default: 5000])
 ```
 

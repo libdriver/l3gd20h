@@ -365,10 +365,10 @@ typedef enum
 typedef struct l3gd20h_handle_s
 {
     uint8_t iic_addr;                                                                   /**< iic address */
-    uint8_t (*iic_init)(void);                                                          /**< point to a iic_init function address */
-    uint8_t (*iic_deinit)(void);                                                        /**< point to a iic_deinit function address */
-    uint8_t (*iic_read)(uint8_t addr, uint8_t reg, uint8_t *buf, uint16_t len);         /**< point to a iic_read function address */
-    uint8_t (*iic_write)(uint8_t addr, uint8_t reg, uint8_t *buf, uint16_t len);        /**< point to a iic_write function address */
+    uint8_t (*iic_init)(void);                                                          /**< point to an iic_init function address */
+    uint8_t (*iic_deinit)(void);                                                        /**< point to an iic_deinit function address */
+    uint8_t (*iic_read)(uint8_t addr, uint8_t reg, uint8_t *buf, uint16_t len);         /**< point to an iic_read function address */
+    uint8_t (*iic_write)(uint8_t addr, uint8_t reg, uint8_t *buf, uint16_t len);        /**< point to an iic_write function address */
     uint8_t (*spi_init)(void);                                                          /**< point to a spi_init function address */
     uint8_t (*spi_deinit)(void);                                                        /**< point to a spi_deinit function address */
     uint8_t (*spi_read)(uint8_t reg, uint8_t *buf, uint16_t len);                       /**< point to a spi_read function address */
@@ -409,7 +409,7 @@ typedef struct l3gd20h_info_s
 
 /**
  * @brief     initialize l3gd20h_handle_t structure
- * @param[in] HANDLE points to a l3gd20h handle structure
+ * @param[in] HANDLE points to an l3gd20h handle structure
  * @param[in] STRUCTURE is l3gd20h_handle_t
  * @note      none
  */
@@ -417,39 +417,39 @@ typedef struct l3gd20h_info_s
 
 /**
  * @brief     link iic_init function
- * @param[in] HANDLE points to a l3gd20h handle structure
- * @param[in] FUC points to a iic_init function address
+ * @param[in] HANDLE points to an l3gd20h handle structure
+ * @param[in] FUC points to an iic_init function address
  * @note      none
  */
 #define DRIVER_L3GD20H_LINK_IIC_INIT(HANDLE, FUC)                (HANDLE)->iic_init = FUC
 
 /**
  * @brief     link iic_deinit function
- * @param[in] HANDLE points to a l3gd20h handle structure
- * @param[in] FUC points to a iic_deinit function address
+ * @param[in] HANDLE points to an l3gd20h handle structure
+ * @param[in] FUC points to an iic_deinit function address
  * @note      none
  */
 #define DRIVER_L3GD20H_LINK_IIC_DEINIT(HANDLE, FUC)              (HANDLE)->iic_deinit = FUC
 
 /**
  * @brief     link iic_read function
- * @param[in] HANDLE points to a l3gd20h handle structure
- * @param[in] FUC points to a iic_read function address
+ * @param[in] HANDLE points to an l3gd20h handle structure
+ * @param[in] FUC points to an iic_read function address
  * @note      none
  */
 #define DRIVER_L3GD20H_LINK_IIC_READ(HANDLE, FUC)                (HANDLE)->iic_read = FUC
 
 /**
  * @brief     link iic_write function
- * @param[in] HANDLE points to a l3gd20h handle structure
- * @param[in] FUC points to a iic_write function address
+ * @param[in] HANDLE points to an l3gd20h handle structure
+ * @param[in] FUC points to an iic_write function address
  * @note      none
  */
 #define DRIVER_L3GD20H_LINK_IIC_WRITE(HANDLE, FUC)               (HANDLE)->iic_write = FUC
 
 /**
  * @brief     link spi_init function
- * @param[in] HANDLE points to a l3gd20h handle structure
+ * @param[in] HANDLE points to an l3gd20h handle structure
  * @param[in] FUC points to a spi_init function address
  * @note      none
  */
@@ -457,7 +457,7 @@ typedef struct l3gd20h_info_s
 
 /**
  * @brief     link spi_deinit function
- * @param[in] HANDLE points to a l3gd20h handle structure
+ * @param[in] HANDLE points to an l3gd20h handle structure
  * @param[in] FUC points to a spi_deinit function address
  * @note      none
  */
@@ -465,7 +465,7 @@ typedef struct l3gd20h_info_s
 
 /**
  * @brief     link spi_read function
- * @param[in] HANDLE points to a l3gd20h handle structure
+ * @param[in] HANDLE points to an l3gd20h handle structure
  * @param[in] FUC points to a spi_read function address
  * @note      none
  */
@@ -473,7 +473,7 @@ typedef struct l3gd20h_info_s
 
 /**
  * @brief     link spi_write function
- * @param[in] HANDLE points to a l3gd20h handle structure
+ * @param[in] HANDLE points to an l3gd20h handle structure
  * @param[in] FUC points to a spi_write function address
  * @note      none
  */
@@ -481,7 +481,7 @@ typedef struct l3gd20h_info_s
 
 /**
  * @brief     link delay_ms function
- * @param[in] HANDLE points to a l3gd20h handle structure
+ * @param[in] HANDLE points to an l3gd20h handle structure
  * @param[in] FUC points to a delay_ms function address
  * @note      none
  */
@@ -489,7 +489,7 @@ typedef struct l3gd20h_info_s
 
 /**
  * @brief     link debug_print function
- * @param[in] HANDLE points to a l3gd20h handle structure
+ * @param[in] HANDLE points to an l3gd20h handle structure
  * @param[in] FUC points to a debug_print function address
  * @note      none
  */
@@ -497,7 +497,7 @@ typedef struct l3gd20h_info_s
 
 /**
  * @brief     link receive_callback function
- * @param[in] HANDLE points to a l3gd20h handle structure
+ * @param[in] HANDLE points to an l3gd20h handle structure
  * @param[in] FUC points to a receive_callback function address
  * @note      none
  */
@@ -516,7 +516,7 @@ typedef struct l3gd20h_info_s
 
 /**
  * @brief      get chip's information
- * @param[out] *info points to a l3gd20h info structure
+ * @param[out] *info points to an l3gd20h info structure
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -526,7 +526,7 @@ uint8_t l3gd20h_info(l3gd20h_info_t *info);
 
 /**
  * @brief     set the chip interface
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] interface is the chip interface
  * @return    status code
  *            - 0 success
@@ -537,7 +537,7 @@ uint8_t l3gd20h_set_interface(l3gd20h_handle_t *handle, l3gd20h_interface_t inte
 
 /**
  * @brief      get the chip interface
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *interface points to a chip interface buffer
  * @return     status code
  *             - 0 success
@@ -548,7 +548,7 @@ uint8_t l3gd20h_get_interface(l3gd20h_handle_t *handle, l3gd20h_interface_t *int
 
 /**
  * @brief     set the iic address pin
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] addr_pin is the address pin
  * @return    status code
  *            - 0 success
@@ -559,8 +559,8 @@ uint8_t l3gd20h_set_addr_pin(l3gd20h_handle_t *handle, l3gd20h_address_t addr_pi
 
 /**
  * @brief      get the iic address pin
- * @param[in]  *handle points to a l3gd20h handle structure
- * @param[out] *addr_pin points to a address pin buffer
+ * @param[in]  *handle points to an l3gd20h handle structure
+ * @param[out] *addr_pin points to an address pin buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -570,7 +570,7 @@ uint8_t l3gd20h_get_addr_pin(l3gd20h_handle_t *handle, l3gd20h_address_t *addr_p
 
 /**
  * @brief     initialize the chip
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @return    status code
  *            - 0 success
  *            - 1 spi or iic initialization failed
@@ -583,7 +583,7 @@ uint8_t l3gd20h_init(l3gd20h_handle_t *handle);
 
 /**
  * @brief     close the chip
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @return    status code
  *            - 0 success
  *            - 1 iic or spi deinit failed
@@ -596,7 +596,7 @@ uint8_t l3gd20h_deinit(l3gd20h_handle_t *handle);
 
 /**
  * @brief         read the data
- * @param[in]     *handle points to a l3gd20h handle structure
+ * @param[in]     *handle points to an l3gd20h handle structure
  * @param[out]    **raw points to a raw data buffer
  * @param[out]    **dps points to a converted data buffer
  * @param[in,out] *len points to a date length buffer
@@ -612,7 +612,7 @@ uint8_t l3gd20h_read(l3gd20h_handle_t *handle, int16_t (*raw)[3], float (*dps)[3
 
 /**
  * @brief     interrupt handler
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] num is the interrupt number
  * @return    status code
  *            - 0 success
@@ -625,7 +625,7 @@ uint8_t l3gd20h_irq_handler(l3gd20h_handle_t *handle, uint8_t num);
 
 /**
  * @brief      read the temperature
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *raw points to a raw temperature buffer
  * @param[out] *temp points to a converted temperature buffer
  * @return     status code
@@ -639,7 +639,7 @@ uint8_t l3gd20h_read_temperature(l3gd20h_handle_t *handle, int8_t *raw, float *t
 
 /**
  * @brief     set the chip mode
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] mode is the chip mode
  * @return    status code
  *            - 0 success
@@ -652,7 +652,7 @@ uint8_t l3gd20h_set_mode(l3gd20h_handle_t *handle, l3gd20h_mode_t mode);
 
 /**
  * @brief      get the chip mode
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *mode points to a chip mode buffer
  * @return     status code
  *             - 0 success
@@ -665,7 +665,7 @@ uint8_t l3gd20h_get_mode(l3gd20h_handle_t *handle, l3gd20h_mode_t *mode);
 
 /**
  * @brief     set the axis
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] axis is the set axis
  * @param[in] enable is the bool value
  * @return    status code
@@ -679,7 +679,7 @@ uint8_t l3gd20h_set_axis(l3gd20h_handle_t *handle, l3gd20h_axis_t axis, l3gd20h_
 
 /**
  * @brief      get the axis
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[in]  axis is the set axis
  * @param[out] *enable points to a bool value buffer
  * @return     status code
@@ -693,7 +693,7 @@ uint8_t l3gd20h_get_axis(l3gd20h_handle_t *handle, l3gd20h_axis_t axis, l3gd20h_
 
 /**
  * @brief     set the rate bandwidth
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] rate_bandwidth is the rate bandwidth
  * @return    status code
  *            - 0 success
@@ -706,7 +706,7 @@ uint8_t l3gd20h_set_rate_bandwidth(l3gd20h_handle_t *handle, l3gd20h_lodr_odr_bw
 
 /**
  * @brief      get the rate bandwidth
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *rate_bandwidth points to a rate bandwidth buffer
  * @return     status code
  *             - 0 success
@@ -719,7 +719,7 @@ uint8_t l3gd20h_get_rate_bandwidth(l3gd20h_handle_t *handle, l3gd20h_lodr_odr_bw
 
 /**
  * @brief     enable or disable the edge trigger
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -732,7 +732,7 @@ uint8_t l3gd20h_set_edge_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t enable
 
 /**
  * @brief      get the edge trigger status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -745,7 +745,7 @@ uint8_t l3gd20h_get_edge_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t *enabl
 
 /**
  * @brief     enable or disable the level trigger
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -758,7 +758,7 @@ uint8_t l3gd20h_set_level_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t enabl
 
 /**
  * @brief      get the level trigger status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -771,7 +771,7 @@ uint8_t l3gd20h_get_level_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t *enab
 
 /**
  * @brief     set the high pass filter mode
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] mode is the high pass filter mode
  * @return    status code
  *            - 0 success
@@ -784,7 +784,7 @@ uint8_t l3gd20h_set_high_pass_filter_mode(l3gd20h_handle_t *handle, l3gd20h_high
 
 /**
  * @brief      get the high pass filter mode
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *mode points to a high pass filter mode buffer
  * @return     status code
  *             - 0 success
@@ -797,7 +797,7 @@ uint8_t l3gd20h_get_high_pass_filter_mode(l3gd20h_handle_t *handle, l3gd20h_high
 
 /**
  * @brief     set the high pass filter cut off frequency
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] frequency is the high pass filter cut off frequency
  * @return    status code
  *            - 0 success
@@ -810,7 +810,7 @@ uint8_t l3gd20h_set_high_pass_filter_cut_off_frequency(l3gd20h_handle_t *handle,
 
 /**
  * @brief      get the high pass filter cut off frequency
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *frequency points to a high pass filter cut off frequency buffer
  * @return     status code
  *             - 0 success
@@ -823,7 +823,7 @@ uint8_t l3gd20h_get_high_pass_filter_cut_off_frequency(l3gd20h_handle_t *handle,
 
 /**
  * @brief     enable or disable the block data update
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -836,7 +836,7 @@ uint8_t l3gd20h_set_block_data_update(l3gd20h_handle_t *handle, l3gd20h_bool_t e
 
 /**
  * @brief      get the block data update status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -849,7 +849,7 @@ uint8_t l3gd20h_get_block_data_update(l3gd20h_handle_t *handle, l3gd20h_bool_t *
 
 /**
  * @brief     set the data format
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] data_format is the data format
  * @return    status code
  *            - 0 success
@@ -862,7 +862,7 @@ uint8_t l3gd20h_set_data_format(l3gd20h_handle_t *handle, l3gd20h_data_format_t 
 
 /**
  * @brief      get the data format
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *data_format points to a data format buffer
  * @return     status code
  *             - 0 success
@@ -875,7 +875,7 @@ uint8_t l3gd20h_get_data_format(l3gd20h_handle_t *handle, l3gd20h_data_format_t 
 
 /**
  * @brief     set the full scale
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] full_scale is the full scale
  * @return    status code
  *            - 0 success
@@ -888,7 +888,7 @@ uint8_t l3gd20h_set_full_scale(l3gd20h_handle_t *handle, l3gd20h_full_scale_t fu
 
 /**
  * @brief      get the full scale
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *full_scale points to a full scale buffer
  * @return     status code
  *             - 0 success
@@ -901,7 +901,7 @@ uint8_t l3gd20h_get_full_scale(l3gd20h_handle_t *handle, l3gd20h_full_scale_t *f
 
 /**
  * @brief     enable or disable the level sensitive latched
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -914,7 +914,7 @@ uint8_t l3gd20h_set_level_sensitive_latched(l3gd20h_handle_t *handle, l3gd20h_bo
 
 /**
  * @brief      get the level sensitive latched status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -927,7 +927,7 @@ uint8_t l3gd20h_get_level_sensitive_latched(l3gd20h_handle_t *handle, l3gd20h_bo
 
 /**
  * @brief     set the self test
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] self_test is the self test
  * @return    status code
  *            - 0 success
@@ -940,7 +940,7 @@ uint8_t l3gd20h_set_self_test(l3gd20h_handle_t *handle, l3gd20h_self_test_t self
 
 /**
  * @brief      get the self test
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *self_test points to a self test buffer
  * @return     status code
  *             - 0 success
@@ -953,7 +953,7 @@ uint8_t l3gd20h_get_self_test(l3gd20h_handle_t *handle, l3gd20h_self_test_t *sel
 
 /**
  * @brief     set the spi wire
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] spi_wire is the spi wire
  * @return    status code
  *            - 0 success
@@ -966,7 +966,7 @@ uint8_t l3gd20h_set_spi_wire(l3gd20h_handle_t *handle, l3gd20h_spi_wire_t spi_wi
 
 /**
  * @brief      get the spi wire
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *spi_wire points to a spi wire buffer
  * @return     status code
  *             - 0 success
@@ -979,7 +979,7 @@ uint8_t l3gd20h_get_spi_wire(l3gd20h_handle_t *handle, l3gd20h_spi_wire_t *spi_w
 
 /**
  * @brief     set the boot
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] boot is the boot mode
  * @return    status code
  *            - 0 success
@@ -992,7 +992,7 @@ uint8_t l3gd20h_set_boot(l3gd20h_handle_t *handle, l3gd20h_boot_t boot);
 
 /**
  * @brief      get the boot
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *boot points to a boot mode buffer
  * @return     status code
  *             - 0 success
@@ -1005,7 +1005,7 @@ uint8_t l3gd20h_get_boot(l3gd20h_handle_t *handle, l3gd20h_boot_t *boot);
 
 /**
  * @brief     enable or disable high pass filter
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -1018,7 +1018,7 @@ uint8_t l3gd20h_set_high_pass_filter(l3gd20h_handle_t *handle, l3gd20h_bool_t en
 
 /**
  * @brief      get high pass filter status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -1031,7 +1031,7 @@ uint8_t l3gd20h_get_high_pass_filter(l3gd20h_handle_t *handle, l3gd20h_bool_t *e
 
 /**
  * @brief     set the out selection
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] selection is the out selection
  * @return    status code
  *            - 0 success
@@ -1044,8 +1044,8 @@ uint8_t l3gd20h_set_out_selection(l3gd20h_handle_t *handle, l3gd20h_selection_t 
 
 /**
  * @brief      get the out selection
- * @param[in]  *handle points to a l3gd20h handle structure
- * @param[out] *selection points to a out selection buffer
+ * @param[in]  *handle points to an l3gd20h handle structure
+ * @param[out] *selection points to an out selection buffer
  * @return     status code
  *             - 0 success
  *             - 1 get out selection failed
@@ -1057,7 +1057,7 @@ uint8_t l3gd20h_get_out_selection(l3gd20h_handle_t *handle, l3gd20h_selection_t 
 
 /**
  * @brief     set the high pass filter reference
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] value is the high pass filter reference value
  * @return    status code
  *            - 0 success
@@ -1070,7 +1070,7 @@ uint8_t l3gd20h_set_high_pass_filter_reference(l3gd20h_handle_t *handle, uint8_t
 
 /**
  * @brief      get the high pass filter reference
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *value points to a high pass filter reference value buffer
  * @return     status code
  *             - 0 success
@@ -1083,7 +1083,7 @@ uint8_t l3gd20h_get_high_pass_filter_reference(l3gd20h_handle_t *handle, uint8_t
 
 /**
  * @brief      get the chip status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *status points to a status buffer
  * @return     status code
  *             - 0 success
@@ -1096,7 +1096,7 @@ uint8_t l3gd20h_get_status(l3gd20h_handle_t *handle, uint8_t *status);
 
 /**
  * @brief     enable or disable the iic interface
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -1109,7 +1109,7 @@ uint8_t l3gd20h_set_iic(l3gd20h_handle_t *handle, l3gd20h_bool_t enable);
 
 /**
  * @brief      get the iic interface status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -1122,7 +1122,7 @@ uint8_t l3gd20h_get_iic(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable);
 
 /**
  * @brief     soft reset the device
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @return    status code
  *            - 0 success
  *            - 1 soft reset failed
@@ -1145,7 +1145,7 @@ uint8_t l3gd20h_soft_reset(l3gd20h_handle_t *handle);
 
 /**
  * @brief     enable or disable the interrupt1
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -1158,7 +1158,7 @@ uint8_t l3gd20h_set_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t enable);
 
 /**
  * @brief      get the interrupt1 status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -1171,7 +1171,7 @@ uint8_t l3gd20h_get_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
 
 /**
  * @brief     enable or disable boot on the interrupt1
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -1184,7 +1184,7 @@ uint8_t l3gd20h_set_boot_on_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t 
 
 /**
  * @brief      get the boot on the interrupt1 status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -1197,7 +1197,7 @@ uint8_t l3gd20h_get_boot_on_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t 
 
 /**
  * @brief     set the interrupt active level
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] level is the interrupt active level
  * @return    status code
  *            - 0 success
@@ -1210,8 +1210,8 @@ uint8_t l3gd20h_set_interrupt_active_level(l3gd20h_handle_t *handle, l3gd20h_int
 
 /**
  * @brief      get the interrupt active level
- * @param[in]  *handle points to a l3gd20h handle structure
- * @param[out] *level points to a interrupt active level buffer
+ * @param[in]  *handle points to an l3gd20h handle structure
+ * @param[out] *level points to an interrupt active level buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt active level failed
@@ -1223,7 +1223,7 @@ uint8_t l3gd20h_get_interrupt_active_level(l3gd20h_handle_t *handle, l3gd20h_int
 
 /**
  * @brief     set the interrupt pin type
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] pin_type is the interrupt pin type
  * @return    status code
  *            - 0 success
@@ -1236,8 +1236,8 @@ uint8_t l3gd20h_set_interrupt_pin_type(l3gd20h_handle_t *handle, l3gd20h_pin_typ
 
 /**
  * @brief      get the interrupt pin type
- * @param[in]  *handle points to a l3gd20h handle structure
- * @param[out] *pin_type points to a interrupt pin type buffer
+ * @param[in]  *handle points to an l3gd20h handle structure
+ * @param[out] *pin_type points to an interrupt pin type buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt pin type failed
@@ -1249,7 +1249,7 @@ uint8_t l3gd20h_get_interrupt_pin_type(l3gd20h_handle_t *handle, l3gd20h_pin_typ
 
 /**
  * @brief     enable or disable the data ready on interrupt2
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -1262,7 +1262,7 @@ uint8_t l3gd20h_set_data_ready_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
 
 /**
  * @brief      get the data ready on interrupt2 status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -1275,7 +1275,7 @@ uint8_t l3gd20h_get_data_ready_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
 
 /**
  * @brief     enable or disable the fifo threshold on interrupt2
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -1288,7 +1288,7 @@ uint8_t l3gd20h_set_fifo_threshold_on_interrupt2(l3gd20h_handle_t *handle, l3gd2
 
 /**
  * @brief      get the fifo threshold on interrupt2 status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -1301,7 +1301,7 @@ uint8_t l3gd20h_get_fifo_threshold_on_interrupt2(l3gd20h_handle_t *handle, l3gd2
 
 /**
  * @brief     enable or disable the fifo overrun on interrupt2
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -1314,7 +1314,7 @@ uint8_t l3gd20h_set_fifo_overrun_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h
 
 /**
  * @brief      get the fifo overrun on interrupt2 status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -1327,7 +1327,7 @@ uint8_t l3gd20h_get_fifo_overrun_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h
 
 /**
  * @brief     enable or disable the fifo empty on interrupt2
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -1340,7 +1340,7 @@ uint8_t l3gd20h_set_fifo_empty_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
 
 /**
  * @brief      get the fifo empty on interrupt2 status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -1353,7 +1353,7 @@ uint8_t l3gd20h_get_fifo_empty_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
 
 /**
  * @brief     set the interrupt selection
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] selection is the interrupt selection
  * @return    status code
  *            - 0 success
@@ -1366,8 +1366,8 @@ uint8_t l3gd20h_set_interrupt_selection(l3gd20h_handle_t *handle, l3gd20h_select
 
 /**
  * @brief      get the interrupt selection
- * @param[in]  *handle points to a l3gd20h handle structure
- * @param[out] *selection points to a interrupt selection buffer
+ * @param[in]  *handle points to an l3gd20h handle structure
+ * @param[out] *selection points to an interrupt selection buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt selection failed
@@ -1379,7 +1379,7 @@ uint8_t l3gd20h_get_interrupt_selection(l3gd20h_handle_t *handle, l3gd20h_select
 
 /**
  * @brief     set the interrupt event
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] interrupt_event is the chip interrupt event
  * @param[in] enable is a bool value
  * @return    status code
@@ -1393,7 +1393,7 @@ uint8_t l3gd20h_set_interrupt_event(l3gd20h_handle_t *handle, l3gd20h_interrupt_
 
 /**
  * @brief      get the interrupt event
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[in]  interrupt_event is the chip interrupt event
  * @param[out] *enable points to a bool value buffer
  * @return     status code
@@ -1407,8 +1407,8 @@ uint8_t l3gd20h_get_interrupt_event(l3gd20h_handle_t *handle, l3gd20h_interrupt_
 
 /**
  * @brief      get the interrupt source
- * @param[in]  *handle points to a l3gd20h handle structure
- * @param[out] *src points to a interrupt source buffer
+ * @param[in]  *handle points to an l3gd20h handle structure
+ * @param[out] *src points to an interrupt source buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt source failed
@@ -1420,7 +1420,7 @@ uint8_t l3gd20h_get_interrupt_source(l3gd20h_handle_t *handle, uint8_t *src);
 
 /**
  * @brief     set the x interrupt threshold
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] threshold is the interrupt threshold
  * @return    status code
  *            - 0 success
@@ -1434,8 +1434,8 @@ uint8_t l3gd20h_set_x_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
 
 /**
  * @brief      get the x interrupt threshold
- * @param[in]  *handle points to a l3gd20h handle structure
- * @param[out] *threshold points to a interrupt threshold buffer
+ * @param[in]  *handle points to an l3gd20h handle structure
+ * @param[out] *threshold points to an interrupt threshold buffer
  * @return     status code
  *             - 0 success
  *             - 1 get x interrupt threshold failed
@@ -1447,7 +1447,7 @@ uint8_t l3gd20h_get_x_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t *th
 
 /**
  * @brief     set the y interrupt threshold
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] threshold is the interrupt threshold
  * @return    status code
  *            - 0 success
@@ -1461,8 +1461,8 @@ uint8_t l3gd20h_set_y_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
 
 /**
  * @brief      get the y interrupt threshold
- * @param[in]  *handle points to a l3gd20h handle structure
- * @param[out] *threshold points to a interrupt threshold buffer
+ * @param[in]  *handle points to an l3gd20h handle structure
+ * @param[out] *threshold points to an interrupt threshold buffer
  * @return     status code
  *             - 0 success
  *             - 1 get y interrupt threshold failed
@@ -1474,7 +1474,7 @@ uint8_t l3gd20h_get_y_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t *th
 
 /**
  * @brief     set the z interrupt threshold
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] threshold is the interrupt threshold
  * @return    status code
  *            - 0 success
@@ -1488,8 +1488,8 @@ uint8_t l3gd20h_set_z_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
 
 /**
  * @brief      get the z interrupt threshold
- * @param[in]  *handle points to a l3gd20h handle structure
- * @param[out] *threshold points to a interrupt threshold buffer
+ * @param[in]  *handle points to an l3gd20h handle structure
+ * @param[out] *threshold points to an interrupt threshold buffer
  * @return     status code
  *             - 0 success
  *             - 1 get z interrupt threshold failed
@@ -1501,9 +1501,9 @@ uint8_t l3gd20h_get_z_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t *th
 
 /**
  * @brief      convert the interrupt threshold real data to the register raw data
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[in]  dps is the interrupt threshold real data
- * @param[out] *reg points to a interrupt threshold raw data buffer
+ * @param[out] *reg points to an interrupt threshold raw data buffer
  * @return     status code
  *             - 0 success
  *             - 1 convert to register failed
@@ -1515,9 +1515,9 @@ uint8_t l3gd20h_interrupt_threshold_convert_to_register(l3gd20h_handle_t *handle
 
 /**
  * @brief      convert the interrupt threshold register raw data to the real data
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[in]  reg is the interrupt threshold raw data
- * @param[out] *dps points to a interrupt threshold real data buffer
+ * @param[out] *dps points to an interrupt threshold real data buffer
  * @return     status code
  *             - 0 success
  *             - 1 convert to data failed
@@ -1529,7 +1529,7 @@ uint8_t l3gd20h_interrupt_threshold_convert_to_data(l3gd20h_handle_t *handle, ui
 
 /**
  * @brief     set the counter mode
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] counter_mode is the counter mode
  * @return    status code
  *            - 0 success
@@ -1542,7 +1542,7 @@ uint8_t l3gd20h_set_counter_mode(l3gd20h_handle_t *handle, l3gd20h_counter_mode_
 
 /**
  * @brief      get the counter mode
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *counter_mode points to a counter mode buffer
  * @return     status code
  *             - 0 success
@@ -1555,7 +1555,7 @@ uint8_t l3gd20h_get_counter_mode(l3gd20h_handle_t *handle, l3gd20h_counter_mode_
 
 /**
  * @brief     enable or disable the wait
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -1568,7 +1568,7 @@ uint8_t l3gd20h_set_wait(l3gd20h_handle_t *handle, l3gd20h_bool_t enable);
 
 /**
  * @brief      get the wait status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -1581,7 +1581,7 @@ uint8_t l3gd20h_get_wait(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable);
 
 /**
  * @brief     set the wait duration
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] duration is the wait duration
  * @return    status code
  *            - 0 success
@@ -1594,7 +1594,7 @@ uint8_t l3gd20h_set_duration(l3gd20h_handle_t *handle, uint8_t duration);
 
 /**
  * @brief      get the wait duration
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *duration points to a wait duration buffer
  * @return     status code
  *             - 0 success
@@ -1607,7 +1607,7 @@ uint8_t l3gd20h_get_duration(l3gd20h_handle_t *handle, uint8_t *duration);
 
 /**
  * @brief     set the data ready active level
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] level is the interrupt active level
  * @return    status code
  *            - 0 success
@@ -1620,8 +1620,8 @@ uint8_t l3gd20h_set_data_ready_active_level(l3gd20h_handle_t *handle, l3gd20h_in
 
 /**
  * @brief      get the data ready active level
- * @param[in]  *handle points to a l3gd20h handle structure
- * @param[out] *level points to a interrupt active level buffer
+ * @param[in]  *handle points to an l3gd20h handle structure
+ * @param[out] *level points to an interrupt active level buffer
  * @return     status code
  *             - 0 success
  *             - 1 get data ready active level failed
@@ -1644,7 +1644,7 @@ uint8_t l3gd20h_get_data_ready_active_level(l3gd20h_handle_t *handle, l3gd20h_in
 
 /**
  * @brief     enable or disable the fifo
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -1657,7 +1657,7 @@ uint8_t l3gd20h_set_fifo(l3gd20h_handle_t *handle, l3gd20h_bool_t enable);
 
 /**
  * @brief      get the fifo status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -1670,7 +1670,7 @@ uint8_t l3gd20h_get_fifo(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable);
 
 /**
  * @brief     enable or disable stop on fifo threshold
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] enable is a bool value
  * @return    status code
  *            - 0 success
@@ -1683,7 +1683,7 @@ uint8_t l3gd20h_set_stop_on_fifo_threshold(l3gd20h_handle_t *handle, l3gd20h_boo
 
 /**
  * @brief      get stop on fifo threshold status
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *enable points to a bool value buffer
  * @return     status code
  *             - 0 success
@@ -1696,7 +1696,7 @@ uint8_t l3gd20h_get_stop_on_fifo_threshold(l3gd20h_handle_t *handle, l3gd20h_boo
 
 /**
  * @brief     set the fifo mode
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] fifo_mode is the chip fifo working mode
  * @return    status code
  *            - 0 success
@@ -1709,7 +1709,7 @@ uint8_t l3gd20h_set_fifo_mode(l3gd20h_handle_t *handle, l3gd20h_fifo_mode_t fifo
 
 /**
  * @brief      get the fifo mode
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *fifo_mode points to a chip fifo working mode buffer
  * @return     status code
  *             - 0 success
@@ -1722,7 +1722,7 @@ uint8_t l3gd20h_get_fifo_mode(l3gd20h_handle_t *handle, l3gd20h_fifo_mode_t *fif
 
 /**
  * @brief     set the fifo threshold
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] threshold is the fifo threshold
  * @return    status code
  *            - 0 success
@@ -1736,7 +1736,7 @@ uint8_t l3gd20h_set_fifo_threshold(l3gd20h_handle_t *handle, uint8_t threshold);
 
 /**
  * @brief      get the fifo threshold
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *threshold points to a fifo threshold buffer
  * @return     status code
  *             - 0 success
@@ -1749,7 +1749,7 @@ uint8_t l3gd20h_get_fifo_threshold(l3gd20h_handle_t *handle, uint8_t *threshold)
 
 /**
  * @brief      get the fifo level
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[out] *level points to a fifo level buffer
  * @return     status code
  *             - 0 success
@@ -1773,7 +1773,7 @@ uint8_t l3gd20h_get_fifo_level(l3gd20h_handle_t *handle, uint8_t *level);
 
 /**
  * @brief     set the chip register
- * @param[in] *handle points to a l3gd20h handle structure
+ * @param[in] *handle points to an l3gd20h handle structure
  * @param[in] reg is the register address
  * @param[in] *buf points to a data buffer
  * @param[in] len is the data buffer length
@@ -1788,7 +1788,7 @@ uint8_t l3gd20h_set_reg(l3gd20h_handle_t *handle, uint8_t reg, uint8_t *buf, uin
 
 /**
  * @brief      get the chip register
- * @param[in]  *handle points to a l3gd20h handle structure
+ * @param[in]  *handle points to an l3gd20h handle structure
  * @param[in]  reg is the register address
  * @param[out] *buf points to a data buffer
  * @param[in]  len is the data buffer length
