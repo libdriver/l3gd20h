@@ -1103,7 +1103,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l01059"></a><span class="lineno"> 1059</span>&#160;    }</div>
 <div class="line"><a name="l01060"></a><span class="lineno"> 1060</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: check high pass filter mode %s.\n&quot;</span>, high_mode == <a class="code" href="group__l3gd20h__basic__driver.html#gga7a7bc0094a6e31d0076113fd708f0963a5483f6683b7c65dd19ed605f70deded8">L3GD20H_HIGH_PASS_FILTER_MODE_NORMAL_RESET</a> ? <span class="stringliteral">&quot;ok&quot;</span> : <span class="stringliteral">&quot;error&quot;</span>);</div>
 <div class="line"><a name="l01061"></a><span class="lineno"> 1061</span>&#160;    </div>
-<div class="line"><a name="l01062"></a><span class="lineno"> 1062</span>&#160;    <span class="comment">/* refernce signal mode */</span></div>
+<div class="line"><a name="l01062"></a><span class="lineno"> 1062</span>&#160;    <span class="comment">/* reference signal mode */</span></div>
 <div class="line"><a name="l01063"></a><span class="lineno"> 1063</span>&#160;    res = <a class="code" href="group__l3gd20h__basic__driver.html#ga452d413def0b3e66d82ccdb299f5a72a">l3gd20h_set_high_pass_filter_mode</a>(&amp;gs_handle, <a class="code" href="group__l3gd20h__basic__driver.html#gga7a7bc0094a6e31d0076113fd708f0963a763411cf2489d0a755d88cd1c54ed99e">L3GD20H_HIGH_PASS_FILTER_MODE_REFERENCE_SIGNAL</a>);</div>
 <div class="line"><a name="l01064"></a><span class="lineno"> 1064</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l01065"></a><span class="lineno"> 1065</span>&#160;    {</div>
@@ -1112,7 +1112,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l01068"></a><span class="lineno"> 1068</span>&#160;        </div>
 <div class="line"><a name="l01069"></a><span class="lineno"> 1069</span>&#160;        <span class="keywordflow">return</span> 1;</div>
 <div class="line"><a name="l01070"></a><span class="lineno"> 1070</span>&#160;    }</div>
-<div class="line"><a name="l01071"></a><span class="lineno"> 1071</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: set high pass filter refernce signal mode.\n&quot;</span>);</div>
+<div class="line"><a name="l01071"></a><span class="lineno"> 1071</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: set high pass filter reference signal mode.\n&quot;</span>);</div>
 <div class="line"><a name="l01072"></a><span class="lineno"> 1072</span>&#160;    res = <a class="code" href="group__l3gd20h__basic__driver.html#gabf2a002ca07f6b162bf95df1fba670c9">l3gd20h_get_high_pass_filter_mode</a>(&amp;gs_handle, &amp;high_mode);</div>
 <div class="line"><a name="l01073"></a><span class="lineno"> 1073</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l01074"></a><span class="lineno"> 1074</span>&#160;    {</div>
@@ -1143,7 +1143,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l01099"></a><span class="lineno"> 1099</span>&#160;    }</div>
 <div class="line"><a name="l01100"></a><span class="lineno"> 1100</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: check high pass filter mode %s.\n&quot;</span>, high_mode == <a class="code" href="group__l3gd20h__basic__driver.html#gga7a7bc0094a6e31d0076113fd708f0963a1d1bc86d588d25167d1e8cca16abc80d">L3GD20H_HIGH_PASS_FILTER_MODE_NORMAL</a> ? <span class="stringliteral">&quot;ok&quot;</span> : <span class="stringliteral">&quot;error&quot;</span>);</div>
 <div class="line"><a name="l01101"></a><span class="lineno"> 1101</span>&#160;    </div>
-<div class="line"><a name="l01102"></a><span class="lineno"> 1102</span>&#160;    <span class="comment">/* autoreset on int mode */</span></div>
+<div class="line"><a name="l01102"></a><span class="lineno"> 1102</span>&#160;    <span class="comment">/* auto reset on int mode */</span></div>
 <div class="line"><a name="l01103"></a><span class="lineno"> 1103</span>&#160;    res = <a class="code" href="group__l3gd20h__basic__driver.html#ga452d413def0b3e66d82ccdb299f5a72a">l3gd20h_set_high_pass_filter_mode</a>(&amp;gs_handle, <a class="code" href="group__l3gd20h__basic__driver.html#gga7a7bc0094a6e31d0076113fd708f0963a44ce5f2a665c078ecfeb8f23a9bb8010">L3GD20H_HIGH_PASS_FILTER_MODE_AUTORESET_ON_INT</a>);</div>
 <div class="line"><a name="l01104"></a><span class="lineno"> 1104</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l01105"></a><span class="lineno"> 1105</span>&#160;    {</div>
@@ -1152,7 +1152,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l01108"></a><span class="lineno"> 1108</span>&#160;        </div>
 <div class="line"><a name="l01109"></a><span class="lineno"> 1109</span>&#160;        <span class="keywordflow">return</span> 1;</div>
 <div class="line"><a name="l01110"></a><span class="lineno"> 1110</span>&#160;    }</div>
-<div class="line"><a name="l01111"></a><span class="lineno"> 1111</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: set high pass filter autoreset on int mode.\n&quot;</span>);</div>
+<div class="line"><a name="l01111"></a><span class="lineno"> 1111</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: set high pass filter auto reset on int mode.\n&quot;</span>);</div>
 <div class="line"><a name="l01112"></a><span class="lineno"> 1112</span>&#160;    res = <a class="code" href="group__l3gd20h__basic__driver.html#gabf2a002ca07f6b162bf95df1fba670c9">l3gd20h_get_high_pass_filter_mode</a>(&amp;gs_handle, &amp;high_mode);</div>
 <div class="line"><a name="l01113"></a><span class="lineno"> 1113</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l01114"></a><span class="lineno"> 1114</span>&#160;    {</div>
@@ -1166,7 +1166,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l01122"></a><span class="lineno"> 1122</span>&#160;    <span class="comment">/* l3gd20h_set_high_pass_filter_cut_off_frequency/l3gd20h_get_high_pass_filter_cut_off_frequency test */</span></div>
 <div class="line"><a name="l01123"></a><span class="lineno"> 1123</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: l3gd20h_set_high_pass_filter_cut_off_frequency/l3gd20h_get_high_pass_filter_cut_off_frequency test.\n&quot;</span>);</div>
 <div class="line"><a name="l01124"></a><span class="lineno"> 1124</span>&#160;    </div>
-<div class="line"><a name="l01125"></a><span class="lineno"> 1125</span>&#160;    <span class="comment">/* cut off frequency 0 */</span></div>
+<div class="line"><a name="l01125"></a><span class="lineno"> 1125</span>&#160;    <span class="comment">/* cut-off frequency 0 */</span></div>
 <div class="line"><a name="l01126"></a><span class="lineno"> 1126</span>&#160;    res = <a class="code" href="group__l3gd20h__basic__driver.html#gadd799a22a28ea703459f9406f68f776a">l3gd20h_set_high_pass_filter_cut_off_frequency</a>(&amp;gs_handle, <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5af517a52c1cc5a0fad55a62f6f61c0343">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_0</a>);</div>
 <div class="line"><a name="l01127"></a><span class="lineno"> 1127</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l01128"></a><span class="lineno"> 1128</span>&#160;    {</div>
@@ -1186,7 +1186,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l01142"></a><span class="lineno"> 1142</span>&#160;    }</div>
 <div class="line"><a name="l01143"></a><span class="lineno"> 1143</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: check high pass filter cut off frequency %s.\n&quot;</span>, frequency == <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5af517a52c1cc5a0fad55a62f6f61c0343">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_0</a> ? <span class="stringliteral">&quot;ok&quot;</span> : <span class="stringliteral">&quot;error&quot;</span>);</div>
 <div class="line"><a name="l01144"></a><span class="lineno"> 1144</span>&#160;    </div>
-<div class="line"><a name="l01145"></a><span class="lineno"> 1145</span>&#160;    <span class="comment">/* cut off frequency 1 */</span></div>
+<div class="line"><a name="l01145"></a><span class="lineno"> 1145</span>&#160;    <span class="comment">/* cut-off frequency 1 */</span></div>
 <div class="line"><a name="l01146"></a><span class="lineno"> 1146</span>&#160;    res = <a class="code" href="group__l3gd20h__basic__driver.html#gadd799a22a28ea703459f9406f68f776a">l3gd20h_set_high_pass_filter_cut_off_frequency</a>(&amp;gs_handle, <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5ab66ce2081bb7344522dc8cea7ea2b385">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_1</a>);</div>
 <div class="line"><a name="l01147"></a><span class="lineno"> 1147</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l01148"></a><span class="lineno"> 1148</span>&#160;    {</div>
@@ -1206,7 +1206,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l01162"></a><span class="lineno"> 1162</span>&#160;    }</div>
 <div class="line"><a name="l01163"></a><span class="lineno"> 1163</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: check high pass filter cut off frequency %s.\n&quot;</span>, frequency == <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5ab66ce2081bb7344522dc8cea7ea2b385">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_1</a> ? <span class="stringliteral">&quot;ok&quot;</span> : <span class="stringliteral">&quot;error&quot;</span>);</div>
 <div class="line"><a name="l01164"></a><span class="lineno"> 1164</span>&#160;    </div>
-<div class="line"><a name="l01165"></a><span class="lineno"> 1165</span>&#160;    <span class="comment">/* cut off frequency 2 */</span></div>
+<div class="line"><a name="l01165"></a><span class="lineno"> 1165</span>&#160;    <span class="comment">/* cut-off frequency 2 */</span></div>
 <div class="line"><a name="l01166"></a><span class="lineno"> 1166</span>&#160;    res = <a class="code" href="group__l3gd20h__basic__driver.html#gadd799a22a28ea703459f9406f68f776a">l3gd20h_set_high_pass_filter_cut_off_frequency</a>(&amp;gs_handle, <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5ae211bdb45285d6d1636c8962bb194de5">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_2</a>);</div>
 <div class="line"><a name="l01167"></a><span class="lineno"> 1167</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l01168"></a><span class="lineno"> 1168</span>&#160;    {</div>
@@ -1226,7 +1226,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l01182"></a><span class="lineno"> 1182</span>&#160;    }</div>
 <div class="line"><a name="l01183"></a><span class="lineno"> 1183</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: check high pass filter cut off frequency %s.\n&quot;</span>, frequency == <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5ae211bdb45285d6d1636c8962bb194de5">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_2</a> ? <span class="stringliteral">&quot;ok&quot;</span> : <span class="stringliteral">&quot;error&quot;</span>);</div>
 <div class="line"><a name="l01184"></a><span class="lineno"> 1184</span>&#160;    </div>
-<div class="line"><a name="l01185"></a><span class="lineno"> 1185</span>&#160;    <span class="comment">/* cut off frequency 3 */</span></div>
+<div class="line"><a name="l01185"></a><span class="lineno"> 1185</span>&#160;    <span class="comment">/* cut-off frequency 3 */</span></div>
 <div class="line"><a name="l01186"></a><span class="lineno"> 1186</span>&#160;    res = <a class="code" href="group__l3gd20h__basic__driver.html#gadd799a22a28ea703459f9406f68f776a">l3gd20h_set_high_pass_filter_cut_off_frequency</a>(&amp;gs_handle, <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5a589741827daeeea6590b2a91338112da">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_3</a>);</div>
 <div class="line"><a name="l01187"></a><span class="lineno"> 1187</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l01188"></a><span class="lineno"> 1188</span>&#160;    {</div>
@@ -1246,7 +1246,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l01202"></a><span class="lineno"> 1202</span>&#160;    }</div>
 <div class="line"><a name="l01203"></a><span class="lineno"> 1203</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: check high pass filter cut off frequency %s.\n&quot;</span>, frequency == <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5a589741827daeeea6590b2a91338112da">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_3</a> ? <span class="stringliteral">&quot;ok&quot;</span> : <span class="stringliteral">&quot;error&quot;</span>);</div>
 <div class="line"><a name="l01204"></a><span class="lineno"> 1204</span>&#160;    </div>
-<div class="line"><a name="l01205"></a><span class="lineno"> 1205</span>&#160;    <span class="comment">/* cut off frequency 4 */</span></div>
+<div class="line"><a name="l01205"></a><span class="lineno"> 1205</span>&#160;    <span class="comment">/* cut-off frequency 4 */</span></div>
 <div class="line"><a name="l01206"></a><span class="lineno"> 1206</span>&#160;    res = <a class="code" href="group__l3gd20h__basic__driver.html#gadd799a22a28ea703459f9406f68f776a">l3gd20h_set_high_pass_filter_cut_off_frequency</a>(&amp;gs_handle, <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5aa125ac332c080714e356bf2e3aa24847">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_4</a>);</div>
 <div class="line"><a name="l01207"></a><span class="lineno"> 1207</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l01208"></a><span class="lineno"> 1208</span>&#160;    {</div>
@@ -1266,7 +1266,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l01222"></a><span class="lineno"> 1222</span>&#160;    }</div>
 <div class="line"><a name="l01223"></a><span class="lineno"> 1223</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: check high pass filter cut off frequency %s.\n&quot;</span>, frequency == <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5aa125ac332c080714e356bf2e3aa24847">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_4</a> ? <span class="stringliteral">&quot;ok&quot;</span> : <span class="stringliteral">&quot;error&quot;</span>);</div>
 <div class="line"><a name="l01224"></a><span class="lineno"> 1224</span>&#160;    </div>
-<div class="line"><a name="l01225"></a><span class="lineno"> 1225</span>&#160;    <span class="comment">/* cut off frequency 5 */</span></div>
+<div class="line"><a name="l01225"></a><span class="lineno"> 1225</span>&#160;    <span class="comment">/* cut-off frequency 5 */</span></div>
 <div class="line"><a name="l01226"></a><span class="lineno"> 1226</span>&#160;    res = <a class="code" href="group__l3gd20h__basic__driver.html#gadd799a22a28ea703459f9406f68f776a">l3gd20h_set_high_pass_filter_cut_off_frequency</a>(&amp;gs_handle, <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5afdb6f6d6f1072e2a95c99c8ee228ef1f">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_5</a>);</div>
 <div class="line"><a name="l01227"></a><span class="lineno"> 1227</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l01228"></a><span class="lineno"> 1228</span>&#160;    {</div>
@@ -1286,7 +1286,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l01242"></a><span class="lineno"> 1242</span>&#160;    }</div>
 <div class="line"><a name="l01243"></a><span class="lineno"> 1243</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: check high pass filter cut off frequency %s.\n&quot;</span>, frequency == <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5afdb6f6d6f1072e2a95c99c8ee228ef1f">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_5</a> ? <span class="stringliteral">&quot;ok&quot;</span> : <span class="stringliteral">&quot;error&quot;</span>);</div>
 <div class="line"><a name="l01244"></a><span class="lineno"> 1244</span>&#160;    </div>
-<div class="line"><a name="l01245"></a><span class="lineno"> 1245</span>&#160;    <span class="comment">/* cut off frequency 6 */</span></div>
+<div class="line"><a name="l01245"></a><span class="lineno"> 1245</span>&#160;    <span class="comment">/* cut-off frequency 6 */</span></div>
 <div class="line"><a name="l01246"></a><span class="lineno"> 1246</span>&#160;    res = <a class="code" href="group__l3gd20h__basic__driver.html#gadd799a22a28ea703459f9406f68f776a">l3gd20h_set_high_pass_filter_cut_off_frequency</a>(&amp;gs_handle, <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5a630022ff166469d07afafa53f71c18b0">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_6</a>);</div>
 <div class="line"><a name="l01247"></a><span class="lineno"> 1247</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l01248"></a><span class="lineno"> 1248</span>&#160;    {</div>
@@ -1306,7 +1306,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l01262"></a><span class="lineno"> 1262</span>&#160;    }</div>
 <div class="line"><a name="l01263"></a><span class="lineno"> 1263</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: check high pass filter cut off frequency %s.\n&quot;</span>, frequency == <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5a630022ff166469d07afafa53f71c18b0">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_6</a> ? <span class="stringliteral">&quot;ok&quot;</span> : <span class="stringliteral">&quot;error&quot;</span>);</div>
 <div class="line"><a name="l01264"></a><span class="lineno"> 1264</span>&#160;    </div>
-<div class="line"><a name="l01265"></a><span class="lineno"> 1265</span>&#160;    <span class="comment">/* cut off frequency 7 */</span></div>
+<div class="line"><a name="l01265"></a><span class="lineno"> 1265</span>&#160;    <span class="comment">/* cut-off frequency 7 */</span></div>
 <div class="line"><a name="l01266"></a><span class="lineno"> 1266</span>&#160;    res = <a class="code" href="group__l3gd20h__basic__driver.html#gadd799a22a28ea703459f9406f68f776a">l3gd20h_set_high_pass_filter_cut_off_frequency</a>(&amp;gs_handle, <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5a9f01c0cc69a1985958e09085586117f8">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_7</a>);</div>
 <div class="line"><a name="l01267"></a><span class="lineno"> 1267</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l01268"></a><span class="lineno"> 1268</span>&#160;    {</div>
@@ -1326,7 +1326,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l01282"></a><span class="lineno"> 1282</span>&#160;    }</div>
 <div class="line"><a name="l01283"></a><span class="lineno"> 1283</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: check high pass filter cut off frequency %s.\n&quot;</span>, frequency == <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5a9f01c0cc69a1985958e09085586117f8">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_7</a> ? <span class="stringliteral">&quot;ok&quot;</span> : <span class="stringliteral">&quot;error&quot;</span>);</div>
 <div class="line"><a name="l01284"></a><span class="lineno"> 1284</span>&#160;    </div>
-<div class="line"><a name="l01285"></a><span class="lineno"> 1285</span>&#160;    <span class="comment">/* cut off frequency 8 */</span></div>
+<div class="line"><a name="l01285"></a><span class="lineno"> 1285</span>&#160;    <span class="comment">/* cut-off frequency 8 */</span></div>
 <div class="line"><a name="l01286"></a><span class="lineno"> 1286</span>&#160;    res = <a class="code" href="group__l3gd20h__basic__driver.html#gadd799a22a28ea703459f9406f68f776a">l3gd20h_set_high_pass_filter_cut_off_frequency</a>(&amp;gs_handle, <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5ae7bc3fce9c166a37d7956e7720f98c8b">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_8</a>);</div>
 <div class="line"><a name="l01287"></a><span class="lineno"> 1287</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l01288"></a><span class="lineno"> 1288</span>&#160;    {</div>
@@ -1346,7 +1346,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l01302"></a><span class="lineno"> 1302</span>&#160;    }</div>
 <div class="line"><a name="l01303"></a><span class="lineno"> 1303</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: check high pass filter cut off frequency %s.\n&quot;</span>, frequency == <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5ae7bc3fce9c166a37d7956e7720f98c8b">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_8</a> ? <span class="stringliteral">&quot;ok&quot;</span> : <span class="stringliteral">&quot;error&quot;</span>);</div>
 <div class="line"><a name="l01304"></a><span class="lineno"> 1304</span>&#160;    </div>
-<div class="line"><a name="l01305"></a><span class="lineno"> 1305</span>&#160;    <span class="comment">/* cut off frequency 9 */</span></div>
+<div class="line"><a name="l01305"></a><span class="lineno"> 1305</span>&#160;    <span class="comment">/* cut-off frequency 9 */</span></div>
 <div class="line"><a name="l01306"></a><span class="lineno"> 1306</span>&#160;    res = <a class="code" href="group__l3gd20h__basic__driver.html#gadd799a22a28ea703459f9406f68f776a">l3gd20h_set_high_pass_filter_cut_off_frequency</a>(&amp;gs_handle, <a class="code" href="group__l3gd20h__basic__driver.html#gga85a8eee6c666b7f54adb6b2610e46ac5abe88bcede3ff999946c2330c7faaf658">L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_9</a>);</div>
 <div class="line"><a name="l01307"></a><span class="lineno"> 1307</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l01308"></a><span class="lineno"> 1308</span>&#160;    {</div>
@@ -1978,7 +1978,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l01934"></a><span class="lineno"> 1934</span>&#160;    <span class="comment">/* l3gd20h_set_interrupt_pin_type/l3gd20h_get_interrupt_pin_type test */</span></div>
 <div class="line"><a name="l01935"></a><span class="lineno"> 1935</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: l3gd20h_set_interrupt_pin_type/l3gd20h_get_interrupt_pin_type test.\n&quot;</span>);</div>
 <div class="line"><a name="l01936"></a><span class="lineno"> 1936</span>&#160;    </div>
-<div class="line"><a name="l01937"></a><span class="lineno"> 1937</span>&#160;    <span class="comment">/* push pull */</span></div>
+<div class="line"><a name="l01937"></a><span class="lineno"> 1937</span>&#160;    <span class="comment">/* push-pull */</span></div>
 <div class="line"><a name="l01938"></a><span class="lineno"> 1938</span>&#160;    res = <a class="code" href="group__l3gd20h__interrupt__driver.html#ga06d31c9a5b8856ad60e762da0399200b">l3gd20h_set_interrupt_pin_type</a>(&amp;gs_handle, <a class="code" href="group__l3gd20h__interrupt__driver.html#ggaee436f15768bc0a3fd319ee9553e0725a4694aa1fc5a873e23999ac66ad1f0fb3">L3GD20H_PIN_PUSH_PULL</a>);</div>
 <div class="line"><a name="l01939"></a><span class="lineno"> 1939</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l01940"></a><span class="lineno"> 1940</span>&#160;    {</div>
@@ -3032,7 +3032,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l02988"></a><span class="lineno"> 2988</span>&#160;    }</div>
 <div class="line"><a name="l02989"></a><span class="lineno"> 2989</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: check fifo mode %s.\n&quot;</span>, fifo_mode == <a class="code" href="group__l3gd20h__fifo__driver.html#ggad20f98038ec100b0112400751f566a25a77ac4245bf625908096392c7384088fd">L3GD20H_FIFO_MODE_STREAM</a> ? <span class="stringliteral">&quot;ok&quot;</span> : <span class="stringliteral">&quot;error&quot;</span>);</div>
 <div class="line"><a name="l02990"></a><span class="lineno"> 2990</span>&#160;    </div>
-<div class="line"><a name="l02991"></a><span class="lineno"> 2991</span>&#160;    <span class="comment">/* stream to fifo fifo mode */</span></div>
+<div class="line"><a name="l02991"></a><span class="lineno"> 2991</span>&#160;    <span class="comment">/* stream to fifo mode */</span></div>
 <div class="line"><a name="l02992"></a><span class="lineno"> 2992</span>&#160;    res = <a class="code" href="group__l3gd20h__fifo__driver.html#ga69da520e5dffb09a737a543ee6503123">l3gd20h_set_fifo_mode</a>(&amp;gs_handle, <a class="code" href="group__l3gd20h__fifo__driver.html#ggad20f98038ec100b0112400751f566a25afd5f02f281e633f707d84e29d16f62ba">L3GD20H_FIFO_MODE_STREAM_TO_FIFO</a>);</div>
 <div class="line"><a name="l02993"></a><span class="lineno"> 2993</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l02994"></a><span class="lineno"> 2994</span>&#160;    {</div>
@@ -3092,7 +3092,7 @@ $(document).ready(function(){initNavTree('driver__l3gd20h__register__test_8c_sou
 <div class="line"><a name="l03048"></a><span class="lineno"> 3048</span>&#160;    }</div>
 <div class="line"><a name="l03049"></a><span class="lineno"> 3049</span>&#160;    <a class="code" href="group__l3gd20h__interface__driver.html#ga2be5a6c7759d509786c94b7fce0d71fc">l3gd20h_interface_debug_print</a>(<span class="stringliteral">&quot;l3gd20h: check fifo mode %s.\n&quot;</span>, fifo_mode == <a class="code" href="group__l3gd20h__fifo__driver.html#ggad20f98038ec100b0112400751f566a25a38346da1a03496cb3a4255a7ed9da8e5">L3GD20H_FIFO_MODE_DYNAMIC_STREAM</a> ? <span class="stringliteral">&quot;ok&quot;</span> : <span class="stringliteral">&quot;error&quot;</span>);</div>
 <div class="line"><a name="l03050"></a><span class="lineno"> 3050</span>&#160;    </div>
-<div class="line"><a name="l03051"></a><span class="lineno"> 3051</span>&#160;    <span class="comment">/* bypass to fifo fifo mode */</span></div>
+<div class="line"><a name="l03051"></a><span class="lineno"> 3051</span>&#160;    <span class="comment">/* bypass to fifo mode */</span></div>
 <div class="line"><a name="l03052"></a><span class="lineno"> 3052</span>&#160;    res = <a class="code" href="group__l3gd20h__fifo__driver.html#ga69da520e5dffb09a737a543ee6503123">l3gd20h_set_fifo_mode</a>(&amp;gs_handle, <a class="code" href="group__l3gd20h__fifo__driver.html#ggad20f98038ec100b0112400751f566a25aba13077e55d000d0c6abae008c157272">L3GD20H_FIFO_MODE_BYPASS_TO_FIFO</a>);</div>
 <div class="line"><a name="l03053"></a><span class="lineno"> 3053</span>&#160;    <span class="keywordflow">if</span> (res != 0)</div>
 <div class="line"><a name="l03054"></a><span class="lineno"> 3054</span>&#160;    {</div>

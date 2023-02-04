@@ -159,7 +159,7 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
         {"timeout", required_argument, NULL, 5},
         {NULL, 0, NULL, 0},
     };
-    char type[33] = "unknow";
+    char type[33] = "unknown";
     uint32_t times = 3;
     uint32_t timeout = 5000;
     l3gd20h_address_t addr = L3GD20H_ADDRESS_SDO_0;
@@ -645,7 +645,7 @@ int main(void)
     /* uart init */
     uart_init(115200);
     
-    /* shell init && register l3gd20h fuction */
+    /* shell init && register l3gd20h function */
     shell_init();
     shell_register("l3gd20h", l3gd20h);
     uart_print("l3gd20h: welcome to libdriver l3gd20h.\n");
@@ -668,7 +668,7 @@ int main(void)
             }
             else if (res == 2)
             {
-                uart_print("l3gd20h: unknow command.\n");
+                uart_print("l3gd20h: unknown command.\n");
             }
             else if (res == 3)
             {
@@ -684,7 +684,7 @@ int main(void)
             }
             else
             {
-                uart_print("l3gd20h: unknow status code.\n");
+                uart_print("l3gd20h: unknown status code.\n");
             }
             uart_flush();
         }

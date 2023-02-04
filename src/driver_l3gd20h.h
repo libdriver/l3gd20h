@@ -112,7 +112,7 @@ typedef enum
     L3GD20H_HIGH_PASS_FILTER_MODE_NORMAL_RESET     = 0x00,        /**< normal reset mode */
     L3GD20H_HIGH_PASS_FILTER_MODE_REFERENCE_SIGNAL = 0x01,        /**< reference signal mode */
     L3GD20H_HIGH_PASS_FILTER_MODE_NORMAL           = 0x02,        /**< normal mode */
-    L3GD20H_HIGH_PASS_FILTER_MODE_AUTORESET_ON_INT = 0x03,        /**< autoreset on int mode */
+    L3GD20H_HIGH_PASS_FILTER_MODE_AUTORESET_ON_INT = 0x03,        /**< auto reset on int mode */
 } l3gd20h_high_pass_filter_mode_t;
 
 /**

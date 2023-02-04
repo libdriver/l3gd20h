@@ -250,7 +250,7 @@ uint8_t l3gd20h_get_addr_pin(l3gd20h_handle_t *handle, l3gd20h_address_t *addr_p
         return 2;                                             /* return error */
     }
     
-    *addr_pin = (l3gd20h_address_t)(handle->iic_addr);        /* get the iic adress */
+    *addr_pin = (l3gd20h_address_t)(handle->iic_addr);        /* get the iic address */
     
     return 0;                                                 /* success return 0 */
 }
@@ -297,7 +297,7 @@ uint8_t l3gd20h_set_mode(l3gd20h_handle_t *handle, l3gd20h_mode_t mode)
     {
         prev &= ~(1 << 3);                                                                    /* clear pd */
         prev |= (mode << 3);                                                                  /* set mode */
-        prev |= 0x07;                                                                         /* set x,y,z enale */
+        prev |= 0x07;                                                                         /* set x,y,z enable */
         
         return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL1, (uint8_t *)&prev, 1);       /* write config */
     }
@@ -602,7 +602,7 @@ uint8_t l3gd20h_get_edge_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t *enabl
         return 1;                                                                       /* return error */
     }
     
-    prev &= (1 << 7);                                                                   /* get the enable bit */
+    prev &= (1 << 7);                                                                   /* get enable bit */
     *enable = (l3gd20h_bool_t)(prev >> 7);                                              /* get bool */
     
     return 0;                                                                           /* success return 0 */
@@ -640,7 +640,7 @@ uint8_t l3gd20h_set_level_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t enabl
         return 1;                                                                         /* return error */
     }
     prev &= ~(1 << 6);                                                                    /* get bool */
-    prev |= enable << 6;                                                                  /* set the enable */
+    prev |= enable << 6;                                                                  /* set enable */
     
     return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);       /* write config */
 }
@@ -676,7 +676,7 @@ uint8_t l3gd20h_get_level_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t *enab
         
         return 1;                                                                         /* return error */
     }
-    prev &= (1 << 6);                                                                     /* get the enable */
+    prev &= (1 << 6);                                                                     /* get enable */
     *enable = (l3gd20h_bool_t)(prev >> 6);                                                /* get bool */
     
     return 0;                                                                             /* success return 0 */
@@ -787,7 +787,7 @@ uint8_t l3gd20h_set_high_pass_filter_cut_off_frequency(l3gd20h_handle_t *handle,
         
         return 1;                                                                         /* return error */
     }
-    prev &= ~(0x0F);                                                                      /* clear the cut off frequency */
+    prev &= ~(0x0F);                                                                      /* clear the cut-off frequency */
     prev |= frequency;                                                                    /* set the frequency */
     
     return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);       /* write config */
@@ -824,7 +824,7 @@ uint8_t l3gd20h_get_high_pass_filter_cut_off_frequency(l3gd20h_handle_t *handle,
         
         return 1;                                                                         /* return error */
     }
-    prev &= 0x0F;                                                                         /* get the cut off frequency */
+    prev &= 0x0F;                                                                         /* get the cut-off frequency */
     *frequency = (l3gd20h_high_pass_filter_cut_off_frequency_t)(prev >> 0);               /* get the frequency */
     
     return 0;                                                                             /* success return 0 */
@@ -861,7 +861,7 @@ uint8_t l3gd20h_set_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
         
         return 1;                                                                         /* return error */
     }
-    prev &= ~(1 << 7);                                                                    /* clear the enable */
+    prev &= ~(1 << 7);                                                                    /* clear enable */
     prev |= enable << 7;                                                                  /* set enable */
     
     return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* write config */
@@ -972,7 +972,7 @@ uint8_t l3gd20h_get_boot_on_interrupt1(l3gd20h_handle_t *handle, l3gd20h_bool_t 
         
         return 1;                                                                       /* return error */
     }
-    prev &= (1 << 6);                                                                   /* get the enable bit */
+    prev &= (1 << 6);                                                                   /* get enable bit */
     *enable = (l3gd20h_bool_t)(prev >> 6);                                              /* get bool */
     
     return 0;                                                                           /* success return 0 */
@@ -1194,7 +1194,7 @@ uint8_t l3gd20h_get_data_ready_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
         
         return 1;                                                                       /* return error */
     }
-    prev &= (1 << 3);                                                                   /* get the enable bit */
+    prev &= (1 << 3);                                                                   /* get enable bit */
     *enable = (l3gd20h_bool_t)(prev >> 3);                                              /* get bool */
     
     return 0;                                                                           /* success return 0 */
@@ -1268,7 +1268,7 @@ uint8_t l3gd20h_get_fifo_threshold_on_interrupt2(l3gd20h_handle_t *handle, l3gd2
         
         return 1;                                                                       /* return error */
     }
-    prev &= (1 << 2);                                                                   /* get the enable bit */
+    prev &= (1 << 2);                                                                   /* get enable bit */
     *enable = (l3gd20h_bool_t)(prev >> 2);                                              /* get bool */
   
     return 0;                                                                           /* success return 0 */
@@ -1342,7 +1342,7 @@ uint8_t l3gd20h_get_fifo_overrun_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h
         
         return 1;                                                                       /* return error */
     }
-    prev &= (1 << 1);                                                                   /* get the enable bit */
+    prev &= (1 << 1);                                                                   /* get enable bit */
     *enable = (l3gd20h_bool_t)(prev >> 1);                                              /* get bool */
     
     return 0;                                                                           /* success return 0 */
@@ -1416,7 +1416,7 @@ uint8_t l3gd20h_get_fifo_empty_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
         
         return 1;                                                                       /* return error */
     }
-    prev &= (1 << 0);                                                                   /* get the enable bit */
+    prev &= (1 << 0);                                                                   /* get enable bit */
     *enable = (l3gd20h_bool_t)(prev >> 0);                                              /* get bool */
     
     return 0;                                                                           /* success return 0 */
@@ -1453,7 +1453,7 @@ uint8_t l3gd20h_set_block_data_update(l3gd20h_handle_t *handle, l3gd20h_bool_t e
         
         return 1;                                                                         /* return error */
     }
-    prev &= ~(1 << 7);                                                                    /* clear the enable bit */
+    prev &= ~(1 << 7);                                                                    /* clear enable bit */
     prev |= enable << 7;                                                                  /* set enable */
   
     return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL4, (uint8_t *)&prev, 1);       /* write config */
@@ -2456,7 +2456,7 @@ uint8_t l3gd20h_set_fifo_mode(l3gd20h_handle_t *handle, l3gd20h_fifo_mode_t fifo
     prev &= ~(7 << 5);
     prev |= fifo_mode << 5;                                                                   /* clear fifo mode bits */
                                                                                               /* set fifo mode */
-    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);       /* wrtie config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -2537,7 +2537,7 @@ uint8_t l3gd20h_set_fifo_threshold(l3gd20h_handle_t *handle, uint8_t threshold)
     prev &= ~(0x1F);                                                                          /* clear the threshold bits */
     prev |= threshold;                                                                        /* set the threshold */
   
-    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);       /* wrtie config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -2649,7 +2649,7 @@ uint8_t l3gd20h_set_interrupt_event(l3gd20h_handle_t *handle, l3gd20h_interrupt_
     prev &= ~(1 << interrupt_event);                                                       /* clear event bit */
     prev |= enable << interrupt_event;                                                     /* set event bit */
   
-    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_CFG, (uint8_t *)&prev, 1);       /* wrtie config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_CFG, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -3052,7 +3052,7 @@ uint8_t l3gd20h_set_counter_mode(l3gd20h_handle_t *handle, l3gd20h_counter_mode_
     prev &= ~(1 << 7);                                                                        /* clear the counter mode bit */
     prev |= counter_mode << 7;                                                                /* set the counter mode */
   
-    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_XH, (uint8_t *)&prev, 1);       /* wrtie config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_XH, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -3126,7 +3126,7 @@ uint8_t l3gd20h_set_wait(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
     prev &= ~(1 << 7);                                                                          /* clear enable bit */
     prev |= enable << 7;                                                                        /* set enable */
   
-    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_DURATION, (uint8_t *)&prev, 1);       /* wrtie config */
+    return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_DURATION, (uint8_t *)&prev, 1);       /* write config */
 }
 
 /**
@@ -3385,7 +3385,7 @@ uint8_t l3gd20h_get_iic(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
     {
         handle->debug_print("l3gd20h: read low odr failed.\n");                           /* read low odr failed */
     
-        return 1;                                                                         /* return erro */
+        return 1;                                                                         /* return error */
     }
     prev &= (1 << 3);                                                                     /* get enable bit */
    *enable = (l3gd20h_bool_t)(prev >> 3);                                                 /* get bool */
@@ -3828,7 +3828,7 @@ uint8_t l3gd20h_init(l3gd20h_handle_t *handle)
     }
     if (id != 0xD7)                                                                       /* check id */
     {
-        handle->debug_print("l3gd20h: id is invalid.\n");                                 /* id is invlaid */
+        handle->debug_print("l3gd20h: id is invalid.\n");                                 /* id is invalid */
         if (handle->iic_spi == L3GD20H_INTERFACE_IIC)                                     /* if iic interface */
         {
             (void)handle->iic_deinit();                                                   /* iic deinit */
@@ -4021,7 +4021,7 @@ uint8_t l3gd20h_read(l3gd20h_handle_t *handle, int16_t (*raw)[3], float (*dps)[3
             return 1;                                                                                /* return error */
         }
         cnt = prev & 0x1F;                                                                           /* get counter */
-        *len = ((*len) < cnt) ? (*len) : cnt;                                                        /* get the lenght */
+        *len = ((*len) < cnt) ? (*len) : cnt;                                                        /* get the length */
         res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_OUT_X_L, (uint8_t *)buf, 6 * (*len));       /* read all data */
         if (res != 0)                                                                                /* check result */
         {
@@ -4186,7 +4186,7 @@ uint8_t l3gd20h_info(l3gd20h_info_t *info)
     info->max_current_ma = MAX_CURRENT;                             /* set maximum current */
     info->temperature_max = TEMPERATURE_MAX;                        /* set minimal temperature */
     info->temperature_min = TEMPERATURE_MIN;                        /* set maximum temperature */
-    info->driver_version = DRIVER_VERSION;                          /* set driver verison */
+    info->driver_version = DRIVER_VERSION;                          /* set driver version */
     
     return 0;                                                       /* success return 0 */
 }

@@ -315,7 +315,7 @@ uint8_t l3gd20h_fifo_test(l3gd20h_interface_t interface, l3gd20h_address_t addr_
         return 1;
     }
     
-    /* set high pass filter cut off frequency 0 */
+    /* set high pass filter cut-off frequency 0 */
     res = l3gd20h_set_high_pass_filter_cut_off_frequency(&gs_handle, L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_0);
     if (res != 0)
     {
@@ -415,7 +415,7 @@ uint8_t l3gd20h_fifo_test(l3gd20h_interface_t interface, l3gd20h_address_t addr_
         return 1;
     }
     
-    /* push pull pin type */
+    /* push-pull pin type */
     res = l3gd20h_set_interrupt_pin_type(&gs_handle, L3GD20H_PIN_PUSH_PULL);
     if (res != 0)
     {
@@ -445,7 +445,7 @@ uint8_t l3gd20h_fifo_test(l3gd20h_interface_t interface, l3gd20h_address_t addr_
         return 1;
     }
     
-    /* enalbe fifo overrun on interrupt2 */
+    /* enable fifo overrun on interrupt2 */
     res = l3gd20h_set_fifo_overrun_on_interrupt2(&gs_handle, L3GD20H_BOOL_TRUE);
     if (res != 0)
     {
@@ -455,7 +455,7 @@ uint8_t l3gd20h_fifo_test(l3gd20h_interface_t interface, l3gd20h_address_t addr_
         return 1;
     }
     
-    /* disable fifo empty on on interrupt2 */
+    /* disable fifo empty on interrupt2 */
     res = l3gd20h_set_fifo_empty_on_interrupt2(&gs_handle, L3GD20H_BOOL_FALSE);
     if (res != 0)
     {

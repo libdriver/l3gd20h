@@ -125,7 +125,7 @@ uint8_t l3gd20h(uint8_t argc, char **argv)
         {"timeout", required_argument, NULL, 5},
         {NULL, 0, NULL, 0},
     };
-    char type[33] = "unknow";
+    char type[33] = "unknown";
     uint32_t times = 3;
     uint32_t timeout = 5000;
     l3gd20h_address_t addr = L3GD20H_ADDRESS_SDO_0;
@@ -620,7 +620,7 @@ int main(uint8_t argc, char **argv)
     }
     else
     {
-        l3gd20h_interface_debug_print("l3gd20h: unknow status code.\n");
+        l3gd20h_interface_debug_print("l3gd20h: unknown status code.\n");
     }
 
     return 0;
