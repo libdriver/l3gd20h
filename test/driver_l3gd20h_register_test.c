@@ -1059,7 +1059,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
     }
     l3gd20h_interface_debug_print("l3gd20h: check high pass filter mode %s.\n", high_mode == L3GD20H_HIGH_PASS_FILTER_MODE_NORMAL_RESET ? "ok" : "error");
     
-    /* refernce signal mode */
+    /* reference signal mode */
     res = l3gd20h_set_high_pass_filter_mode(&gs_handle, L3GD20H_HIGH_PASS_FILTER_MODE_REFERENCE_SIGNAL);
     if (res != 0)
     {
@@ -1068,7 +1068,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
         
         return 1;
     }
-    l3gd20h_interface_debug_print("l3gd20h: set high pass filter refernce signal mode.\n");
+    l3gd20h_interface_debug_print("l3gd20h: set high pass filter reference signal mode.\n");
     res = l3gd20h_get_high_pass_filter_mode(&gs_handle, &high_mode);
     if (res != 0)
     {
@@ -1099,7 +1099,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
     }
     l3gd20h_interface_debug_print("l3gd20h: check high pass filter mode %s.\n", high_mode == L3GD20H_HIGH_PASS_FILTER_MODE_NORMAL ? "ok" : "error");
     
-    /* autoreset on int mode */
+    /* auto reset on int mode */
     res = l3gd20h_set_high_pass_filter_mode(&gs_handle, L3GD20H_HIGH_PASS_FILTER_MODE_AUTORESET_ON_INT);
     if (res != 0)
     {
@@ -1108,7 +1108,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
         
         return 1;
     }
-    l3gd20h_interface_debug_print("l3gd20h: set high pass filter autoreset on int mode.\n");
+    l3gd20h_interface_debug_print("l3gd20h: set high pass filter auto reset on int mode.\n");
     res = l3gd20h_get_high_pass_filter_mode(&gs_handle, &high_mode);
     if (res != 0)
     {
@@ -1122,7 +1122,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
     /* l3gd20h_set_high_pass_filter_cut_off_frequency/l3gd20h_get_high_pass_filter_cut_off_frequency test */
     l3gd20h_interface_debug_print("l3gd20h: l3gd20h_set_high_pass_filter_cut_off_frequency/l3gd20h_get_high_pass_filter_cut_off_frequency test.\n");
     
-    /* cut off frequency 0 */
+    /* cut-off frequency 0 */
     res = l3gd20h_set_high_pass_filter_cut_off_frequency(&gs_handle, L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_0);
     if (res != 0)
     {
@@ -1142,7 +1142,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
     }
     l3gd20h_interface_debug_print("l3gd20h: check high pass filter cut off frequency %s.\n", frequency == L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_0 ? "ok" : "error");
     
-    /* cut off frequency 1 */
+    /* cut-off frequency 1 */
     res = l3gd20h_set_high_pass_filter_cut_off_frequency(&gs_handle, L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_1);
     if (res != 0)
     {
@@ -1162,7 +1162,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
     }
     l3gd20h_interface_debug_print("l3gd20h: check high pass filter cut off frequency %s.\n", frequency == L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_1 ? "ok" : "error");
     
-    /* cut off frequency 2 */
+    /* cut-off frequency 2 */
     res = l3gd20h_set_high_pass_filter_cut_off_frequency(&gs_handle, L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_2);
     if (res != 0)
     {
@@ -1182,7 +1182,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
     }
     l3gd20h_interface_debug_print("l3gd20h: check high pass filter cut off frequency %s.\n", frequency == L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_2 ? "ok" : "error");
     
-    /* cut off frequency 3 */
+    /* cut-off frequency 3 */
     res = l3gd20h_set_high_pass_filter_cut_off_frequency(&gs_handle, L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_3);
     if (res != 0)
     {
@@ -1202,7 +1202,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
     }
     l3gd20h_interface_debug_print("l3gd20h: check high pass filter cut off frequency %s.\n", frequency == L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_3 ? "ok" : "error");
     
-    /* cut off frequency 4 */
+    /* cut-off frequency 4 */
     res = l3gd20h_set_high_pass_filter_cut_off_frequency(&gs_handle, L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_4);
     if (res != 0)
     {
@@ -1222,7 +1222,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
     }
     l3gd20h_interface_debug_print("l3gd20h: check high pass filter cut off frequency %s.\n", frequency == L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_4 ? "ok" : "error");
     
-    /* cut off frequency 5 */
+    /* cut-off frequency 5 */
     res = l3gd20h_set_high_pass_filter_cut_off_frequency(&gs_handle, L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_5);
     if (res != 0)
     {
@@ -1242,7 +1242,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
     }
     l3gd20h_interface_debug_print("l3gd20h: check high pass filter cut off frequency %s.\n", frequency == L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_5 ? "ok" : "error");
     
-    /* cut off frequency 6 */
+    /* cut-off frequency 6 */
     res = l3gd20h_set_high_pass_filter_cut_off_frequency(&gs_handle, L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_6);
     if (res != 0)
     {
@@ -1262,7 +1262,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
     }
     l3gd20h_interface_debug_print("l3gd20h: check high pass filter cut off frequency %s.\n", frequency == L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_6 ? "ok" : "error");
     
-    /* cut off frequency 7 */
+    /* cut-off frequency 7 */
     res = l3gd20h_set_high_pass_filter_cut_off_frequency(&gs_handle, L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_7);
     if (res != 0)
     {
@@ -1282,7 +1282,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
     }
     l3gd20h_interface_debug_print("l3gd20h: check high pass filter cut off frequency %s.\n", frequency == L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_7 ? "ok" : "error");
     
-    /* cut off frequency 8 */
+    /* cut-off frequency 8 */
     res = l3gd20h_set_high_pass_filter_cut_off_frequency(&gs_handle, L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_8);
     if (res != 0)
     {
@@ -1302,7 +1302,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
     }
     l3gd20h_interface_debug_print("l3gd20h: check high pass filter cut off frequency %s.\n", frequency == L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_8 ? "ok" : "error");
     
-    /* cut off frequency 9 */
+    /* cut-off frequency 9 */
     res = l3gd20h_set_high_pass_filter_cut_off_frequency(&gs_handle, L3GD20H_HIGH_PASS_FILTER_CUT_OFF_FREQUENCY_9);
     if (res != 0)
     {
@@ -1934,7 +1934,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
     /* l3gd20h_set_interrupt_pin_type/l3gd20h_get_interrupt_pin_type test */
     l3gd20h_interface_debug_print("l3gd20h: l3gd20h_set_interrupt_pin_type/l3gd20h_get_interrupt_pin_type test.\n");
     
-    /* push pull */
+    /* push-pull */
     res = l3gd20h_set_interrupt_pin_type(&gs_handle, L3GD20H_PIN_PUSH_PULL);
     if (res != 0)
     {
@@ -2988,7 +2988,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
     }
     l3gd20h_interface_debug_print("l3gd20h: check fifo mode %s.\n", fifo_mode == L3GD20H_FIFO_MODE_STREAM ? "ok" : "error");
     
-    /* stream to fifo fifo mode */
+    /* stream to fifo mode */
     res = l3gd20h_set_fifo_mode(&gs_handle, L3GD20H_FIFO_MODE_STREAM_TO_FIFO);
     if (res != 0)
     {
@@ -3048,7 +3048,7 @@ uint8_t l3gd20h_register_test(l3gd20h_interface_t interface, l3gd20h_address_t a
     }
     l3gd20h_interface_debug_print("l3gd20h: check fifo mode %s.\n", fifo_mode == L3GD20H_FIFO_MODE_DYNAMIC_STREAM ? "ok" : "error");
     
-    /* bypass to fifo fifo mode */
+    /* bypass to fifo mode */
     res = l3gd20h_set_fifo_mode(&gs_handle, L3GD20H_FIFO_MODE_BYPASS_TO_FIFO);
     if (res != 0)
     {
