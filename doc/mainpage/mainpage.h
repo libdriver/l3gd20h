@@ -1,6 +1,6 @@
 /**
  * @mainpage  LibDriver L3GD20H
- * @brief     libdriver l3gd20h is a full function driver of l3gd20h and it can run in both MCU and Linux platform.
+ * @brief     LibDriver L3GD20H is a full function driver of L3GD20H and it can run in both MCU and Linux platform.
  * @version   2.0.0
  * @author    Shifeng Li
  *
