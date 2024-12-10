@@ -62,7 +62,7 @@ uint8_t l3gd20h_interrupt_test_irq_handler(void)
 
 /**
  * @brief     interface receive callback
- * @param[in] type is the irq type
+ * @param[in] type irq type
  * @note      none
  */
 static void a_l3gd20h_interface_receive_callback(uint8_t type)
@@ -137,10 +137,10 @@ static void a_l3gd20h_interface_receive_callback(uint8_t type)
 
 /**
  * @brief     interrupt test
- * @param[in] interface is the chip interface
- * @param[in] addr_pin is the iic device address
- * @param[in] interrupt_threshold is the interrupt threshold
- * @param[in] times is the read times
+ * @param[in] interface chip interface
+ * @param[in] addr_pin iic device address
+ * @param[in] interrupt_threshold interrupt threshold
+ * @param[in] times test times
  * @return    status code
  *            - 0 success
  *            - 1 test failed
