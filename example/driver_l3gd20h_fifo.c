@@ -63,7 +63,7 @@ uint8_t l3gd20h_fifo_irq_handler(void)
 
 /**
  * @brief     interface receive callback
- * @param[in] type is the irq type
+ * @param[in] type irq type
  * @note      none
  */
 static void a_l3gd20h_interface_receive_callback(uint8_t type)
@@ -135,9 +135,9 @@ static void a_l3gd20h_interface_receive_callback(uint8_t type)
 
 /**
  * @brief     fifo example init
- * @param[in] interface is the chip interface
- * @param[in] addr_pin is the iic device address
- * @param[in] *callback points to a irq callback address
+ * @param[in] interface chip interface
+ * @param[in] addr_pin iic device address
+ * @param[in] *callback pointer to a irq callback address
  * @return    status code
  *            - 0 success
  *            - 1 init failed

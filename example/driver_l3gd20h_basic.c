@@ -41,8 +41,8 @@ static l3gd20h_handle_t gs_handle;        /**< l3gd20h handle */
 
 /**
  * @brief     basic example init
- * @param[in] interface is the chip interface
- * @param[in] addr_pin is the iic device address
+ * @param[in] interface chip interface
+ * @param[in] addr_pin iic device address
  * @return    status code
  *            - 0 success
  *            - 1 init failed
@@ -599,7 +599,7 @@ uint8_t l3gd20h_basic_deinit(void)
 
 /**
  * @brief      basic example read
- * @param[out] *dps points to a converted data buffer
+ * @param[out] *dps pointer to a converted data buffer
  * @return     status code
  *             - 0 success
  *             - 1 read failed

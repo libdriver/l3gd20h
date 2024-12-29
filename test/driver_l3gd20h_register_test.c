@@ -42,8 +42,8 @@ static l3gd20h_handle_t gs_handle;        /**< l3gd20h handle */
 
 /**
  * @brief     register test
- * @param[in] interface is the chip interface
- * @param[in] addr_pin is the iic device address
+ * @param[in] interface chip interface
+ * @param[in] addr_pin iic device address
  * @return    status code
  *            - 0 success
  *            - 1 test failed
