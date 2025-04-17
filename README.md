@@ -10,7 +10,7 @@
 
 The L3GD20H is a low-power three-axis angular rate sensor. It includes a sensing element and an IC interface able to provide the measured angular rate to the external world through digital interface (I2C/SPI).The sensing element is manufactured using a dedicated micromachining process developed by ST to produce inertial sensors and actuators on silicon wafers.The IC interface is manufactured using a CMOS process that allows a high level of integration to design a dedicated circuit which is trimmed to better match the sensing element characteristics.The L3GD20H has a full scale of ±245/±500/±2000 dps and is capable of measuring rates with a user selectable bandwidth.It can be used in gaming and virtual reality input devices,motion control with MMI (man-machine interface),GPS navigation systems,GPS navigation systems and so on.
 
-LibDriver L3GD20H is the full function driver of L3GD20H  launched by LibDriver.It provides angular velocity reading, angular velocity FIFO mode acquisition, threshold interrupt and other functions. LibDriver is MISRA compliant.
+LibDriver L3GD20H is a full-featured driver of L3GD20H launched by LibDriver.It provides angular velocity reading, angular velocity FIFO mode acquisition, threshold interrupt and other functions. LibDriver is MISRA compliant.
 
 ### Table of Contents
 
