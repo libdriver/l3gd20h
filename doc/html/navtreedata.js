@@ -25,7 +25,7 @@
 var NAVTREE =
 [
   [ "LibDriver L3GD20H", "index.html", [
-    [ "Modules", "modules.html", "modules" ],
+    [ "Topics", "topics.html", "topics" ],
     [ "Data Structures", "annotated.html", [
       [ "Data Structures", "annotated.html", "annotated_dup" ],
       [ "Data Structure Index", "classes.html", null ],
@@ -51,11 +51,10 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"group__l3gd20h__basic__driver.html#gadb7e9bf6c5a321cc0621f058fbf2f941",
-"group__l3gd20h__example__driver.html#ga4162872532604f5ae0627e396d2a605b",
-"group__l3gd20h__interface__driver.html#ga2e68ac2fa28c389615d72cadd3eabc04",
-"group__l3gd20h__test__driver.html#ga561ad70858e1d559d8825b7134929e2f"
+"group__l3gd20h__example__driver.html#ga147a111090006f280b8e0d2bea881866",
+"structl3gd20h__handle__s.html"
 ];
 
-var SYNCONMSG = 'click to disable panel synchronisation';
-var SYNCOFFMSG = 'click to enable panel synchronisation';
+var SYNCONMSG = 'click to disable panel synchronization';
+var SYNCOFFMSG = 'click to enable panel synchronization';
+var LISTOFALLMEMBERS = 'List of all members';
