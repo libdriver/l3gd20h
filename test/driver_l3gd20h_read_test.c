@@ -54,7 +54,8 @@ uint8_t l3gd20h_read_test(l3gd20h_interface_t interface, l3gd20h_address_t addr_
 {
     uint8_t res;
     float dps_threshold;
-    uint16_t threshold, i;
+    uint16_t threshold;
+    uint32_t i;
     l3gd20h_info_t info;
     
     /* link interface function */
