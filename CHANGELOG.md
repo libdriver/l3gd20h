@@ -1,3 +1,9 @@
+## 2.0.7 (2025-12-05)
+
+## Bug Fixes
+
+- fix test times bugs
+
 ## 2.0.6 (2025-10-26)
 
 ## Features
