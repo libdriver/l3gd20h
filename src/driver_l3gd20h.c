@@ -2764,7 +2764,7 @@ uint8_t l3gd20h_set_x_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
     
         return 1;                                                                              /* return error */
     }
-    buf[0] = buf[0] | ((threshold >> 8) & 0x7F);                                               /* set threshold high */
+    buf[0] = (buf[0] & 0x80) | ((threshold >> 8) & 0x7F);                                      /* set threshold high */
     buf[1] = (threshold) & 0xFF;                                                               /* set threshold low*/
   
     res = a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_THS_XH, (uint8_t *)&buf[0], 1);       /* write config */
@@ -3463,15 +3463,15 @@ uint8_t l3gd20h_interrupt_threshold_convert_to_register(l3gd20h_handle_t *handle
     range = (prev & (3 << 4)) >> 4;                                                   /* get range */
     if (range == 0)
     {
-        *reg = (uint16_t)(dps * 1000.0f / 7.5f);                                      /* convert */
+        *reg = (uint16_t)(dps * 1000.0f / 8.75f);                                     /* convert */
     }
     else if (range == 1)
     {
-        *reg = (uint16_t)(dps * 1000.0f / 15.3f);                                     /* convert */
+        *reg = (uint16_t)(dps * 1000.0f / 17.50f);                                    /* convert */
     }
     else
     {
-        *reg = (uint16_t)(dps * 1000.0f / 61.0f);                                     /* convert */
+        *reg = (uint16_t)(dps * 1000.0f / 70.0f);                                     /* convert */
     }
     
     return 0;                                                                         /* success return 0 */

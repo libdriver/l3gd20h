@@ -2158,7 +2158,7 @@ $(function(){initNavTree('driver__l3gd20h_8c_source.html','',''); });
 <div class="line"><a id="l02764" name="l02764"></a><span class="lineno"> 2764</span>    </div>
 <div class="line"><a id="l02765" name="l02765"></a><span class="lineno"> 2765</span>        <span class="keywordflow">return</span> 1;                                                                              <span class="comment">/* return error */</span></div>
 <div class="line"><a id="l02766" name="l02766"></a><span class="lineno"> 2766</span>    }</div>
-<div class="line"><a id="l02767" name="l02767"></a><span class="lineno"> 2767</span>    buf[0] = buf[0] | ((threshold &gt;&gt; 8) &amp; 0x7F);                                               <span class="comment">/* set threshold high */</span></div>
+<div class="line"><a id="l02767" name="l02767"></a><span class="lineno"> 2767</span>    buf[0] = (buf[0] &amp; 0x80) | ((threshold &gt;&gt; 8) &amp; 0x7F);                                      <span class="comment">/* set threshold high */</span></div>
 <div class="line"><a id="l02768" name="l02768"></a><span class="lineno"> 2768</span>    buf[1] = (threshold) &amp; 0xFF;                                                               <span class="comment">/* set threshold low*/</span></div>
 <div class="line"><a id="l02769" name="l02769"></a><span class="lineno"> 2769</span>  </div>
 <div class="line"><a id="l02770" name="l02770"></a><span class="lineno"> 2770</span>    res = a_l3gd20h_iic_spi_write(handle, <a class="code hl_define" href="driver__l3gd20h_8c.html#a6e17b4a2c2ab45f229164ba1d9dad0f5">L3GD20H_REG_IG_THS_XH</a>, (uint8_t *)&amp;buf[0], 1);       <span class="comment">/* write config */</span></div>
@@ -2702,15 +2702,15 @@ $(function(){initNavTree('driver__l3gd20h_8c_source.html','',''); });
 <div class="line"><a id="l03463" name="l03463"></a><span class="lineno"> 3463</span>    range = (prev &amp; (3 &lt;&lt; 4)) &gt;&gt; 4;                                                   <span class="comment">/* get range */</span></div>
 <div class="line"><a id="l03464" name="l03464"></a><span class="lineno"> 3464</span>    <span class="keywordflow">if</span> (range == 0)</div>
 <div class="line"><a id="l03465" name="l03465"></a><span class="lineno"> 3465</span>    {</div>
-<div class="line"><a id="l03466" name="l03466"></a><span class="lineno"> 3466</span>        *reg = (uint16_t)(dps * 1000.0f / 7.5f);                                      <span class="comment">/* convert */</span></div>
+<div class="line"><a id="l03466" name="l03466"></a><span class="lineno"> 3466</span>        *reg = (uint16_t)(dps * 1000.0f / 8.75f);                                     <span class="comment">/* convert */</span></div>
 <div class="line"><a id="l03467" name="l03467"></a><span class="lineno"> 3467</span>    }</div>
 <div class="line"><a id="l03468" name="l03468"></a><span class="lineno"> 3468</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (range == 1)</div>
 <div class="line"><a id="l03469" name="l03469"></a><span class="lineno"> 3469</span>    {</div>
-<div class="line"><a id="l03470" name="l03470"></a><span class="lineno"> 3470</span>        *reg = (uint16_t)(dps * 1000.0f / 15.3f);                                     <span class="comment">/* convert */</span></div>
+<div class="line"><a id="l03470" name="l03470"></a><span class="lineno"> 3470</span>        *reg = (uint16_t)(dps * 1000.0f / 17.50f);                                    <span class="comment">/* convert */</span></div>
 <div class="line"><a id="l03471" name="l03471"></a><span class="lineno"> 3471</span>    }</div>
 <div class="line"><a id="l03472" name="l03472"></a><span class="lineno"> 3472</span>    <span class="keywordflow">else</span></div>
 <div class="line"><a id="l03473" name="l03473"></a><span class="lineno"> 3473</span>    {</div>
-<div class="line"><a id="l03474" name="l03474"></a><span class="lineno"> 3474</span>        *reg = (uint16_t)(dps * 1000.0f / 61.0f);                                     <span class="comment">/* convert */</span></div>
+<div class="line"><a id="l03474" name="l03474"></a><span class="lineno"> 3474</span>        *reg = (uint16_t)(dps * 1000.0f / 70.0f);                                     <span class="comment">/* convert */</span></div>
 <div class="line"><a id="l03475" name="l03475"></a><span class="lineno"> 3475</span>    }</div>
 <div class="line"><a id="l03476" name="l03476"></a><span class="lineno"> 3476</span>    </div>
 <div class="line"><a id="l03477" name="l03477"></a><span class="lineno"> 3477</span>    <span class="keywordflow">return</span> 0;                                                                         <span class="comment">/* success return 0 */</span></div>
