@@ -89,8 +89,8 @@ typedef enum
  */
 typedef enum
 {
-    L3GD20H_AXIS_X = 0x01,        /**< axis x */
-    L3GD20H_AXIS_Y = 0x00,        /**< axis y */
+    L3GD20H_AXIS_X = 0x00,        /**< axis x */
+    L3GD20H_AXIS_Y = 0x01,        /**< axis y */
     L3GD20H_AXIS_Z = 0x02,        /**< axis z */
 } l3gd20h_axis_t;
 

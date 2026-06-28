@@ -143,6 +143,11 @@ static uint8_t a_l3gd20h_iic_spi_write(l3gd20h_handle_t *handle, uint8_t reg, ui
 {
     if (handle->iic_spi == L3GD20H_INTERFACE_IIC)                         /* iic interface */
     {
+        if (len > 1)                                                      /* len > 1 */
+        {
+            reg |= 1 << 7;                                                /* flag bit 7 */
+        }
+        
         if (handle->iic_write(handle->iic_addr, reg, buf, len) != 0)      /* write data */
         {
             return 1;                                                     /* return error */
@@ -639,7 +644,7 @@ uint8_t l3gd20h_set_level_trigger(l3gd20h_handle_t *handle, l3gd20h_bool_t enabl
         
         return 1;                                                                         /* return error */
     }
-    prev &= ~(1 << 6);                                                                    /* get bool */
+    prev &= ~(1 << 6);                                                                    /* clear settings */
     prev |= enable << 6;                                                                  /* set enable */
     
     return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL2, (uint8_t *)&prev, 1);       /* write config */
@@ -1157,7 +1162,7 @@ uint8_t l3gd20h_set_data_ready_on_interrupt2(l3gd20h_handle_t *handle, l3gd20h_b
         
         return 1;                                                                         /* return error */
     }
-    prev &= ~(1 << 3);                                                                    /* set data ready bit */
+    prev &= ~(1 << 3);                                                                    /* clear data ready bit */
     prev |= enable << 3;                                                                  /* set data ready */
     
     return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL3, (uint8_t *)&prev, 1);       /* write config */
@@ -2045,7 +2050,7 @@ uint8_t l3gd20h_set_stop_on_fifo_threshold(l3gd20h_handle_t *handle, l3gd20h_boo
         
         return 1;                                                                         /* return error */
     }
-    prev &= ~(1 << 5);                                                                    /* clear fifo enable bit */
+    prev &= ~(1 << 5);                                                                    /* clear bit */
     prev |= enable << 5;                                                                  /* set enable */
   
     return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);       /* write config */
@@ -2268,7 +2273,7 @@ uint8_t l3gd20h_set_out_selection(l3gd20h_handle_t *handle, l3gd20h_selection_t 
         return 1;                                                                         /* return error */
     }
     prev &= ~(3 << 0);                                                                    /* clear the selection bits */
-    prev |= selection << 0;                                                               /* get the selection */
+    prev |= selection << 0;                                                               /* set the selection */
   
     return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_CTRL5, (uint8_t *)&prev, 1);       /* write config */
 }
@@ -2453,9 +2458,9 @@ uint8_t l3gd20h_set_fifo_mode(l3gd20h_handle_t *handle, l3gd20h_fifo_mode_t fifo
    
         return 1;                                                                             /* return error */
     }
-    prev &= ~(7 << 5);
-    prev |= fifo_mode << 5;                                                                   /* clear fifo mode bits */
-                                                                                              /* set fifo mode */
+    prev &= ~(7 << 5);                                                                        /* clear fifo mode bits */
+    prev |= fifo_mode << 5;                                                                   /* set fifo mode */
+    
     return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_FIFO_CTRL, (uint8_t *)&prev, 1);       /* write config */
 }
 
