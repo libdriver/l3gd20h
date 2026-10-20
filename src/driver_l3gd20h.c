@@ -2755,7 +2755,7 @@ uint8_t l3gd20h_set_x_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
     {
         return 3;                                                                              /* return error */
     }
-    if (threshold > 0x8000U)                                                                   /* check the threshold */
+    if (threshold >= 0x8000U)                                                                  /* check the threshold */
     {
         handle->debug_print("l3gd20h: threshold is invalid.\n");                               /* threshold is invalid */
     
@@ -2858,7 +2858,7 @@ uint8_t l3gd20h_set_y_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
     {
         return 3;                                                                              /* return error */
     }
-    if (threshold > 0x8000U)                                                                   /* check the threshold */
+    if (threshold >= 0x8000U)                                                                  /* check the threshold */
     {
         handle->debug_print("l3gd20h: threshold is invalid.\n");                               /* threshold is invalid */
     
@@ -2953,7 +2953,7 @@ uint8_t l3gd20h_set_z_interrupt_threshold(l3gd20h_handle_t *handle, uint16_t thr
     {
         return 3;                                                                              /* return error */
     }
-    if (threshold > 0x8000U)                                                                   /* check the threshold */
+    if (threshold >= 0x8000U)                                                                  /* check the threshold */
     {
         handle->debug_print("l3gd20h: threshold is invalid.\n");                               /* threshold is invalid */
     
@@ -3208,6 +3208,7 @@ uint8_t l3gd20h_set_duration(l3gd20h_handle_t *handle, uint8_t duration)
     
         return 1;                                                                               /* return error */
     }
+    prev &= ~0x7F;                                                                              /* clear settings */
     prev |= duration & 0x7F;                                                                    /* set the duration */
   
     return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_IG_DURATION, (uint8_t *)&prev, 1);       /* write config */
@@ -3356,7 +3357,7 @@ uint8_t l3gd20h_set_iic(l3gd20h_handle_t *handle, l3gd20h_bool_t enable)
         return 1;                                                                           /* return error */
     }
     prev &= ~(1 << 3);                                                                      /* clear enable bit */
-    prev |= enable << 3;                                                                    /* set enable */
+    prev |= (!enable) << 3;                                                                 /* set enable */
   
     return a_l3gd20h_iic_spi_write(handle, L3GD20H_REG_LOW_ODR, (uint8_t *)&prev, 1);       /* write config */
 }
@@ -3392,8 +3393,7 @@ uint8_t l3gd20h_get_iic(l3gd20h_handle_t *handle, l3gd20h_bool_t *enable)
     
         return 1;                                                                         /* return error */
     }
-    prev &= (1 << 3);                                                                     /* get enable bit */
-   *enable = (l3gd20h_bool_t)(prev >> 3);                                                 /* get bool */
+   *enable = (l3gd20h_bool_t)(!((prev >> 3) & 0x01));                                     /* get bool */
   
     return 0;                                                                             /* success return 0 */
 }
@@ -4018,6 +4018,10 @@ uint8_t l3gd20h_read(l3gd20h_handle_t *handle, int16_t (*raw)[3], float (*dps)[3
     ble = (prev & (1 << 6)) >> 6;                                                                    /* get big little endian */
     if ((mode && enable) != 0)                                                                       /* fifo modes */
     {
+        uint8_t fss;
+        uint8_t empty;
+        uint8_t ovrn;
+        
         res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_FIFO_SRC, (uint8_t *)&prev, 1);             /* read fifo source */
         if (res != 0)                                                                                /* check result */
         {
@@ -4025,7 +4029,29 @@ uint8_t l3gd20h_read(l3gd20h_handle_t *handle, int16_t (*raw)[3], float (*dps)[3
       
             return 1;                                                                                /* return error */
         }
-        cnt = prev & 0x1F;                                                                           /* get counter */
+
+        fss = prev & 0x1F;                                                                           /* get fss */
+        empty = (prev >> 5) & 0x01;                                                                  /* get empty */
+        ovrn  = (prev >> 6) & 0x01;                                                                  /* get overrun */
+        if (empty != 0)                                                                              /* not true */
+        {
+            *len = 0;                                                                                /* set 0 */
+            
+            return 0;                                                                                /* return 0 */
+        }
+        if (mode == L3GD20H_FIFO_MODE_DYNAMIC_STREAM)                                                /* stream */
+        {
+            cnt = (uint8_t)(fss + 1);                                                                /* set counter */
+        }
+        else if (ovrn != 0)                                                                          /* check overrun */
+        {
+            cnt = 32;                                                                                /* set max */
+        }
+        else
+        {
+            cnt = fss;                                                                               /* set counter */
+        }
+        
         *len = ((*len) < cnt) ? (*len) : cnt;                                                        /* get the length */
         res = a_l3gd20h_iic_spi_read(handle, L3GD20H_REG_OUT_X_L, (uint8_t *)buf, 6 * (*len));       /* read all data */
         if (res != 0)                                                                                /* check result */
