@@ -47,8 +47,8 @@ var group__l3gd20h__basic__driver =
       [ "L3GD20H_BOOT_REBOOT", "group__l3gd20h__basic__driver.html#gga13e8e855bda5c398c98d1351be9fc447afa05a3eca5b5f3baeb1550f875f46586", null ]
     ] ],
     [ "l3gd20h_data_format_t", "group__l3gd20h__basic__driver.html#ga80f90094315cdfe0e73fde3a6febcece", [
-      [ "L3GD20H_DATA_FORMAT_BIG_ENDIAN", "group__l3gd20h__basic__driver.html#gga80f90094315cdfe0e73fde3a6febcecea95fe794a246d660c6d67e78594d0a1e9", null ],
-      [ "L3GD20H_DATA_FORMAT_LITTLE_ENDIAN", "group__l3gd20h__basic__driver.html#gga80f90094315cdfe0e73fde3a6febcecea5015fdfd7dcd9c2de2321e88c5910ce3", null ]
+      [ "L3GD20H_DATA_FORMAT_LITTLE_ENDIAN", "group__l3gd20h__basic__driver.html#gga80f90094315cdfe0e73fde3a6febcecea5015fdfd7dcd9c2de2321e88c5910ce3", null ],
+      [ "L3GD20H_DATA_FORMAT_BIG_ENDIAN", "group__l3gd20h__basic__driver.html#gga80f90094315cdfe0e73fde3a6febcecea95fe794a246d660c6d67e78594d0a1e9", null ]
     ] ],
     [ "l3gd20h_full_scale_t", "group__l3gd20h__basic__driver.html#ga67b130efbb61c7f00a33ab62df69b9c2", [
       [ "L3GD20H_FULL_SCALE_245_DPS", "group__l3gd20h__basic__driver.html#gga67b130efbb61c7f00a33ab62df69b9c2ac5ce950319e710bdd64b53139cc15b0a", null ],

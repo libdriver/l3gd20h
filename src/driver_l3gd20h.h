@@ -184,8 +184,8 @@ typedef enum
  */
 typedef enum
 {
-    L3GD20H_DATA_FORMAT_BIG_ENDIAN    = 0x00,        /**< big endian */
-    L3GD20H_DATA_FORMAT_LITTLE_ENDIAN = 0x01,        /**< little endian */
+    L3GD20H_DATA_FORMAT_LITTLE_ENDIAN = 0x00,        /**< little endian */
+    L3GD20H_DATA_FORMAT_BIG_ENDIAN    = 0x01,        /**< big endian */
 } l3gd20h_data_format_t;
 
 /**

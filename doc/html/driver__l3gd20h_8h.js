@@ -36,8 +36,8 @@ var driver__l3gd20h_8h =
       [ "L3GD20H_COUNTER_MODE_DECREMENT", "group__l3gd20h__interrupt__driver.html#gga6cf84ebb2376cef209466cb240df06f7abc3778136c4a778a2faf544157377d52", null ]
     ] ],
     [ "l3gd20h_data_format_t", "group__l3gd20h__basic__driver.html#ga80f90094315cdfe0e73fde3a6febcece", [
-      [ "L3GD20H_DATA_FORMAT_BIG_ENDIAN", "group__l3gd20h__basic__driver.html#gga80f90094315cdfe0e73fde3a6febcecea95fe794a246d660c6d67e78594d0a1e9", null ],
-      [ "L3GD20H_DATA_FORMAT_LITTLE_ENDIAN", "group__l3gd20h__basic__driver.html#gga80f90094315cdfe0e73fde3a6febcecea5015fdfd7dcd9c2de2321e88c5910ce3", null ]
+      [ "L3GD20H_DATA_FORMAT_LITTLE_ENDIAN", "group__l3gd20h__basic__driver.html#gga80f90094315cdfe0e73fde3a6febcecea5015fdfd7dcd9c2de2321e88c5910ce3", null ],
+      [ "L3GD20H_DATA_FORMAT_BIG_ENDIAN", "group__l3gd20h__basic__driver.html#gga80f90094315cdfe0e73fde3a6febcecea95fe794a246d660c6d67e78594d0a1e9", null ]
     ] ],
     [ "l3gd20h_fifo_mode_t", "group__l3gd20h__fifo__driver.html#gad20f98038ec100b0112400751f566a25", [
       [ "L3GD20H_FIFO_MODE_BYPASS", "group__l3gd20h__fifo__driver.html#ggad20f98038ec100b0112400751f566a25ad43eacc734917066a448067cb457a1f2", null ],
